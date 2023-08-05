@@ -13,7 +13,7 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "ignorePatterns": ["node_modules", "**/assets/**"],
+  "ignorePatterns": ["node_modules", "./src/assets/**"],
   "plugins": ["react", "react-hooks", "@typescript-eslint", "prettier"],
   "rules": {
     "indent": ["error", 2, { "SwitchCase": 1 }],
