@@ -6,6 +6,16 @@ NativeWindStyleSheet.setOutput({
   default: "native",
 });
 
-export default function HomeLayout() {
-  return <Stack />;
+export default function HomeLayout(): React.JSX.Element {
+  return (
+    <Stack>
+      <Stack.Screen
+        name="auth"
+        options={{
+          headerShown: true,
+          title: "Bienvenido",
+        }}
+      />
+    </Stack>
+  );
 }
