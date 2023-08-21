@@ -3,8 +3,12 @@ import { View } from "react-native";
 import AuthConfirmButton from "../components/AuthConfirmButton";
 import AuthRedirectButton from "../components/AuthRedirectButton";
 import AuthInput from "../components/AuthInput";
+import { useTypedSelector } from "../store";
 
 export default function LoginScreen(): React.JSX.Element {
+  const auth = useTypedSelector((state) => state.auth);
+  console.log(auth);
+
   return (
     <View className="flex-1 items-center justify-center bg-slate-50">
       <View className="p-8 w-full max-w-sm">
