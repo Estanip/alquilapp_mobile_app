@@ -1,17 +1,17 @@
 import { Dispatch } from "@reduxjs/toolkit";
 import { loginError, loginPending, loginSuccess } from "../store/modules/Auth";
-import { LoginDispatchI } from "./interfaces/auth";
+import { LoginDispatchI } from "./interfaces/Auth";
 
 export const signIn =
-  () =>
+  (email: string, password: string) =>
   async (dispatch: Dispatch<LoginDispatchI>): Promise<void> => {
     dispatch(loginPending());
     try {
       await fetch("http://localhost:80/auth/login", {
         method: "POST",
         body: JSON.stringify({
-          email: "test@test.com",
-          password: "Test12345",
+          email,
+          password,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -39,9 +39,7 @@ export const checkToken =
         },
       })
         .then((res) => res.json())
-        .then((response: any) => {
-          console.log(response);
-        });
+        .then((response: any) => {});
     } catch (error: any) {
       console.log(error);
     }
