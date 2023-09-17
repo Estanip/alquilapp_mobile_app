@@ -1,32 +1,65 @@
-import React from "react";
-import { View } from "react-native";
-import AuthConfirmButton from "../components/AuthConfirmButton";
+import React, { useState } from "react";
+import { ScrollView, View } from "react-native";
 import AuthRedirectButton from "../components/AuthRedirectButton";
+import RegisterForm from "../components/RegisterForm";
+import AuthConfirmButton from "../components/AuthConfirmButton";
+import { RegisterFormI } from "../interfaces/auth/Auth";
+import TitleText from "../components/TitleText";
+import { useTypedDispatch } from "../store";
+import { Dispatch } from "@reduxjs/toolkit";
+import { signUp } from "../api/auth";
 
 export default function RegisterScreen(): React.JSX.Element {
-  return (
-    <View className="flex-1 items-center justify-center bg-slate-50">
-      <View className="p-8 w-full max-w-sm">
-        {/* <Text className="text-5xl font-bold mb-6 text-slate-900">Iniciar sesión</Text> */}
-        {/* 
-        <AuthInput placeholderText="Ingrese email"></AuthInput>
-        <AuthInput placeholderText="Ingrese contraseña"></AuthInput>
- */}
-        <View className="flex flex-row justify-between items-center my-8">
-          {/*           <View className="flex-row items-center">
-            <Pressable className="bg-white border border-slate-200 h-6 w-6 rounded-sm mr-2 flex items-center justify-center">
-              <View className="bg-blue-400 w-4 h-4 rounded-sm" />
-            </Pressable>
-            <Text className="text-slate-900">Recuerdame</Text>
-          </View> */}
+  const dispatch: Dispatch<any> = useTypedDispatch();
 
-          <AuthRedirectButton
-            navigateTo="login"
-            redirectButtonText="Ya estoy registrado"
-          ></AuthRedirectButton>
-        </View>
-        {/*  <AuthConfirmButton buttonText="Registrarme"></AuthConfirmButton> */}
-      </View>
+  const registerForm: RegisterFormI = {
+    email: "",
+    password: "",
+    first_name: "",
+    last_name: "",
+    identification_number: "",
+    birth_date: "",
+    type_of_user: "",
+  };
+
+  const [registerState, setRegisterState] =
+    useState<RegisterFormI>(registerForm);
+  const [validatedData, setDataValidated] = useState<boolean>();
+
+  const handleRegisterData = (data: RegisterFormI) => {
+    setRegisterState(data);
+  };
+
+  const handleDataValidated = (data: boolean) => {
+    setDataValidated(data);
+  };
+
+  const confirmRegister = () => {
+    const notCompleted = Object.values(registerState).some(
+      (e) => !e || e === ""
+    );
+    if (notCompleted || !validatedData)
+      window.alert("Completa los campos correctamente antes de continuar");
+    else dispatch(signUp(registerState));
+  };
+
+  return (
+    <View className="items-center justify-center bg-slate-50">
+      <ScrollView className="px-8 my-5 w-full max-w-sm">
+        <TitleText title="Registro"></TitleText>
+        <RegisterForm
+          registerData={handleRegisterData}
+          validatedData={handleDataValidated}
+        ></RegisterForm>
+        <AuthRedirectButton
+          navigateTo="login"
+          redirectButtonText="Ya estoy registrado"
+        ></AuthRedirectButton>
+        <AuthConfirmButton
+          buttonText="Registro"
+          onClick={confirmRegister}
+        ></AuthConfirmButton>
+      </ScrollView>
     </View>
   );
 }

@@ -15,7 +15,7 @@ export default function AuthRedirectButton({
 
   return (
     <Pressable onPress={() => router.replace(route)}>
-      <Text className="text-blue-400 font-bold">{redirectButtonText}</Text>
+      <Text className="text-blue-500">{redirectButtonText}</Text>
     </Pressable>
   );
 }
