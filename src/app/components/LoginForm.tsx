@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Text, TextInput } from "react-native";
 
@@ -14,24 +14,25 @@ export default function LoginForm({
   validatedData,
 }: IProps): React.JSX.Element {
   const textInputStyle = "w-full bg-white border rounded-md h-12 px-4 my-1";
-
   const errorTextStyle = "pl-1 pb-2 text-red-600	";
 
-  type LoginForm = {
+  type LoginFormT = {
     email: string;
     password: string;
   };
 
-  type ErrorsState = {
+  type ErrorsStateT = {
     email: string;
     password: string;
   };
 
-  const [errors, setErrors] = useState<ErrorsState>({
+  const errorsState = {
     email: "",
     password: "",
-  });
-  const { control, setValue, getValues } = useForm<LoginForm>();
+  };
+
+  const [errors, setErrors] = useState<ErrorsStateT>(errorsState);
+  const { control, setValue, getValues } = useForm<LoginFormT>();
 
   const setEmail = (value: string) => {
     setValue("email", value);
@@ -60,7 +61,7 @@ export default function LoginForm({
         });
         validatedData(false);
       }
-      if (value.length === 0) {
+      if (!value?.length) {
         setErrors({
           email: "Campo obligatorio",
           password: errors.password,
@@ -81,7 +82,7 @@ export default function LoginForm({
         validatedData(false);
       }
 
-      if (value.length === 0) {
+      if (!value?.length) {
         setErrors({
           email: errors.email,
           password: "Campo obligatorio",
