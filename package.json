@@ -9,7 +9,7 @@
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "eslint .",
-    "format": "prettier .",
+    "format": "prettier --write .",
     "prepare": "husky install"
   },
   "jest": {
@@ -72,5 +72,10 @@
   "lint-staged": {
     "*.ts": "eslint --cache --fix",
     "*.tsx": "eslint --cache --fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run format && git add -A ."
+    }
   }
 }

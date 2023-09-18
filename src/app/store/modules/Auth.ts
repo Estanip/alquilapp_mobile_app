@@ -48,7 +48,7 @@ const RegisterSlice = createSlice({
     },
     registerSuccess: (
       state: AuthState,
-      action: PayloadAction<RegisterPayloadI>
+      action: PayloadAction<RegisterPayloadI>,
     ) => {
       state.status = "Success";
       state.error = null;
@@ -56,7 +56,7 @@ const RegisterSlice = createSlice({
     },
     registerError: (
       state: AuthState,
-      action: PayloadAction<RegisterPayloadI>
+      action: PayloadAction<RegisterPayloadI>,
     ) => {
       state.status = "Error";
       state.success = false;

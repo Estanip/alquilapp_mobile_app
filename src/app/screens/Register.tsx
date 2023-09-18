@@ -35,7 +35,7 @@ export default function RegisterScreen(): React.JSX.Element {
 
   const confirmRegister = () => {
     const notCompleted = Object.values(registerState).some(
-      (e) => !e || e === ""
+      (e) => !e || e === "",
     );
     if (notCompleted || !validatedData)
       window.alert("Completa los campos correctamente antes de continuar");
