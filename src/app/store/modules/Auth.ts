@@ -1,41 +1,77 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { AuthI, AuthPayloadI } from "../interfaces/Auth";
+import { PayloadAction, combineReducers, createSlice } from "@reduxjs/toolkit";
+import { UserI, LoginPayloadI, RegisterPayloadI } from "../interfaces/Auth";
 
 interface AuthState {
   status: "Success" | "Pending" | "Error";
+  success: boolean;
   error: Error | string | null;
-  user: AuthI | null;
+  user?: UserI | null;
 }
 
 const initialState: AuthState = {
   status: "Pending",
+  success: false,
   error: null,
   user: null,
 };
 
-const AuthSlice = createSlice({
+const LoginSlice = createSlice({
   name: "login",
   initialState,
   reducers: {
     loginPending: (state: AuthState) => {
       state.status = "Pending";
-      state.error = null;
-      state.user = null;
     },
-    loginSuccess: (state: AuthState, action: PayloadAction<AuthPayloadI>) => {
+    loginSuccess: (state: AuthState, action: PayloadAction<LoginPayloadI>) => {
       state.status = "Success";
       state.error = null;
-      state.user = action.payload.user as AuthI;
-      localStorage.setItem("user_id", action.payload.user?.id as string);
-      localStorage.setItem("token", action.payload.token as string);
+      state.user = action.payload.user;
+      state.success = action.payload.success;
+      localStorage.setItem("user_id", action.payload.user?.id);
+      localStorage.setItem("token", action.payload.token);
     },
-    loginError: (state: AuthState, action: PayloadAction<AuthPayloadI>) => {
+    loginError: (state: AuthState, action: PayloadAction<LoginPayloadI>) => {
       state.status = "Error";
       state.user = null;
-      state.error = action.payload.message as string;
+      state.success = action.payload.success;
+      state.error = action.payload.message;
     },
   },
 });
 
-export const { loginSuccess, loginError, loginPending } = AuthSlice.actions;
-export default AuthSlice.reducer;
+const RegisterSlice = createSlice({
+  name: "register",
+  initialState,
+  reducers: {
+    registerPending: (state: AuthState) => {
+      state.status = "Pending";
+    },
+    registerSuccess: (
+      state: AuthState,
+      action: PayloadAction<RegisterPayloadI>
+    ) => {
+      state.status = "Success";
+      state.error = null;
+      state.success = action.payload.success;
+    },
+    registerError: (
+      state: AuthState,
+      action: PayloadAction<RegisterPayloadI>
+    ) => {
+      state.status = "Error";
+      state.success = false;
+      state.error = action.payload.message;
+    },
+  },
+});
+
+const reducer = combineReducers({
+  login: LoginSlice.reducer,
+  register: RegisterSlice.reducer,
+});
+
+export const { loginSuccess, loginError, loginPending } = LoginSlice.actions;
+export const { registerSuccess, registerError, registerPending } =
+  RegisterSlice.actions;
+
+export default reducer;

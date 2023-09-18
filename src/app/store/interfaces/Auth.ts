@@ -1,4 +1,4 @@
-export interface AuthI {
+export interface UserI {
   id: string;
   email: string;
   first_name: string;
@@ -7,8 +7,14 @@ export interface AuthI {
   identification_number: string;
 }
 
-export interface AuthPayloadI {
-  user?: AuthI;
-  message?: string;
-  token?: string;
+export interface LoginPayloadI {
+  success: boolean;
+  message: string;
+  token: string;
+  user: UserI;
+}
+
+export interface RegisterPayloadI {
+  success: boolean;
+  message: string;
 }

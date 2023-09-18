@@ -3,13 +3,12 @@ import { View } from "react-native";
 import AuthConfirmButton from "../components/AuthConfirmButton";
 import AuthRedirectButton from "../components/AuthRedirectButton";
 import LoginForm from "../components/LoginForm";
-import { useTypedDispatch } from "../store";
-import { Dispatch } from "@reduxjs/toolkit";
+import { AppDispatch, useTypedDispatch } from "../store";
 import { signIn } from "../api/auth";
 import TitleText from "../components/TitleText";
 
 export default function LoginScreen(): React.JSX.Element {
-  const dispatch: Dispatch<any> = useTypedDispatch();
+  const dispatch: AppDispatch = useTypedDispatch();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

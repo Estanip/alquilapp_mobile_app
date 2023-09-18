@@ -5,12 +5,11 @@ import RegisterForm from "../components/RegisterForm";
 import AuthConfirmButton from "../components/AuthConfirmButton";
 import { RegisterFormI } from "../interfaces/auth/Auth";
 import TitleText from "../components/TitleText";
-import { useTypedDispatch } from "../store";
-import { Dispatch } from "@reduxjs/toolkit";
+import { AppDispatch, useTypedDispatch } from "../store";
 import { signUp } from "../api/auth";
 
 export default function RegisterScreen(): React.JSX.Element {
-  const dispatch: Dispatch<any> = useTypedDispatch();
+  const dispatch: AppDispatch = useTypedDispatch();
 
   const registerForm: RegisterFormI = {
     email: "",

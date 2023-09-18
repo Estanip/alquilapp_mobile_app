@@ -1,10 +1,17 @@
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { Text, TextInput, View, Pressable, StyleSheet } from "react-native";
+import {
+  Text,
+  TextInput,
+  View,
+  Pressable,
+  StyleSheet,
+  TextInputProps,
+} from "react-native";
 import {
   ControllerFieldI,
   RegisterFormI,
-  TypesOfUserI,
+  TypeOfUserOptionsI,
 } from "../interfaces/auth/Auth";
 import DateTimePicker, {
   DateTimePickerEvent,
@@ -57,6 +64,16 @@ export default function RegisterForm({
     { value: "birth_date", name: "Fecha de nacimiento" },
     { value: "type_of_user", name: "Tipo de usuario" },
   ];
+
+  type RegisterValuesT =
+    | "email"
+    | "password"
+    | "first_name"
+    | "last_name"
+    | "identification_number";
+
+  type DateTimePickerModesT = "date" | "time" | "datetime" | "countdown";
+  type DateT = Date | undefined;
 
   // Register
   const [errors, setErrors] = useState<RegisterFormI>(errorState);
@@ -124,19 +141,19 @@ export default function RegisterForm({
   };
 
   // Date Time Picker
-  const [date, setDate] = useState<Date>(new Date());
+  const [date, setDate] = useState<DateT>(new Date());
   const [isDateSelected, setDateSelected] = useState<boolean>(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [displaymode, setMode] = useState<any>("date");
+  const [displaymode, setMode] = useState<DateTimePickerModesT>("date");
 
-  const formatDate = (date: Date) => {
+  const formatDate = (date: DateT) => {
     if (isDateSelected) {
       let formatedDateToRender = date?.toLocaleString("en-GB", {
         timeZone: "UTC",
-      });
+      }) as string;
       formatedDateToRender = formatedDateToRender?.substring(0, 10);
 
-      let formatedDateToSetState = date?.toISOString();
+      let formatedDateToSetState = date?.toISOString() as string;
       formatedDateToSetState = formatedDateToSetState.substring(0, 10);
 
       setValue("birth_date", formatedDateToSetState?.trim());
@@ -145,7 +162,7 @@ export default function RegisterForm({
     return "Fecha de nacimiento";
   };
 
-  const onChangeDate = (e: DateTimePickerEvent, selectedDate: Date | any) => {
+  const onChangeDate = (e: DateTimePickerEvent, selectedDate: DateT) => {
     if (e?.type === "dismissed") {
       setShowDatePicker(false);
       setDateSelected(false);
@@ -162,14 +179,14 @@ export default function RegisterForm({
     }
   };
 
-  const displayDatepicker = (mode: string) => {
+  const displayDatepicker = (mode: DateTimePickerModesT) => {
     setMode(mode);
     setShowDatePicker(true);
   };
 
   // Type of user
   const [typeOfUser, setTypeOfUser] = useState("");
-  const typesOfUsers: TypesOfUserI[] = [
+  const typesOfUsers: TypeOfUserOptionsI[] = [
     { label: "Abonado", value: "abonado" },
     { label: "Socio", value: "socio" },
     { label: "No Socio", value: "no_socio" },
@@ -185,7 +202,7 @@ export default function RegisterForm({
 
   return (
     <View>
-      {fields.map((field: any, index: number) => {
+      {fields.map((field: ControllerFieldI, index: number) => {
         if (
           field.name != "Fecha de nacimiento" &&
           field.name != "Tipo de usuario"
@@ -194,7 +211,7 @@ export default function RegisterForm({
             <View key={`View-Register-${index}`}>
               <Controller
                 control={control}
-                name={field.value}
+                name={field.value as RegisterValuesT}
                 render={() => (
                   <TextInput
                     maxLength={field.name === "DNI" ? 8 : 30}
@@ -231,9 +248,8 @@ export default function RegisterForm({
               </Pressable>
               {showDatePicker && (
                 <DateTimePicker
-                  value={date}
+                  value={date as Date}
                   mode={displaymode}
-                  is24Hour={true}
                   onChange={onChangeDate}
                   maximumDate={new Date()}
                 />
@@ -251,7 +267,9 @@ export default function RegisterForm({
                 <RNPickerSelect
                   placeholder={pickerPlaceholder}
                   useNativeAndroidPickerStyle={false}
-                  textInputProps={{ style: { color: "#737373" } } as any}
+                  textInputProps={
+                    { style: { color: "#737373" } } as TextInputProps
+                  }
                   onValueChange={(value: string) => onChangeTypeOfUser(value)}
                   items={typesOfUsers}
                 />

@@ -1,11 +1,11 @@
-import { AuthI } from "../../store/interfaces/Auth";
+import { LoginPayloadI, RegisterPayloadI } from "../../store/interfaces/Auth";
 
 export interface LoginDispatchI {
   type: string;
-  payload?: {
-    message?: string;
-    succees?: boolean;
-    token?: string;
-    user?: AuthI;
-  };
+  payload?: LoginPayloadI;
+}
+
+export interface RegisterDispatchI {
+  type: string;
+  payload?: RegisterPayloadI;
 }

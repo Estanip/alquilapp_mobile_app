@@ -1,7 +1,15 @@
 import { Dispatch } from "@reduxjs/toolkit";
-import { loginError, loginPending, loginSuccess } from "../store/modules/Auth";
-import { LoginDispatchI } from "./interfaces/Auth";
+import {
+  loginError,
+  loginPending,
+  loginSuccess,
+  registerError,
+  registerPending,
+  registerSuccess,
+} from "../store/modules/Auth";
+import { LoginDispatchI, RegisterDispatchI } from "./interfaces/Auth";
 import { RegisterFormI } from "../interfaces/auth/Auth";
+import { RegisterPayloadI } from "../store/interfaces/Auth";
 
 export const signIn =
   (email: string, password: string) =>
@@ -30,8 +38,8 @@ export const signIn =
 
 export const signUp =
   (user: RegisterFormI) =>
-  async (dispatch: Dispatch<LoginDispatchI>): Promise<void> => {
-    dispatch(loginPending());
+  async (dispatch: Dispatch<RegisterDispatchI>): Promise<void> => {
+    dispatch(registerPending());
     try {
       await fetch("http://192.168.1.6:80/auth/register", {
         method: "POST",
@@ -42,28 +50,10 @@ export const signUp =
       })
         .then((res) => res.json())
         .then((response) => {
-          if (response?.success) dispatch(loginSuccess(response));
-          else if (!response?.success) dispatch(loginError(response));
+          if (response?.success) dispatch(registerSuccess(response));
+          else if (!response?.success) dispatch(registerError(response));
         });
     } catch (error: any) {
-      dispatch(loginError(error));
-    }
-  };
-
-export const checkToken =
-  () =>
-  async (dispatch: Dispatch): Promise<void> => {
-    dispatch(loginPending());
-    try {
-      await fetch("http://localhost:80/court", {
-        method: "GET",
-        headers: {
-          authorization: localStorage.getItem("token") as string,
-        },
-      })
-        .then((res) => res.json())
-        .then((response: any) => {});
-    } catch (error: any) {
-      console.log(error);
+      dispatch(registerError(error));
     }
   };

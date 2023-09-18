@@ -7,10 +7,6 @@ const rootReducer = combineReducers({
   auth: AuthReducer,
 });
 
-export type RootState = ReturnType<typeof rootReducer>;
-export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
-export const useTypedDispatch = useDispatch;
-
 const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
@@ -18,5 +14,11 @@ const store = configureStore({
       serializableCheck: false,
     }),
 });
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+
+export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
+export const useTypedDispatch = useDispatch;
 
 export default store;
