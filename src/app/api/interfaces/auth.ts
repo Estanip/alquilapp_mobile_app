@@ -1,11 +1,11 @@
-import { LoginPayloadI, RegisterPayloadI } from "../../store/interfaces/Auth";
+import { type LoginPayloadI, type RegisterPayloadI } from '../../store/interfaces/Auth';
 
-export interface LoginDispatchI {
-  type: string;
-  payload?: LoginPayloadI;
-}
+export type LoginDispatchI = {
+    type: string;
+    payload?: LoginPayloadI;
+};
 
-export interface RegisterDispatchI {
-  type: string;
-  payload?: RegisterPayloadI;
-}
+export type RegisterDispatchI = {
+    type: string;
+    payload?: RegisterPayloadI;
+};

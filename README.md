@@ -12,4 +12,4 @@ _Desarrollo en_
 
 ## Autor ✒️
 
-- **Estani Pettigrew** - [Estanip](https://github.com/Estanip)
+-   **Estani Pettigrew** - [Estanip](https://github.com/Estanip)
