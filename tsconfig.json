@@ -3,11 +3,13 @@
     "compilerOptions": {
         "strict": true,
         "module": "NodeNext",
-        "moduleResolution": "Node",
+        "moduleResolution": "NodeNext",
         "pretty": true,
         "resolveJsonModule": true,
         "paths": {
-            "@/*": ["./*"]
+            "@/*": [
+                "./*"
+            ]
         }
     },
     "include": [
@@ -15,6 +17,5 @@
         "**/*.tsx",
         ".expo/types/**/*.ts",
         "expo-env.d.ts",
-        "../codigo de ejemplo/index.tsx"
     ]
 }
