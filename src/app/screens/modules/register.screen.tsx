@@ -1,42 +1,36 @@
 import React, { useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import AuthRedirectButton from '../components/AuthRedirectButton';
-import RegisterForm from '../components/RegisterForm';
-import AuthConfirmButton from '../components/AuthConfirmButton';
-import { type RegisterFormI } from '../interfaces/auth/Auth';
-import TitleText from '../components/TitleText';
-import { type AppDispatch, useTypedDispatch } from '../store';
-import { signUp } from '../api/auth';
+import { signUp } from '../../api/modules/auth.service';
+import AuthConfirmButton from '../../components/modules/auth/confirm-btn.component';
+import AuthRedirectButton from '../../components/modules/auth/redirect-btn.component';
+import RegisterForm from '../../components/modules/auth/register.component';
+import TitleText from '../../components/modules/shared/title-text.component';
+import { MembershipTypes } from '../../constants/user.constants';
+import { useAppDispatch } from '../../store/hooks';
+import { IRegisterForm } from '../interfaces/register.interfaces';
 
 export default function RegisterScreen(): React.JSX.Element {
-    const dispatch: AppDispatch = useTypedDispatch();
-
-    const registerForm: RegisterFormI = {
+    const registerForm: IRegisterForm = {
         email: '',
         password: '',
         first_name: '',
         last_name: '',
         identification_number: '',
+        phone_number: '',
         birth_date: '',
-        type_of_user: '',
+        membership_type: '',
     };
-
-    const [registerState, setRegisterState] = useState<RegisterFormI>(registerForm);
+    const [registerState, setRegisterState] = useState<IRegisterForm>(registerForm);
     const [validatedData, setDataValidated] = useState<boolean>();
 
-    const handleRegisterData = (data: RegisterFormI) => {
-        setRegisterState(data);
-    };
-
-    const handleDataValidated = (data: boolean) => {
-        setDataValidated(data);
-    };
-
+    const dispatch = useAppDispatch();
+    const handleRegisterData = (data: IRegisterForm) => setRegisterState(data);
+    const handleDataValidated = (data: boolean) => setDataValidated(data);
     const confirmRegister = () => {
         const notCompleted = Object.values(registerState).some((e) => !e || e === '');
         if (notCompleted || !validatedData)
             window.alert('Completa los campos correctamente antes de continuar');
-        else dispatch(signUp(registerState));
+        else return dispatch(signUp(registerState));
     };
 
     return (

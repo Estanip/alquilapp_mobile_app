@@ -1,35 +1,25 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import AuthConfirmButton from '../components/AuthConfirmButton';
-import AuthRedirectButton from '../components/AuthRedirectButton';
-import LoginForm from '../components/LoginForm';
-import { type AppDispatch, useTypedDispatch } from '../store';
-import { signIn } from '../api/auth';
-import TitleText from '../components/TitleText';
+import { signIn } from '../../api/modules/auth.service';
+import AuthConfirmButton from '../../components/modules/auth/confirm-btn.component';
+import AuthRedirectButton from '../../components/modules/auth/redirect-btn.component';
+import LoginForm from '../../components/modules/auth/login.component';
+import TitleText from '../../components/modules/shared/title-text.component';
+import { useAppDispatch } from '../../store/hooks';
 
 export default function LoginScreen(): React.JSX.Element {
-    const dispatch: AppDispatch = useTypedDispatch();
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [validatedData, setDataValidated] = useState<boolean>();
 
-    const handleEmailData = (data: string) => {
-        setEmail(data);
-    };
-
-    const handlePasswordData = (data: string) => {
-        setPassword(data);
-    };
-
-    const handleDataValidated = (data: boolean) => {
-        setDataValidated(data);
-    };
-
-    const confirmLogin = () => {
+    const dispatch = useAppDispatch();
+    const handleEmailData = (data: string) => setEmail(data);
+    const handlePasswordData = (data: string) => setPassword(data);
+    const handleDataValidated = (data: boolean) => setDataValidated(data);
+    const confirmLogin = async () => {
         if (password === '' || email === '' || !validatedData)
             window.alert('Completa los campos correctamente antes de continuar');
-        else dispatch(signIn(email, password));
+        else await dispatch(signIn(email, password));
     };
 
     return (

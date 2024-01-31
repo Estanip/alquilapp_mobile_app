@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import LoginScreen from '../screens/Login';
+import LoginScreen from '../screens/modules/login.screen';
 
 export default function Login(): React.JSX.Element {
     return (

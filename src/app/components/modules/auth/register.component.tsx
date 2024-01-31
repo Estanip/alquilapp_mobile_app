@@ -1,63 +1,44 @@
-import React, { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { Text, TextInput, View, Pressable, StyleSheet, type TextInputProps } from 'react-native';
-import {
-    type ControllerFieldI,
-    type RegisterFormI,
-    type TypeOfUserOptionsI,
-} from '../interfaces/auth/Auth';
+import { MembershipTypes } from '@/src/app/constants/user.constants';
 import DateTimePicker, { type DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import React, { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { Pressable, Text, TextInput, View, type TextInputProps } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
-import { TypesOfUser } from '../constants';
+import { IRegisterForm } from '../../../screens/interfaces/register.interfaces';
+import { IControllerField, ISelectOptions } from '../../interfaces';
+import {
+    IRegisterComponentProps,
+    TDate,
+    TDateTimePickerModes,
+    TRegisterValues,
+} from '../../interfaces/auth.interfaces';
+import { pickerMembershipTypeProps, sharedStyles, styles } from './styles';
 
-type IProps = {
-    registerData: (arg: RegisterFormI) => void;
-    validatedData: (arg: boolean) => void;
-};
-
-export default function RegisterForm({ registerData, validatedData }: IProps): React.JSX.Element {
-    const styles = StyleSheet.create({
-        pickerViewStyle: {
-            backgroundColor: 'white',
-            borderColor: '#e2e8f0',
-            borderRadius: 5,
-            borderWidth: 1,
-            height: 50,
-            justifyContent: 'center',
-            overflow: 'hidden',
-            paddingLeft: 15,
-        },
-    });
-
-    const textInputStyle = 'w-full bg-white border rounded-md h-12 px-4 my-1';
-    const errorTextStyle = 'pl-1 pb-2 text-red-600';
-    const pickerPlaceholder = {
-        label: 'Selecciona tipo de usuario',
-        value: null,
-        color: '#737373',
-    };
-
-    const registerFormData: RegisterFormI = {
+export default function Register({
+    registerData,
+    validatedData,
+}: IRegisterComponentProps): React.JSX.Element {
+    const registerFormData: IRegisterForm = {
         email: '',
         password: '',
         first_name: '',
         last_name: '',
+        phone_number: '',
         identification_number: '',
         birth_date: '',
-        type_of_user: '',
+        membership_type: '',
     };
-
-    const errorState: RegisterFormI = {
+    const errorState: IRegisterForm = {
         email: '',
         password: '',
         first_name: '',
         last_name: '',
+        phone_number: '',
         identification_number: '',
         birth_date: '',
-        type_of_user: '',
+        membership_type: '',
     };
-
-    const fields: ControllerFieldI[] = [
+    const fields: IControllerField[] = [
         { value: 'email', name: 'Email' },
         { value: 'password', name: 'Contraseña' },
         { value: 'first_name', name: 'Nombre' },
@@ -67,33 +48,23 @@ export default function RegisterForm({ registerData, validatedData }: IProps): R
         { value: 'type_of_user', name: 'Tipo de usuario' },
     ];
 
-    type RegisterValuesT =
-        | 'email'
-        | 'password'
-        | 'first_name'
-        | 'last_name'
-        | 'identification_number';
-
-    type DateTimePickerModesT = 'date' | 'time' | 'datetime' | 'countdown';
-    type DateT = Date | undefined;
-
     // Type of user
-    const [typeOfUser, setTypeOfUser] = useState('');
-    const typesOfUsers: TypeOfUserOptionsI[] = [
-        { label: TypesOfUser.ABONADO, value: 'abonado' },
-        { label: TypesOfUser.SOCIO, value: 'socio' },
-        { label: TypesOfUser.NO_SOCIO, value: 'no_socio' },
+    const [membershipType, setMembershipType] = useState('');
+    const membershipTypes: ISelectOptions[] = [
+        { label: MembershipTypes.ABONADO, value: MembershipTypes.ABONADO },
+        { label: MembershipTypes.SOCIO, value: MembershipTypes.SOCIO },
+        { label: MembershipTypes.NO_SOCIO, value: MembershipTypes.NO_SOCIO },
     ];
 
     // Date Time Picker
-    const [date, setDate] = useState<DateT>(new Date());
+    const [date, setDate] = useState<TDate>(new Date());
     const [isDateSelected, setDateSelected] = useState<boolean>(false);
     const [showDatePicker, setShowDatePicker] = useState(false);
-    const [displaymode, setMode] = useState<DateTimePickerModesT>('date');
+    const [displaymode, setMode] = useState<TDateTimePickerModes>('date');
 
     // Register
-    const [registerErrors, setRegisterErrors] = useState<RegisterFormI>(errorState);
-    const { control, setValue, getValues } = useForm<RegisterFormI>({
+    const [registerErrors, setRegisterErrors] = useState<IRegisterForm>(errorState);
+    const { control, setValue, getValues } = useForm<IRegisterForm>({
         defaultValues: registerFormData,
     });
 
@@ -102,10 +73,11 @@ export default function RegisterForm({ registerData, validatedData }: IProps): R
         setRegisterErrors(errorState);
         const registerForm = getValues();
         for (const property in registerForm) {
-            let value = registerForm[property as keyof RegisterFormI];
-            value = value?.trim();
+            let value = registerForm[property as keyof IRegisterForm];
 
-            if (!value?.length) {
+            value = value.trim();
+
+            if (!value.length) {
                 setRegisterErrors((errors) => ({
                     ...errors,
                     [property]: 'Campo obligatorio',
@@ -121,14 +93,6 @@ export default function RegisterForm({ registerData, validatedData }: IProps): R
                     }));
                     validatedData(false);
                 }
-            }
-
-            if (property === 'birth_date' && !isDateSelected) {
-                setRegisterErrors((errors) => ({
-                    ...errors,
-                    [property]: 'Campo obligatorio',
-                }));
-                validatedData(false);
             }
 
             if (property === 'password') {
@@ -151,90 +115,89 @@ export default function RegisterForm({ registerData, validatedData }: IProps): R
                     validatedData(false);
                 }
             }
+
+            if (property === 'birth_date' && !isDateSelected) {
+                setRegisterErrors((errors) => ({
+                    ...errors,
+                    [property]: 'Campo obligatorio',
+                }));
+                validatedData(false);
+            }
         }
     };
-
-    const setValues = (value: string, field: keyof RegisterFormI) => {
+    const setValues = (value: string, field: keyof IRegisterForm) => {
         setValue(field, value?.trim());
         registerData(getValues());
         checkErrors();
     };
 
-    const formatDate = (selectedDate: DateT) => {
+    const formatDate = (selectedDate: TDate) => {
         if (isDateSelected) {
             let formatedDateToRender = selectedDate?.toLocaleString('en-GB', {
                 timeZone: 'UTC',
             })!;
             formatedDateToRender = formatedDateToRender?.substring(0, 10);
-
             let formatedDateToSetState = selectedDate?.toISOString()!;
             formatedDateToSetState = formatedDateToSetState.substring(0, 10);
-
             setValue('birth_date', formatedDateToSetState?.trim());
             return formatedDateToRender;
         }
 
         return 'Fecha de nacimiento';
     };
-
-    const onChangeDate = (e: DateTimePickerEvent, selectedDate: DateT) => {
+    const onChangeDate = (e: DateTimePickerEvent, selectedDate: TDate | undefined) => {
         if (e?.type === 'dismissed') {
             setShowDatePicker(false);
             setDateSelected(false);
-
             registerData(getValues());
             checkErrors();
         } else if (e?.type === 'set') {
             setShowDatePicker(false);
-            setDate(selectedDate);
+            setDate(selectedDate!);
             setDateSelected(true);
-
             registerData(getValues());
             checkErrors();
         }
     };
-
-    const displayDatepicker = (mode: DateTimePickerModesT) => {
+    const displayDatepicker = (mode: TDateTimePickerModes) => {
         setMode(mode);
         setShowDatePicker(true);
     };
-
     const onChangeTypeOfUser = (type: string) => {
-        setTypeOfUser(type);
-        setValue('type_of_user', type?.trim());
-
+        setMembershipType(type);
+        setValue('membership_type', type?.trim());
         registerData(getValues());
         checkErrors();
     };
 
     return (
         <View>
-            {fields.map((field: ControllerFieldI, index: number) => {
+            {fields.map((field: IControllerField, index: number) => {
                 if (field.name != 'Fecha de nacimiento' && field.name != 'Tipo de usuario') {
                     return (
                         <View key={`View-Register-${index}`}>
                             <Controller
                                 control={control}
-                                name={field.value as RegisterValuesT}
+                                name={field.value as TRegisterValues}
                                 render={() => (
                                     <TextInput
                                         maxLength={field.name === 'DNI' ? 8 : 30}
-                                        className={`${textInputStyle} ${
+                                        className={`${sharedStyles.textInput} ${
                                             registerErrors[
-                                                `${field.value}` as keyof RegisterFormI
+                                                `${field.value}` as keyof IRegisterForm
                                             ] === ''
                                                 ? 'border-slate-200'
                                                 : 'border-red-400'
                                         }`}
                                         onChangeText={(value: string) =>
-                                            setValues(value, field.value as keyof RegisterFormI)
+                                            setValues(value, field.value as keyof IRegisterForm)
                                         }
                                         placeholder={field.name}
                                     ></TextInput>
                                 )}
                             />
-                            <Text className={errorTextStyle}>
-                                {registerErrors[field.value as keyof RegisterFormI]}
+                            <Text className={sharedStyles.textError}>
+                                {registerErrors[field.value as keyof IRegisterForm]}
                             </Text>
                         </View>
                     );
@@ -250,7 +213,7 @@ export default function RegisterForm({ registerData, validatedData }: IProps): R
                             >
                                 <TextInput
                                     style={{ color: '#737373' }}
-                                    className={`${textInputStyle} ${
+                                    className={`${sharedStyles.textInput} ${
                                         isDateSelected ? 'border-slate-200' : 'border-red-400'
                                     }`}
                                     value={formatDate(date)}
@@ -266,7 +229,7 @@ export default function RegisterForm({ registerData, validatedData }: IProps): R
                                 />
                             )}
                             {!isDateSelected && (
-                                <Text className={errorTextStyle}>Campo obligatorio</Text>
+                                <Text className={sharedStyles.textError}>Campo obligatorio</Text>
                             )}
                         </View>
                     );
@@ -277,7 +240,7 @@ export default function RegisterForm({ registerData, validatedData }: IProps): R
                         <View key={`View-Select-${index}`} className="my-4">
                             <View style={styles.pickerViewStyle}>
                                 <RNPickerSelect
-                                    placeholder={pickerPlaceholder}
+                                    placeholder={pickerMembershipTypeProps}
                                     useNativeAndroidPickerStyle={false}
                                     textInputProps={
                                         { style: { color: '#737373' } } as TextInputProps
@@ -285,11 +248,11 @@ export default function RegisterForm({ registerData, validatedData }: IProps): R
                                     onValueChange={(value: string) => {
                                         onChangeTypeOfUser(value);
                                     }}
-                                    items={typesOfUsers}
+                                    items={membershipTypes}
                                 />
                             </View>
-                            {!typeOfUser && (
-                                <Text className={errorTextStyle}>Campo obligatorio</Text>
+                            {!membershipType && (
+                                <Text className={sharedStyles.textError}>Campo obligatorio</Text>
                             )}
                         </View>
                     );

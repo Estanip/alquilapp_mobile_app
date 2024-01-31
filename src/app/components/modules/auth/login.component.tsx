@@ -1,38 +1,20 @@
 import React, { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Text, TextInput } from 'react-native';
-
-type IProps = {
-    emailData: (arg: string) => void;
-    passwordData: (arg: string) => void;
-    validatedData: (arg: boolean) => void;
-};
+import { ILoginComponentProps, IErrorState, ILoginForm } from '../../interfaces/auth.interfaces';
+import { sharedStyles } from './styles';
 
 export default function LoginForm({
     emailData,
     passwordData,
     validatedData,
-}: IProps): React.JSX.Element {
-    const textInputStyle = 'w-full bg-white border rounded-md h-12 px-4 my-1';
-    const errorTextStyle = 'pl-1 pb-2 text-red-600	';
-
-    type LoginFormT = {
-        email: string;
-        password: string;
-    };
-
-    type ErrorsStateT = {
-        email: string;
-        password: string;
-    };
-
+}: ILoginComponentProps): React.JSX.Element {
     const errorsState = {
         email: '',
         password: '',
     };
-
-    const [errors, setErrors] = useState<ErrorsStateT>(errorsState);
-    const { control, setValue, getValues } = useForm<LoginFormT>();
+    const [errors, setErrors] = useState<IErrorState>(errorsState);
+    const { control, setValue, getValues } = useForm<ILoginForm>();
 
     const checkErrors = (value: string, field: string) => {
         validatedData(true);
@@ -98,8 +80,10 @@ export default function LoginForm({
                 name="email"
                 render={() => (
                     <TextInput
-                        className={`${textInputStyle} ${
-                            errors.email === '' ? 'border-slate-200' : 'border-red-400'
+                        className={`${sharedStyles.textInput} ${
+                            errors.email === ''
+                                ? sharedStyles.borderSuccess
+                                : sharedStyles.borderError
                         }`}
                         onChangeText={(value: string) => {
                             setEmail(value);
@@ -108,13 +92,13 @@ export default function LoginForm({
                     ></TextInput>
                 )}
             />
-            <Text className={errorTextStyle}>{errors.email}</Text>
+            <Text className={sharedStyles.textError}>{errors.email}</Text>
             <Controller
                 control={control}
                 name="password"
                 render={() => (
                     <TextInput
-                        className={`${textInputStyle} ${
+                        className={`${sharedStyles.textInput} ${
                             errors.password === '' ? 'border-slate-200' : 'border-red-400'
                         }`}
                         onChangeText={(value: string) => {
@@ -124,7 +108,7 @@ export default function LoginForm({
                     ></TextInput>
                 )}
             />
-            <Text className={errorTextStyle}>{errors.password}</Text>
+            <Text className={sharedStyles.textError}>{errors.password}</Text>
         </>
     );
 }
