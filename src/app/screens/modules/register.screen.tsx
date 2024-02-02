@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { Alert, ScrollView, View } from 'react-native';
 import { signUp } from '../../api/modules/auth.service';
 import AuthConfirmButton from '../../components/modules/auth/confirm-btn.component';
 import AuthRedirectButton from '../../components/modules/auth/redirect-btn.component';
@@ -29,7 +29,18 @@ export default function RegisterScreen(): React.JSX.Element {
     const confirmRegister = () => {
         const notCompleted = Object.values(registerState).some((e) => !e || e === '');
         if (notCompleted || !validatedData)
-            window.alert('Completa los campos correctamente antes de continuar');
+            Alert.alert('Alert Title', 'My Alert Msg', [
+                {
+                    text: 'Ask me later',
+                    onPress: () => console.log('Ask me later pressed'),
+                },
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                { text: 'OK', onPress: () => console.log('OK Pressed') },
+            ]);
         else return dispatch(signUp(registerState));
     };
 
