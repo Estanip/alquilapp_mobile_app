@@ -30,8 +30,8 @@
       "favicon": "./assets/icons/favicon.png"
     },
     "plugins": [
-      "expo-router",
-      "expo-font"
+      "expo-font",
+      "expo-router"
     ],
     "experiments": {
       "tsconfigPaths": true,
