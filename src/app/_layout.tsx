@@ -1,7 +1,8 @@
-import React from 'react';
 import { Stack } from 'expo-router';
-import { Provider } from 'react-redux';
 import { NativeWindStyleSheet } from 'nativewind';
+import React from 'react';
+import { Provider } from 'react-redux';
+import ToastManager from 'toastify-react-native';
 import store from './store';
 
 NativeWindStyleSheet.setOutput({
@@ -11,12 +12,12 @@ NativeWindStyleSheet.setOutput({
 export default function HomeLayout(): React.JSX.Element {
     return (
         <Provider store={store}>
+            <ToastManager />
             <Stack>
                 <Stack.Screen
-                    name="auth"
+                    name="screens"
                     options={{
-                        headerShown: true,
-                        title: 'Bienvenido',
+                        headerShown: false,
                     }}
                 />
             </Stack>

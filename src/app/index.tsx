@@ -1,10 +1,14 @@
-import { Link, Stack } from 'expo-router';
+import { Stack } from 'expo-router';
 import React from 'react';
+import { View } from 'react-native';
+import LoginScreen from './screens/modules/login.screen';
 export default function Root() {
     return (
         <>
-            <Stack.Screen options={{ headerShown: true, title: 'Home' }} />
-            <Link href="/auth/login">Navigate to Login</Link>
+            <View style={{ flex: 1 }}>
+                <Stack.Screen options={{ headerShown: true, title: 'Alquilapp' }}></Stack.Screen>
+                <LoginScreen></LoginScreen>
+            </View>
         </>
     );
 }
