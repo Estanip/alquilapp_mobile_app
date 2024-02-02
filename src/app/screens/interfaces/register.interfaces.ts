@@ -9,4 +9,6 @@ export interface IRegisterForm {
     phone_number: string;
     birth_date: string;
     membership_type: string;
+    is_enabled?: boolean;
+    is_membership_validated?: boolean;
 }
