@@ -2,7 +2,6 @@
 
 # dependencies
 node_modules/
-package-lock.json
 
 # Expo
 .expo/
@@ -41,11 +40,11 @@ yarn-error.*
 expo-env.d.ts
 # @end expo-cli
 
-# Husky
-.husky
-
 # Idea
 .idea
 
+# ESLint
 .eslintcache
+
+# Environment
 .env

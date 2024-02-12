@@ -1,5 +1,5 @@
-import Constants from 'expo-constants';
 import { API_LOCAL_PORT } from '@env';
+import Constants from 'expo-constants';
 
 const api =
     typeof Constants?.expoGoConfig?.packagerOpts === `object` &&
