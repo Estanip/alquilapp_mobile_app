@@ -1,39 +1,154 @@
 import { StyleSheet } from 'react-native';
+
 // Title text styles
 export const titleTextStyles = StyleSheet.create({
     textInput: {
-        marginBottom: 4, // mb-4 in Tailwind
-        color: '#1E3A8A', // text-sky-800 in Tailwind
-        fontSize: 18, // text-lg in Tailwind
-        fontWeight: 'bold', // font-bold in Tailwind
+        marginBottom: 4,
+        color: '#1E3A8A',
+        fontSize: 18,
+        fontWeight: 'bold',
     },
 });
 
 // Shared button styles
 export const sharedBtnStyles = StyleSheet.create({
     pressable: {
-        height: 40, // h-12 in Tailwind
+        height: 40,
         width: 200,
-        backgroundColor: '#2196F3', // bg-sky-500 in Tailwind
-        justifyContent: 'center', // flex-row and justify-center in Tailwind
-        alignItems: 'center', // items-center in Tailwind
-        paddingHorizontal: 24, // px-6 in Tailwind
-        marginTop: 16, // mt-4 in Tailwind
-        borderRadius: 8, // rounded-md in Tailwind
-    },
-    focusPressable: {
-        backgroundColor: '#1565C0', // focus:bg-sky-700 in Tailwind
-    },
-    disabledPressable: {
-        backgroundColor: '#BBDEFB', // disabled:bg-blue-200 in Tailwind
+        backgroundColor: '#2196F3',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 24,
+        marginTop: 16,
+        borderRadius: 8,
     },
     text: {
-        color: 'white', // text-white in Tailwind
-        fontSize: 16, // text-base in Tailwind
-        fontWeight: 'bold', // font-medium in Tailwind
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     view: {
-        flex: 1, // flex-1 in Tailwind
-        justifyContent: 'center', // items-center in Tailwind
+        flex: 1,
+        justifyContent: 'center',
     },
 });
+
+// Confirm BTN styles
+export const confirmBtnStyles = StyleSheet.create({
+    pressable: {
+        height: 48,
+        backgroundColor: '#2196F3',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 24,
+        marginTop: 16,
+        borderRadius: 8,
+    },
+    text: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    view: {
+        flex: 1,
+        justifyContent: 'center',
+    },
+});
+
+// Redirect BTN styles
+export const redirectBtnStyles = {};
+
+// Components sharedStyles
+export const sharedStyles = StyleSheet.create({
+    buttonText: {
+        color: '#3B82F6',
+    },
+    textInput: {
+        backgroundColor: 'white',
+        borderRadius: 8,
+        height: 48,
+        paddingLeft: 16,
+        color: 'gray',
+        borderWidth: 1,
+    },
+    textError: {
+        paddingLeft: 4,
+        marginTop: 1,
+        marginBottom: 12,
+        color: '#EF4444',
+    },
+});
+
+// Shared icon styles
+export const iconStyles = StyleSheet.create({
+    background: {
+        backgroundColor: '#f0f8ff',
+    },
+    icon: {
+        color: '#2196F3',
+    },
+});
+
+// Shared text inputs styles
+export const textInputStyles = StyleSheet.create({
+    success: {
+        ...sharedStyles.textInput,
+        borderColor: 'gray',
+    },
+    error: {
+        ...sharedStyles.textInput,
+        borderColor: 'red',
+    },
+    successWithIcon: {
+        ...sharedStyles.textInput,
+        borderColor: 'gray',
+        width: '90%',
+    },
+    errorWithIcon: {
+        ...sharedStyles.textInput,
+        borderColor: 'red',
+        width: '90%',
+    },
+});
+
+// Shared view styles
+export const viewStyles = StyleSheet.create({
+    icon: {
+        marginLeft: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    picker: {
+        backgroundColor: 'white',
+        borderWidth: 1,
+        height: 45,
+        borderRadius: 6,
+        overflow: 'hidden',
+        paddingLeft: 15,
+        color: '#737373',
+        justifyContent: 'center',
+    },
+    withIcon: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+});
+
+// shared view Picker styles
+export const viewPickerStyles = StyleSheet.create({
+    success: {
+        ...viewStyles.picker,
+        borderColor: 'gray',
+    },
+    error: {
+        ...viewStyles.picker,
+        borderColor: 'red',
+    },
+});
+
+/// Props
+export const pickerMembershipTypeProps = {
+    label: 'Seleccione tipo de usuario',
+    value: null,
+    color: '#737373',
+};
