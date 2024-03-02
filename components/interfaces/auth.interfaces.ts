@@ -1,23 +1,24 @@
-import { IRegisterForm } from '@/screens/interfaces/register.interfaces';
 import { StyleProp } from 'react-native';
 
+import { IRegisterForm } from '@/screens/interfaces/register.interfaces';
+
 export interface IRegisterComponentProps {
-    registerData: (arg: IRegisterForm) => void;
-    validatedData: (arg: boolean) => void;
+    _registerData: (arg: IRegisterForm) => void;
+    _validatedData: (arg: boolean) => void;
 }
 export interface IRedirectBtnComponentProps {
-    navigateTo: string;
-    redirectButtonText: string;
+    _navigateTo: string;
+    _redirectButtonText: string;
 }
 export interface IConfirmBtnComponentProps {
-    buttonText: string;
-    btnStyle?: StyleProp<any>;
-    onClick: () => void;
+    _buttonText: string;
+    _btnStyle?: StyleProp<any>;
+    _onClick: () => void;
 }
 export interface ILoginComponentProps {
-    emailData: (arg: string) => void;
-    passwordData: (arg: string) => void;
-    validatedData: (arg: boolean) => void;
+    _emailData: (arg: string) => void;
+    _passwordData: (arg: string) => void;
+    _validatedData: (arg: boolean) => void;
 }
 export type TDateTimePickerModes = 'date' | 'time' | 'datetime' | 'countdown';
 export type TDate = Date;
