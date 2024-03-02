@@ -1,11 +1,14 @@
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
+import ToastManager from 'toastify-react-native';
+
+import Book from './(app)/book';
+import Bookings from './(app)/bookings';
+import Home from './(app)/home';
+
 import LoginScreen from '@/screens/login.screen';
 import RegisterScreen from '@/screens/register.screen';
-import { SessionProvider } from '@/store/context/react.ctx';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ToastManager from 'toastify-react-native';
-import Home from './(app)/home';
-import Bookings from './(app)/bookings';
-import Book from './(app)/book';
+import { SessionProvider } from '@/store/react.ctx';
 
 export default function Root() {
     const Stack = createNativeStackNavigator();
