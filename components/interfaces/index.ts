@@ -9,5 +9,5 @@ export interface ISelectOptions {
 }
 
 export interface ITitleProps {
-    title: string;
+    _title: string;
 }
