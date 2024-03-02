@@ -1,11 +1,10 @@
-import { routes } from '@/constants/routes.constants';
-import { useSession } from '@/store/context/react.ctx';
 import { Redirect } from 'expo-router';
 import React from 'react';
 
-export default function Login(): React.JSX.Element {
-    const { session } = useSession();
-    console.log('sss', session);
+import { routes } from '@/constants/routes.constants';
+import { useSession } from '@/store/react.ctx';
 
-    return !session ? <Redirect href={routes.LOGIN} /> : <Redirect href={routes.HOME} />;
+export default function Login(): React.JSX.Element {
+    const { token } = useSession();
+    return !token ? <Redirect href={routes.LOGIN} /> : <Redirect href={routes.HOME} />;
 }

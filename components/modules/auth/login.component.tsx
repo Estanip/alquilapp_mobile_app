@@ -1,28 +1,30 @@
+import React, { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { Text, TextInput } from 'react-native';
+
+import { sharedStyles, textInputStyles } from '../shared/styles';
+
+import { errorsState } from '@/components/constants/login.contants';
 import {
     IErrorState,
     ILoginComponentProps,
     ILoginForm,
 } from '@/components/interfaces/auth.interfaces';
 import { emailRegExp, passwordRegExp } from '@/constants/auth.constants';
-import React, { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { Text, TextInput } from 'react-native';
-import { sharedStyles } from './styles';
 
 export default function LoginForm({
-    emailData,
-    passwordData,
-    validatedData,
+    _emailData,
+    _passwordData,
+    _validatedData,
 }: ILoginComponentProps): React.JSX.Element {
-    const errorsState = {
-        email: '',
-        password: '',
-    };
-    const [errors, setErrors] = useState<IErrorState>(errorsState);
+    // Login state
     const { control, setValue, getValues } = useForm<ILoginForm>();
 
+    // Errors state
+    const [errors, setErrors] = useState<IErrorState>(errorsState);
+
     const checkErrors = (value: string, field: string) => {
-        validatedData(true);
+        _validatedData(true);
         value = value.trim();
 
         if (field === 'email') {
@@ -32,13 +34,13 @@ export default function LoginForm({
                     email: 'Campo obligatorio',
                     password: errors.password,
                 });
-                validatedData(false);
+                _validatedData(false);
             } else if (!emailRegExp.exec(value)) {
                 setErrors({
                     email: 'Formato de email inválido',
                     password: errors.password,
                 });
-                validatedData(false);
+                _validatedData(false);
             }
         }
 
@@ -49,25 +51,25 @@ export default function LoginForm({
                     email: errors.email,
                     password: 'Campo obligatorio',
                 });
-                validatedData(false);
+                _validatedData(false);
             } else if (!passwordRegExp.exec(value)) {
                 setErrors({
                     email: errors.email,
                     password:
                         'La contraseña debe contener al menos 8 caracteres, un número, una letra y una mayúscula',
                 });
-                validatedData(false);
+                _validatedData(false);
             }
         }
     };
     const setEmail = (value: string) => {
         setValue('email', value);
-        emailData(getValues('email'));
+        _emailData(getValues('email'));
         checkErrors(getValues('email'), 'email');
     };
     const setPassword = (value: string) => {
         setValue('password', value);
-        passwordData(getValues('password'));
+        _passwordData(getValues('password'));
         checkErrors(getValues('password'), 'password');
     };
 
@@ -79,15 +81,13 @@ export default function LoginForm({
                 render={() => (
                     <TextInput
                         style={
-                            errors.email === ''
-                                ? sharedStyles.textInputSuccess
-                                : sharedStyles.textInputError
+                            errors.email === '' ? textInputStyles.success : textInputStyles.error
                         }
                         onChangeText={(value: string) => {
                             setEmail(value);
                         }}
                         placeholder="Ingrese email"
-                    ></TextInput>
+                    />
                 )}
             />
             <Text style={sharedStyles.textError}>{errors.email}</Text>
@@ -97,15 +97,13 @@ export default function LoginForm({
                 render={() => (
                     <TextInput
                         style={
-                            errors.password === ''
-                                ? sharedStyles.textInputSuccess
-                                : sharedStyles.textInputError
+                            errors.password === '' ? textInputStyles.success : textInputStyles.error
                         }
                         onChangeText={(value: string) => {
                             setPassword(value);
                         }}
                         placeholder="Ingrese contraseña"
-                    ></TextInput>
+                    />
                 )}
             />
             <Text style={sharedStyles.textError}>{errors.password}</Text>
