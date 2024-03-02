@@ -1,3 +1,6 @@
 module.exports = {
-    extends: ['universe/node', 'universe/native'],
+    extends: ['universe/node', 'universe/native', 'eslint:recommended'],
+    rules: {
+        'no-unused-vars': 'off',
+    },
 };
