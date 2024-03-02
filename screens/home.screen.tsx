@@ -1,35 +1,36 @@
-import SharedButton from '@/components/modules/shared/button.component';
-import { useSession } from '@/store/context/react.ctx';
+import { router } from 'expo-router';
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
-import { viewStyles } from './styles';
-import { router } from 'expo-router';
+
+import { homeStyles } from './styles';
+
+import SharedButton from '@/components/modules/shared/button.component';
 import { routes } from '@/constants/routes.constants';
+import { useSession } from '@/store/react.ctx';
 
 export default function HomeScreen(): React.JSX.Element {
-    const { session, signOut } = useSession();
+    // Session
+    const { token, signOut } = useSession();
     useEffect(() => {
-        console.log('home', session);
-
-        if (!session) router.replace(routes.LOGIN);
+        if (!token) router.replace(routes.LOGIN);
     }, []);
     return (
-        <View style={viewStyles.home}>
-            <View style={viewStyles.homeBtns}>
+        <View style={homeStyles.view}>
+            <View style={homeStyles.viewButtons}>
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <SharedButton
-                        buttonText="Mis turnos"
-                        onClick={() => router.navigate({ pathname: routes.BOOKINGS })}
-                    ></SharedButton>
+                        _buttonText="Mis Turnos"
+                        _onClick={() => router.navigate({ pathname: routes.BOOKINGS })}
+                    />
                     <SharedButton
-                        buttonText="Reservar cancha"
-                        onClick={() => router.navigate({ pathname: routes.BOOK })}
-                    ></SharedButton>
+                        _buttonText="Reservar Cancha"
+                        _onClick={() => router.navigate({ pathname: routes.BOOK })}
+                    />
                     <SharedButton
-                        btnStyle={{ marginTop: 50 }}
-                        buttonText="Cerrar sesión"
-                        onClick={() => signOut()}
-                    ></SharedButton>
+                        _btnStyle={{ marginTop: 50 }}
+                        _buttonText="Cerrar sesión"
+                        _onClick={() => signOut()}
+                    />
                 </View>
             </View>
         </View>
