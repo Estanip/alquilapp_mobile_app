@@ -4,5 +4,5 @@ export interface IServerResponse {
     statusCode: number;
     success: boolean;
     timestamp: string;
-    data?: object | null;
+    data?: any;
 }
