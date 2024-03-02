@@ -1,4 +1,4 @@
-import { IUser } from '../store/interfaces/user.interfaces';
+import { IUser } from '@/api/interfaces/user.interfaces';
 
 export enum AuthStates {
     SUCCESS = 'SUCCESS',
