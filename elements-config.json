@@ -1,0 +1,11 @@
+{
+  "theme": "default",
+  "components": {
+    "directory": "components",
+    "installed": [
+      "alert",
+      "card",
+      "icon"
+    ]
+  }
+}
