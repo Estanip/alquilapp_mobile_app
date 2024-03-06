@@ -5,7 +5,7 @@ export const apiUris = {
     register: '/auth/register',
     login: '/auth/login',
     courts: '/court',
-    bookings: '/reservation',
+    reservation: '/reservation',
     user: '/user',
 };
 
@@ -25,6 +25,18 @@ export const apiPost = (url: string, body: object, token?: TToken): Promise<ISer
     return fetch(url, {
         method: 'POST',
         body: JSON.stringify(body),
+        headers: {
+            authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    })
+        .then((res) => res.json())
+        .then((response) => response);
+};
+
+export const apiDelete = async (url: string, token?: TToken): Promise<IServerResponse> => {
+    return fetch(url, {
+        method: 'DELETE',
         headers: {
             authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
