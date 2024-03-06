@@ -23,8 +23,10 @@ import {
 } from './interfaces/book.interfaces';
 import { bookStyles, pickerCourts } from './styles';
 
-import { ICourt, TCourts } from '@/api/interfaces/court.interfaces';
-import { getBookingsByDateAndCourt, getCourts, getPlayers } from '@/api/modules/book.service';
+import { ICourtResponse, TCourts } from '@/api/interfaces/court.interfaces';
+import { BookService } from '@/api/modules/book.service';
+import { CourtService } from '@/api/modules/court.service';
+import { PlayersService } from '@/api/modules/players.service';
 import { TDate, TDateTimePickerModes } from '@/components/interfaces/auth.interfaces';
 import SharedButton from '@/components/modules/shared/button.component';
 import MultiSelectPicker from '@/components/modules/shared/multi-select.component';
@@ -44,7 +46,7 @@ export default function BookScreen(): React.JSX.Element {
         (async () => {
             try {
                 let courts: TCourts = [];
-                const response = await getCourts(token);
+                const response = await CourtService().get(token);
                 if (response) courts = response as TCourts;
                 setCourts(courts);
                 const courtsField: IField[] = courts?.map((court) => {
@@ -91,10 +93,10 @@ export default function BookScreen(): React.JSX.Element {
     const _getAvailbleSchedules = async (date: Date) => {
         let bookings;
         if (date && courtNumber) {
-            bookings = await getBookingsByDateAndCourt(token, courtNumber, date);
-            const selectedCourt: ICourt | undefined = courts.find(
+            bookings = await BookService().getByDateAndCourt(token!, courtNumber, date);
+            const selectedCourt = courts.find(
                 (court) => court?.court_number === courtNumber,
-            );
+            ) as ICourtResponse;
             if (selectedCourt) {
                 let bookingsTimeFrom: number[] = [];
                 if (bookings)
@@ -131,7 +133,7 @@ export default function BookScreen(): React.JSX.Element {
         }
     };
     const _getPlayers = async () => {
-        const players = await getPlayers(token);
+        const players = await PlayersService().get(token);
         const playersFields: IMultiSelectField[] = [];
         if (players)
             for (const player of players) {
