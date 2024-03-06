@@ -342,6 +342,7 @@ export default function RegisterForm({
                                                     iconStyle={iconStyles.icon}
                                                     style={iconStyles.background}
                                                     onPress={() => {
+                                                        // eslint-disable-next-line no-unused-expressions
                                                         field_name === RegisterFieldNames.PASSWORD
                                                             ? showPassword()
                                                             : showInfoAlert(
