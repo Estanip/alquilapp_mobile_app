@@ -4,7 +4,7 @@ import { View } from 'react-native';
 
 import { loginStyles } from './styles';
 
-import { login } from '@/api/modules/auth.service';
+import { AuthService } from '@/api/modules/auth.service';
 import AuthConfirmButton from '@/components/modules/auth/confirm-btn.component';
 import LoginForm from '@/components/modules/auth/login.component';
 import AuthRedirectButton from '@/components/modules/auth/redirect-btn.component';
@@ -37,7 +37,7 @@ export default function LoginScreen(): React.JSX.Element {
         if (password === '' || email === '' || !validatedData)
             showAlert('Error', 'Datos incompletos');
         else {
-            const result = await login({ email, password });
+            const result = await AuthService().login({ email, password });
             if (!result?.success) showAlert('Error', 'Datos incorrectos');
             else if (result?.success) {
                 signIn(result?.data.token, result?.data._id);

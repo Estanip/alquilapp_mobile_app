@@ -6,7 +6,7 @@ import { registerForm } from './constants/register.constants';
 import { IRegisterForm } from './interfaces/register.interfaces';
 import { registerStyles } from './styles';
 
-import { register } from '@/api/modules/auth.service';
+import { AuthService } from '@/api/modules/auth.service';
 import AuthConfirmButton from '@/components/modules/auth/confirm-btn.component';
 import AuthRedirectButton from '@/components/modules/auth/redirect-btn.component';
 import RegisterForm from '@/components/modules/auth/register.component';
@@ -34,13 +34,13 @@ export default function RegisterScreen(): React.JSX.Element {
         const notCompleted = Object.values(registerState).some((e) => !e || e === '');
         if (notCompleted || !validatedData) showAlert('Error', 'Datos incompoletos');
         else {
-            const result = await register(registerState);
+            const result = await AuthService().register(registerState);
             if (result?.message === 'User exists')
                 showAlert(
                     'Error',
                     'Ya existe un usuario registrado con los datos ingresados',
                     { active: true, message: 'Ir a Login', path: 'login' },
-                    { active: false, message: '', return: () => null },
+                    undefined,
                     { active: true, message: 'Cancelar' },
                 );
             else if (!result?.success) showAlert('Error', 'Datos incorrectos');
