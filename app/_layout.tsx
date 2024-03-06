@@ -6,6 +6,8 @@ import Book from './(app)/book';
 import Bookings from './(app)/bookings';
 import Home from './(app)/home';
 
+import { SectionsTitles } from '@/constants';
+import { routesName } from '@/constants/routes.constants';
 import LoginScreen from '@/screens/login.screen';
 import RegisterScreen from '@/screens/register.screen';
 import { SessionProvider } from '@/store/react.ctx';
@@ -22,45 +24,45 @@ export default function Root() {
                 style={{ margin: 0, padding: 0 }}
             />
             <Stack.Navigator
-                initialRouteName="(app)/home"
+                initialRouteName={routesName.HOME}
                 screenOptions={{
                     headerTintColor: 'white',
                     headerStyle: { backgroundColor: '#3498db' },
                 }}
             >
                 <Stack.Screen
-                    name="(app)/home"
+                    name={routesName.HOME}
                     component={Home}
                     options={{
-                        title: 'Home',
+                        title: SectionsTitles.HOME,
                     }}
                 />
                 <Stack.Screen
-                    name="(app)/bookings"
+                    name={routesName.BOOKINGS}
                     component={Bookings}
                     options={{
-                        title: 'Mis Turnos',
+                        title: SectionsTitles.BOOKINGS,
                     }}
                 />
                 <Stack.Screen
-                    name="(app)/book"
+                    name={routesName.BOOK}
                     component={Book}
                     options={{
-                        title: 'Reservar',
+                        title: SectionsTitles.BOOK,
                     }}
                 />
                 <Stack.Screen
-                    name="(auth)/login"
+                    name={routesName.LOGIN}
                     component={LoginScreen}
                     options={{
-                        title: 'Ingreso',
+                        title: SectionsTitles.LOGIN,
                     }}
                 />
                 <Stack.Screen
-                    name="(auth)/register"
+                    name={routesName.REGISTER}
                     component={RegisterScreen}
                     options={{
-                        title: 'Registro',
+                        title: SectionsTitles.REGISTER,
                     }}
                 />
             </Stack.Navigator>
