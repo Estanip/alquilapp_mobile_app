@@ -4,7 +4,7 @@ import { IFieldsData, IStep, StepStatus } from '../interfaces/book.interfaces';
 
 import { TToken } from '@/api/interfaces/auth.interfaces';
 import { IBookRequest, IPlayer } from '@/api/interfaces/book.interfaces';
-import { book } from '@/api/modules/book.service';
+import { BookService } from '@/api/modules/book.service';
 import { TDate } from '@/components/interfaces/auth.interfaces';
 import { routes } from '@/constants/routes.constants';
 import { showErrorAlert, showSuccessAlert, showWarningAlert } from '@/shared/alerts/toast.alert';
@@ -53,7 +53,7 @@ export const _book = async (
             from: schedule,
             players: playersList,
         };
-        const response = await book(token, bookRequest);
+        const response = await BookService().book(token!, bookRequest);
         if (response?.success) {
             showSuccessAlert('Reserva completada con éxito');
             router.navigate(routes.HOME);
@@ -72,7 +72,7 @@ export const _confirmBooking = (
     showAlert(
         'Confirmación',
         '¿Quieres confirmar la reserva?',
-        { active: false, message: '', path: '' },
+        undefined,
         {
             active: true,
             message: 'Confirmar',
