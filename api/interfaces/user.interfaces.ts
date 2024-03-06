@@ -9,8 +9,8 @@ export interface IUserResponse extends IUser {
     token: string;
 }
 
-interface IPlayer extends Pick<IUser, 'email' | 'identification_number' | '_id'> {
+interface IPlayerResponse extends Pick<IUser, 'email' | 'identification_number' | '_id'> {
     name: string;
     membership_type: string;
 }
-export type TPlayers = IPlayer[];
+export type TPlayers = IPlayerResponse[];

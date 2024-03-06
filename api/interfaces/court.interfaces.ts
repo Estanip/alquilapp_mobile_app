@@ -1,4 +1,4 @@
-export interface ICourt {
+export interface ICourtResponse {
     readonly _id: string;
     readonly available_from: string;
     readonly available_until: string;
@@ -7,4 +7,4 @@ export interface ICourt {
     readonly is_enabled: boolean;
 }
 
-export type TCourts = ICourt[];
+export type TCourts = ICourtResponse[];
