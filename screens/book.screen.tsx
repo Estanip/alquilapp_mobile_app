@@ -6,6 +6,7 @@ import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import RNPickerSelect from 'react-native-picker-select';
 
 import {
+    ButtonText,
     _confirmBooking,
     _formatDate,
     _setSchdule,
@@ -15,7 +16,6 @@ import {
 } from './constants/book.constants';
 import {
     IField,
-    IFieldsData,
     IMultiSelectField,
     IStep,
     StepStatus,
@@ -23,6 +23,7 @@ import {
 } from './interfaces/book.interfaces';
 import { bookStyles, pickerCourts } from './styles';
 
+import { IReservationResponse } from '@/api/interfaces/booking.interfaces';
 import { ICourtResponse, TCourts } from '@/api/interfaces/court.interfaces';
 import { BookService } from '@/api/modules/book.service';
 import { CourtService } from '@/api/modules/court.service';
@@ -31,10 +32,17 @@ import { TDate, TDateTimePickerModes } from '@/components/interfaces/auth.interf
 import SharedButton from '@/components/modules/shared/button.component';
 import MultiSelectPicker from '@/components/modules/shared/multi-select.component';
 import { routes } from '@/constants/routes.constants';
+import { INavigationParams, IRoute } from '@/interfaces';
 import { showWarningAlert } from '@/shared/alerts/toast.alert';
 import { useSession } from '@/store/react.ctx';
+import { useRoute } from '@react-navigation/native';
 
 export default function BookScreen(): React.JSX.Element {
+    // Params from navigate
+    let params: INavigationParams;
+    const route: IRoute = useRoute();
+    if (route.params) params = route.params;
+
     // Session
     const { token, user_id } = useSession();
     useEffect(() => {
@@ -56,19 +64,27 @@ export default function BookScreen(): React.JSX.Element {
                         id: court?._id,
                     };
                 });
-                _refreshFields();
-                setFieldsData({
-                    courtNumbers: courtsField,
-                    availableSchedules: [],
-                    players: [],
-                });
+                if (!params._id) {
+                    _refreshFields();
+                    setCourtsFieldsData(courtsField);
+                } else if (params._id) {
+                    setCourtsFieldsData(courtsField);
+                    _setBookingById(params._id);
+                }
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         })();
     }, []);
-    const [fieldsData, setFieldsData] = useState<IFieldsData>(initialDataState);
-
+    const [courtsFieldsData, setCourtsFieldsData] = useState<IField[]>(
+        initialDataState.courtNumbers,
+    );
+    const [availablesSchedulesFieldsData, setAvailablesSchedulesFieldsData] = useState<IField[]>(
+        initialDataState.availableSchedules,
+    );
+    const [playersFieldsData, setPlayersFieldsData] = useState<IMultiSelectField[]>(
+        initialDataState.players,
+    );
     // Steps state
     const [steps, setSteps] = useState(initialStateSteps as IStep);
 
@@ -81,7 +97,6 @@ export default function BookScreen(): React.JSX.Element {
 
     // Players state
     const [players, setPlayers] = useState<string[] | []>([]);
-    const [playersFields, setPlayersFields] = useState<IMultiSelectField[] | []>([]);
 
     // Date Time Picker
     const nextWeek = new Date().setDate(new Date().getDate() + 7);
@@ -90,7 +105,10 @@ export default function BookScreen(): React.JSX.Element {
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [displaymode, setMode] = useState<TDateTimePickerModes>('date');
 
-    const _getAvailbleSchedules = async (date: Date) => {
+    // Checkbox status
+    const [isChecked, setIsChecked] = useState<boolean>(false);
+
+    const _getAvailbleSchedules = async (date: Date, reservationFrom?: string) => {
         let bookings;
         if (date && courtNumber) {
             bookings = await BookService().getByDateAndCourt(token!, courtNumber, date);
@@ -100,9 +118,11 @@ export default function BookScreen(): React.JSX.Element {
             if (selectedCourt) {
                 let bookingsTimeFrom: number[] = [];
                 if (bookings)
-                    bookingsTimeFrom = bookings.map((reservation) =>
-                        parseInt(reservation?.from?.substring(0.2), 10),
-                    );
+                    bookings.map((reservation) => {
+                        if (reservation.from !== reservationFrom)
+                            bookingsTimeFrom.push(parseInt(reservation.from.substring(0.2), 10));
+                    });
+
                 const courtAvailabilityFrom = parseInt(
                     selectedCourt?.available_from?.substring(0, 2),
                     10,
@@ -125,13 +145,11 @@ export default function BookScreen(): React.JSX.Element {
                         label: `${hour}:00 hs`,
                     };
                 });
-                setFieldsData({
-                    ...fieldsData,
-                    availableSchedules: availableSchedulesFields,
-                });
+                setAvailablesSchedulesFieldsData(availableSchedulesFields);
             }
         }
     };
+
     const _getPlayers = async () => {
         const players = await PlayersService().get(token);
         const playersFields: IMultiSelectField[] = [];
@@ -144,28 +162,20 @@ export default function BookScreen(): React.JSX.Element {
                     });
                 }
             }
-        setFieldsData({
-            ...fieldsData,
-            players: playersFields,
-        });
-        setPlayersFields(playersFields);
+        setPlayersFieldsData(playersFields);
     };
+
     const _displayDatepicker = (mode: TDateTimePickerModes) => {
         setMode(mode);
         setShowDatePicker(true);
     };
+
     const _filterPlayersSelection = (word: string) => {
-        if (word === '')
-            setFieldsData({
-                ...fieldsData,
-                players: playersFields,
-            });
+        if (word === '') setPlayersFieldsData(playersFieldsData);
         else if (word?.length > 2)
-            setFieldsData({
-                ...fieldsData,
-                players: fieldsData.players.filter((e) => e.name === word),
-            });
+            setPlayersFieldsData(playersFieldsData.filter((e) => e.name === word));
     };
+
     const _refreshFields = () => {
         setSteps({
             _court: StepStatus.PENDING,
@@ -175,6 +185,7 @@ export default function BookScreen(): React.JSX.Element {
         });
         _resetDataState(true);
     };
+
     const _resetDataState = (
         court: boolean = false,
         date: boolean = false,
@@ -184,30 +195,56 @@ export default function BookScreen(): React.JSX.Element {
         if (date) setDate(null);
         if (schedule) setSchedule(null);
         setPlayers([]);
+        setIsChecked(false);
     };
-    const _resetPlayersFields = () => {
-        setFieldsData({
-            ...fieldsData,
-            players: playersFields,
+
+    const _resetPlayersFields = () => setPlayersFieldsData(playersFieldsData);
+
+    const _setBookingById = async (id: string) => {
+        const reservation = await BookService().getById(token!, id);
+        if (reservation) await _setExistingBooking(reservation);
+    };
+
+    const _setExistingBooking = async (reservation: IReservationResponse) => {
+        setCourtNumber(reservation.court);
+        setDate(new Date(reservation.date));
+        setDateSelected(true);
+        await _getAvailbleSchedules(new Date(reservation.date), reservation.from);
+        setSchedule(reservation.from);
+        await _getPlayers();
+        const currentPlayers = reservation.players.map((player) => player.user);
+        reservation.players.map((player) => {
+            if (player.user === user_id) setIsChecked(true);
+        });
+        onChangePlayers(currentPlayers, true);
+        setSteps({
+            _court: StepStatus.DONE,
+            _date: StepStatus.DONE,
+            _schedule: StepStatus.DONE,
+            _players: StepStatus.DONE,
         });
     };
-    const onChangeCheck = async (isChecked: boolean) => {
+
+    const onChangeCheck = (isChecked: boolean) => {
         let currentPlayers;
         if (isChecked && players.length < 4 && user_id) {
             currentPlayers = [...players, user_id?.toString()];
             setPlayers(currentPlayers);
+            setIsChecked(true);
             if (currentPlayers.length >= 2 && currentPlayers.length <= 4)
                 setSteps({ ...steps, _players: StepStatus.DONE });
             if (currentPlayers.length < 2) setSteps({ ...steps, _players: StepStatus.PENDING });
         } else if (!isChecked) {
             currentPlayers = players.filter((player) => player.toString() !== user_id?.toString());
             setPlayers(currentPlayers);
+            setIsChecked(false);
             if (currentPlayers.length >= 2 && currentPlayers.length <= 4)
                 setSteps({ ...steps, _players: StepStatus.DONE });
             else if (currentPlayers.length < 2)
                 setSteps({ ...steps, _players: StepStatus.PENDING });
         }
     };
+
     const onChangeCourt = (selectedCourt: number) => {
         if (!selectedCourt) {
             _resetDataState(true, true, true);
@@ -229,6 +266,7 @@ export default function BookScreen(): React.JSX.Element {
             });
         }
     };
+
     const onChangeDate = async (e: DateTimePickerEvent, selectedDate: TDate | undefined) => {
         setShowDatePicker(false);
         if (e?.type === 'dismissed') {
@@ -253,10 +291,11 @@ export default function BookScreen(): React.JSX.Element {
             });
         }
     };
-    const onChangePlayers = async (selectedPlayers: any) => {
+
+    const onChangePlayers = async (selectedPlayers: any, isEditing = false) => {
         if (selectedPlayers.length === 5 && players.length === 4)
             return showWarningAlert('Máximo 4 jugadores');
-        else if (selectedPlayers.length === 4 && players.length === 3) {
+        else if ((selectedPlayers.length === 4 && players.length === 3) || isEditing) {
             setPlayers(selectedPlayers);
             if (selectedPlayers.length >= 2 && selectedPlayers.length <= 4)
                 setSteps({ ...steps, _players: StepStatus.DONE });
@@ -270,6 +309,7 @@ export default function BookScreen(): React.JSX.Element {
                 setSteps({ ...steps, _players: StepStatus.PENDING });
         }
     };
+
     const onChangeSchedule = async (selectedSchedule: string) => {
         if (!selectedSchedule) {
             _resetDataState();
@@ -298,7 +338,7 @@ export default function BookScreen(): React.JSX.Element {
                     useNativeAndroidPickerStyle={false}
                     textInputProps={{ style: { color: '#737373' } } as TextInputProps}
                     onValueChange={(value: number) => onChangeCourt(value)}
-                    items={fieldsData?.courtNumbers}
+                    items={courtsFieldsData}
                     value={courtNumber}
                 />
             </View>
@@ -335,11 +375,11 @@ export default function BookScreen(): React.JSX.Element {
                     style={{ ...bookStyles.viewPicker, marginBottom: 20, height: 50 }}
                 >
                     <RNPickerSelect
-                        placeholder={schedulePickerProps}
+                        placeholder={schedulePickerProps(schedule!)}
                         useNativeAndroidPickerStyle={false}
                         textInputProps={{ style: { color: '#737373' } } as TextInputProps}
                         onValueChange={(value: string) => onChangeSchedule(value)}
-                        items={fieldsData?.availableSchedules}
+                        items={availablesSchedulesFieldsData}
                     />
                 </View>
             )}
@@ -356,13 +396,16 @@ export default function BookScreen(): React.JSX.Element {
                             innerIconStyle={{ borderWidth: 2 }}
                             textStyle={{ textDecorationLine: 'none' }}
                             style={{ paddingLeft: 2, marginBottom: 20 }}
-                            onPress={(isChecked: boolean) => onChangeCheck(isChecked)}
+                            isChecked={isChecked}
+                            disableBuiltInState
+                            onPress={() => onChangeCheck(!isChecked)}
                         />
                     </View>
 
                     <View>
                         <MultiSelectPicker
-                            _items={fieldsData.players}
+                            key={'players-multi-select'}
+                            _items={playersFieldsData}
                             _onChangeInput={(word: string) => _filterPlayersSelection(word)}
                             _onSelectedItemsChange={(items: any) => onChangePlayers(items)}
                             _selectedItems={players}
@@ -380,8 +423,19 @@ export default function BookScreen(): React.JSX.Element {
                         alignSelf: 'center',
                         width: 350,
                     }}
-                    _buttonText="Reservar"
-                    _onClick={() => _confirmBooking(courtNumber!, date!, schedule!, players, token)}
+                    _buttonText={route.params ? ButtonText.EDIT : ButtonText.CREATE}
+                    _onClick={() =>
+                        _confirmBooking(
+                            courtNumber!,
+                            date!,
+                            schedule!,
+                            players,
+                            user_id!,
+                            token!,
+                            params?._id ? true : false,
+                            params?._id,
+                        )
+                    }
                 />
             )}
         </View>
