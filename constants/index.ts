@@ -1,10 +1,11 @@
 export enum SectionsTitles {
     HOME = 'Home',
-    BOOKINGS = 'Mis Turnos',
+    BOOKINGS = 'Mis Reservas',
     BOOK = 'Reservar',
     LOGOUT = 'Cerrar Sesión',
     LOGIN = 'Ingreso',
     REGISTER = 'Registro',
+    EDIT_BOOK = 'Modificar Reserva',
 }
 
 export enum ButtonsTextVariants {
