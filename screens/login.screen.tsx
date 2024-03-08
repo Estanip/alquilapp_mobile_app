@@ -38,7 +38,8 @@ export default function LoginScreen(): React.JSX.Element {
             showAlert('Error', 'Datos incompletos');
         else {
             const result = await AuthService().login({ email, password });
-            if (!result?.success) showAlert('Error', 'Datos incorrectos');
+            if (!result) showAlert('Error', 'Estamos teniendo inconvenientes, intente más tarde');
+            else if (!result?.success) showAlert('Error', 'Datos incorrectos');
             else if (result?.success) {
                 signIn(result?.data.token, result?.data._id);
                 router.replace({ pathname: routes.HOME });
