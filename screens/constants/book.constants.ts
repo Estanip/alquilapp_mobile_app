@@ -5,6 +5,7 @@ import { IFieldsData, IStep, StepStatus } from '../interfaces/book.interfaces';
 import { TToken } from '@/api/interfaces/auth.interfaces';
 import { IBookRequest, IPlayer } from '@/api/interfaces/book.interfaces';
 import { BookService } from '@/api/modules/book.service';
+import { BookingsService } from '@/api/modules/bookings.service';
 import { TDate } from '@/components/interfaces/auth.interfaces';
 import { routes } from '@/constants/routes.constants';
 import { showErrorAlert, showSuccessAlert, showWarningAlert } from '@/shared/alerts/toast.alert';
@@ -27,10 +28,12 @@ export const initialDataState: IFieldsData = {
     players: [],
 };
 
-export const schedulePickerProps = {
-    label: 'Seleccione horario',
-    value: null,
-    color: '#737373',
+export const schedulePickerProps = (schedule: string) => {
+    return {
+        label: schedule ? `${schedule} hs` : 'Seleccione horario',
+        value: schedule ? schedule : null,
+        color: '#737373',
+    };
 };
 
 // FUNCTIONS
@@ -39,7 +42,10 @@ export const _book = async (
     date: Date,
     schedule: string,
     players: string[],
+    owner_id: string,
     token: TToken,
+    editing: boolean,
+    booking_id?: string,
 ) => {
     if (!courtNumber || !date || !schedule || players.length === 0)
         showWarningAlert('Datos incompletos');
@@ -52,10 +58,15 @@ export const _book = async (
             court: courtNumber,
             from: schedule,
             players: playersList,
+            owner_id,
         };
-        const response = await BookService().book(token!, bookRequest);
+        const response = editing
+            ? await BookingsService().edit(token!, bookRequest, booking_id!)
+            : await BookService().book(token!, bookRequest);
         if (response?.success) {
-            showSuccessAlert('Reserva completada con éxito');
+            editing
+                ? showSuccessAlert('Reserva editada con éxito')
+                : showSuccessAlert('Reserva completada con éxito');
             router.navigate(routes.HOME);
         }
         if (!response?.success) return showErrorAlert('No se pudo confirmar la reserva');
@@ -67,7 +78,10 @@ export const _confirmBooking = (
     date: Date,
     schedule: string,
     players: string[],
+    owner_id: string,
     token: TToken,
+    editing: boolean,
+    booking_id?: string,
 ) => {
     showAlert(
         'Confirmación',
@@ -76,7 +90,8 @@ export const _confirmBooking = (
         {
             active: true,
             message: 'Confirmar',
-            return: () => _book(courtNumber!, date!, schedule!, players, token),
+            return: () =>
+                _book(courtNumber, date!, schedule!, players, owner_id, token, editing, booking_id),
         },
         { active: true, message: 'Cancelar' },
     );
@@ -104,3 +119,8 @@ export const _setSchdule = (
     initialSchedule = initialSchedule.filter((hour) => !bookings.includes(hour));
     return initialSchedule;
 };
+
+export enum ButtonText {
+    CREATE = 'Reservar',
+    EDIT = 'Editar',
+}
