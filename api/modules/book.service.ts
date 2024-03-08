@@ -4,24 +4,9 @@ import { IBookRequest, TAvailabilities, TBookServices } from '../interfaces/book
 
 import { apiGet, apiPost, apiUris } from '@/constants/api.constants';
 import { environment } from '@/environments/environment';
+import { IReservationResponse } from '../interfaces/booking.interfaces';
 
 export function BookService(): TBookServices {
-    const getByDateAndCourt = async (
-        token: TToken,
-        court: number,
-        date: Date,
-    ): Promise<TAvailabilities | undefined> => {
-        try {
-            const response = await apiGet(
-                `${environment.SERVER_URI}${apiUris.reservation}?court=${court}&date=${date}`,
-                token,
-            );
-            return response.data;
-        } catch (error: unknown) {
-            console.log(error);
-        }
-    };
-
     const book = async (
         token: TToken,
         request: IBookRequest,
@@ -42,8 +27,40 @@ export function BookService(): TBookServices {
         }
     };
 
+    const getById = async (
+        token: TToken,
+        id: string,
+    ): Promise<IReservationResponse | undefined> => {
+        try {
+            const response = await apiGet(
+                `${environment.SERVER_URI}${apiUris.reservation}/${id}`,
+                token,
+            );
+            return response.data;
+        } catch (error: unknown) {
+            console.log(error);
+        }
+    };
+
+    const getByDateAndCourt = async (
+        token: TToken,
+        court: number,
+        date: Date,
+    ): Promise<TAvailabilities | undefined> => {
+        try {
+            const response = await apiGet(
+                `${environment.SERVER_URI}${apiUris.reservation}?court=${court}&date=${date}`,
+                token,
+            );
+            return response.data;
+        } catch (error: unknown) {
+            console.log(error);
+        }
+    };
+
     return {
         book,
+        getById,
         getByDateAndCourt,
     };
 }
