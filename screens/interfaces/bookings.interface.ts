@@ -24,7 +24,7 @@ export type TBookingDetails = IBookingDetails[];
 
 export interface IBookingsData {
     _id: string;
-    date: Date;
+    date: Date | string;
     from: string;
     court: number;
     players: IPlayer[];
@@ -37,3 +37,6 @@ export type TBookingsFieldsData = {
     active: IBookingsData[];
     inactive: IBookingsData[];
 };
+
+export const _formatDateToString = (date: string): string =>
+    date ? `${date.substring(8, 10)}/${date.substring(5, 7)}/${date.substring(0, 4)}` : '';

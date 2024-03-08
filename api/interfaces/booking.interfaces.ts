@@ -1,17 +1,17 @@
-type TUser = {
+export type TUser = {
     first_name: string;
     last_name: string;
     membership_type: string;
 };
 
-type TReservationPlayer = {
-    user: TUser;
+export type TReservationPlayer = {
+    user: TUser | string;
     fee: number;
 };
 
 export interface IReservationResponse {
     _id: string;
-    date: Date;
+    date: Date | string;
     from: string;
     to?: string;
     court: number;

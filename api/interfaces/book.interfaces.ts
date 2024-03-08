@@ -1,3 +1,5 @@
+import { IReservationResponse } from './booking.interfaces';
+
 interface IAvailabilityResponse {
     readonly date: Date;
     readonly from: string;
@@ -11,10 +13,12 @@ export interface IPlayer {
 }
 
 export interface IBookRequest {
+    id?: string;
     readonly date: Date;
     readonly from: string;
     readonly court: number;
     readonly players: IPlayer[];
+    readonly owner_id: string;
 }
 
 export type TBookServices = {
@@ -23,6 +27,7 @@ export type TBookServices = {
         court: number,
         date: Date,
     ) => Promise<TAvailabilities | undefined>;
+    getById: (token: string, id: string) => Promise<IReservationResponse | undefined>;
     book: (
         token: string,
         request: IBookRequest,
