@@ -34,6 +34,19 @@ export const apiPost = (url: string, body: object, token?: TToken): Promise<ISer
         .then((response) => response);
 };
 
+export const apiPut = (url: string, body: object, token?: TToken): Promise<IServerResponse> => {
+    return fetch(url, {
+        method: 'PUT',
+        body: JSON.stringify(body),
+        headers: {
+            authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    })
+        .then((res) => res.json())
+        .then((response) => response);
+};
+
 export const apiDelete = async (url: string, token?: TToken): Promise<IServerResponse> => {
     return fetch(url, {
         method: 'DELETE',
