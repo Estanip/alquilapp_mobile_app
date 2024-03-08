@@ -4,9 +4,13 @@ import React, { useEffect, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { BookingStatus } from './constants/bookings.constants';
-import { BookingDetailsSubtitles, TBookingDetails } from './interfaces/bookings.interface';
+import {
+    BookingDetailsSubtitles,
+    TBookingDetails,
+    _formatDateToString,
+} from './interfaces/bookings.interface';
 
-import { TReservations } from '@/api/interfaces/booking.interfaces';
+import { TReservationPlayer, TReservations, TUser } from '@/api/interfaces/booking.interfaces';
 import { BookingsService } from '@/api/modules/bookings.service';
 import BookingCard from '@/components/modules/bookings/booking-card';
 import { routes } from '@/constants/routes.constants';
@@ -44,7 +48,7 @@ export default function BookingsScreen(): React.JSX.Element {
     // Cancel Booking
     const _cancelBooking = async (booking_id: string) => {
         const _remove = async (token: string, id: string) => {
-            const response = await BookingsService().cancelById(token, id);
+            const response = await BookingsService().cancel(token, id);
             if (response?.statusCode === 200) {
                 showSuccessAlert('Reserva cancelada con éxito');
                 const reservations = (await BookingsService().getByOwner(
@@ -97,9 +101,9 @@ export default function BookingsScreen(): React.JSX.Element {
                                           [
                                               {
                                                   subtitle: BookingDetailsSubtitles.DATE,
-                                                  text: new Date(
-                                                      reservation?.date,
-                                                  ).toLocaleDateString('en-GB'),
+                                                  text: _formatDateToString(
+                                                      reservation.date as string,
+                                                  ),
                                               },
                                               {
                                                   subtitle: BookingDetailsSubtitles.TIME,
@@ -112,14 +116,20 @@ export default function BookingsScreen(): React.JSX.Element {
                                               {
                                                   subtitle: BookingDetailsSubtitles.PLAYERS,
                                                   playersText: reservation.players.length
-                                                      ? reservation.players.map((player) => {
-                                                            return {
-                                                                name: `${player.user.first_name} ${player.user.last_name}`,
-                                                                membership:
-                                                                    player.user.membership_type,
-                                                                fee: player.fee,
-                                                            };
-                                                        })
+                                                      ? reservation.players.map(
+                                                            ({ user, fee }: TReservationPlayer) => {
+                                                                const {
+                                                                    first_name,
+                                                                    last_name,
+                                                                    membership_type,
+                                                                } = user as TUser;
+                                                                return {
+                                                                    name: `${first_name} ${last_name}`,
+                                                                    membership: membership_type,
+                                                                    fee: fee,
+                                                                };
+                                                            },
+                                                        )
                                                       : [],
                                               },
                                               {
@@ -167,9 +177,9 @@ export default function BookingsScreen(): React.JSX.Element {
                                           [
                                               {
                                                   subtitle: BookingDetailsSubtitles.DATE,
-                                                  text: new Date(
-                                                      reservation?.date,
-                                                  ).toLocaleDateString('en-GB'),
+                                                  text: _formatDateToString(
+                                                      reservation.date as string,
+                                                  ),
                                               },
                                               {
                                                   subtitle: BookingDetailsSubtitles.TIME,
@@ -182,12 +192,16 @@ export default function BookingsScreen(): React.JSX.Element {
                                               {
                                                   subtitle: BookingDetailsSubtitles.PLAYERS,
                                                   playersText: reservation.players.length
-                                                      ? reservation.players.map((player) => {
+                                                      ? reservation.players.map(({ user, fee }) => {
+                                                            const {
+                                                                first_name,
+                                                                last_name,
+                                                                membership_type,
+                                                            } = user as TUser;
                                                             return {
-                                                                name: `${player.user.first_name} ${player.user.last_name}`,
-                                                                membership:
-                                                                    player.user.membership_type,
-                                                                fee: player.fee,
+                                                                name: `${first_name} ${last_name}`,
+                                                                membership: membership_type,
+                                                                fee: fee,
                                                             };
                                                         })
                                                       : [],
