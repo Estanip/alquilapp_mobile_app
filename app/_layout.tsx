@@ -8,6 +8,7 @@ import Home from './(app)/home';
 
 import { SectionsTitles } from '@/constants';
 import { routesName } from '@/constants/routes.constants';
+import { IRoute } from '@/interfaces';
 import LoginScreen from '@/screens/login.screen';
 import RegisterScreen from '@/screens/register.screen';
 import { SessionProvider } from '@/store/react.ctx';
@@ -47,9 +48,9 @@ export default function Root() {
                 <Stack.Screen
                     name={routesName.BOOK}
                     component={Book}
-                    options={{
-                        title: SectionsTitles.BOOK,
-                    }}
+                    options={({ route }: { route: IRoute }) => ({
+                        title: route.params?._id ? SectionsTitles.EDIT_BOOK : SectionsTitles.BOOK,
+                    })}
                 />
                 <Stack.Screen
                     name={routesName.LOGIN}
