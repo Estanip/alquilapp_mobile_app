@@ -23,16 +23,13 @@ export default function BookingCard({
 }: IBookingCardProps): any {
     return (
         <View style={{ alignItems: 'center' }} key={_booking_id}>
-            <Card style={tailwind`w-full max-w-sm`}>
+            <Card style={tailwind`mt-2 w-90`}>
                 <CardContent style={tailwind`gap-1`}>
                     {_infoDetails?.map(
                         ({ subtitle, text, playersText }: IBookingDetails, index) => (
-                            <>
+                            <View key={`players-view-${index}`}>
                                 {subtitle === BookingDetailsSubtitles.PLAYERS ? (
-                                    <View
-                                        style={{ display: 'flex', flexDirection: 'column' }}
-                                        key={`players-view-${index}`}
-                                    >
+                                    <View style={{ display: 'flex', flexDirection: 'column' }}>
                                         <CardSubtitle style={tailwind`uppercase pb-2`}>
                                             {subtitle}:
                                         </CardSubtitle>
@@ -64,13 +61,21 @@ export default function BookingCard({
                                     >
                                         {subtitle === BookingDetailsSubtitles.PRICE ? (
                                             <>
-                                                <CardSubtitle style={tailwind`uppercase`}>
-                                                    {subtitle}:
-                                                </CardSubtitle>
-                                                <Text> </Text>
-                                                <CardText style={tailwind`font-semibold`}>
-                                                    {Currencies.ARS} {text}
-                                                </CardText>
+                                                <View
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'row',
+                                                        paddingTop: 15,
+                                                    }}
+                                                >
+                                                    <CardSubtitle style={tailwind`uppercase`}>
+                                                        {subtitle}:
+                                                    </CardSubtitle>
+                                                    <Text> </Text>
+                                                    <CardText style={tailwind`font-semibold`}>
+                                                        {Currencies.ARS} {text}
+                                                    </CardText>
+                                                </View>
                                             </>
                                         ) : (
                                             <>
@@ -83,7 +88,7 @@ export default function BookingCard({
                                         )}
                                     </View>
                                 )}
-                            </>
+                            </View>
                         ),
                     )}
                     <View
@@ -91,7 +96,7 @@ export default function BookingCard({
                         style={{
                             display: 'flex',
                             flexDirection: 'row',
-                            justifyContent: 'space-around',
+                            justifyContent: 'space-between',
                         }}
                     >
                         {_editButton && _status === BookingStatus.ACTIVE ? (
