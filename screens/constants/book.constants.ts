@@ -119,8 +119,3 @@ export const _setSchdule = (
     initialSchedule = initialSchedule.filter((hour) => !bookings.includes(hour));
     return initialSchedule;
 };
-
-export enum ButtonText {
-    CREATE = 'Reservar',
-    EDIT = 'Editar',
-}
