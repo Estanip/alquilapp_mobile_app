@@ -1,7 +1,6 @@
 {
     "build": {
         "preview": {
-            "distribution": "internal",
             "env": {
                 "ENVIRONMENT": "development",
                 "HOST_DEV": "https://alquilappcancha-ae0b6065d831.herokuapp.com"
@@ -20,6 +19,7 @@
             }
         },
         "development-android": {
+            "distribution": "internal",
             "extends": "preview-android",
             "developmentClient": true
         },
