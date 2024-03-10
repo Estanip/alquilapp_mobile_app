@@ -6,5 +6,5 @@ import { useSession } from '@/store/react.ctx';
 
 export default function Register(): React.JSX.Element {
     const { token } = useSession();
-    return !token ? <Redirect href={routes.LOGIN} /> : <Redirect href={routes.HOME} />;
+    return !token ? <Redirect href={routes.REGISTER} /> : <Redirect href={routes.HOME} />;
 }
