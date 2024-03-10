@@ -16,6 +16,7 @@ export interface IConfirmBtnComponentProps {
     _onClick: () => void;
 }
 export interface ILoginComponentProps {
+    _resetPassword?: boolean;
     _emailData: (arg: string) => void;
     _passwordData: (arg: string) => void;
     _validatedData: (arg: boolean) => void;
