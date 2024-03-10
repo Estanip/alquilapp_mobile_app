@@ -1,0 +1,32 @@
+{
+    "build": {
+        "preview": {
+            "distribution": "internal",
+            "env": {
+                "ENVIRONMENT": "development",
+                "HOST_DEV": "https://alquilappcancha-ae0b6065d831.herokuapp.com"
+            }
+        },
+        "preview-android": {
+            "extends": "preview",
+            "android": {
+                "buildType": "apk"
+            }
+        },
+        "preview-ios-simulator": {
+            "extends": "preview",
+            "ios": {
+                "simulator": true
+            }
+        },
+        "development-android": {
+            "extends": "preview-android",
+            "developmentClient": true
+        },
+        "development-ios-simulator": {
+            "extends": "preview-ios-simulator",
+            "developmentClient": true
+        },
+        "production": {}
+    }
+}

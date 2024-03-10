@@ -48,7 +48,8 @@
     "tailwind-rn": "^4.2.0",
     "toastify-react-native": "^5.0.0",
     "twrnc": "^4.0.2",
-    "undefined": "@/components/icon"
+    "undefined": "@/components/icon",
+    "expo-dev-client": "~3.3.9"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

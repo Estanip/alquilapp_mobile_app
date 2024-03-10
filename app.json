@@ -1,7 +1,7 @@
 {
     "expo": {
-        "name": "app",
-        "slug": "app",
+        "name": "alquilapp",
+        "slug": "alquilapp",
         "version": "1.0.0",
         "orientation": "portrait",
         "icon": "./assets/images/icon.png",
@@ -20,7 +20,8 @@
             "adaptiveIcon": {
                 "foregroundImage": "./assets/images/adaptive-icon.png",
                 "backgroundColor": "#ffffff"
-            }
+            },
+            "package": "alquilapp.id"
         },
         "web": {
             "bundler": "metro",
@@ -31,6 +32,14 @@
         "experiments": {
             "tsconfigPaths": true,
             "typedRoutes": true
+        },
+        "extra": {
+            "router": {
+                "origin": false
+            },
+            "eas": {
+                "projectId": "33ab46d9-ec4e-4248-b5aa-f8135bc9fc33"
+            }
         }
     }
 }
