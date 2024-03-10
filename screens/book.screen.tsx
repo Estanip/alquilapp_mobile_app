@@ -6,7 +6,6 @@ import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import RNPickerSelect from 'react-native-picker-select';
 
 import {
-    ButtonText,
     _confirmBooking,
     _formatDate,
     _setSchdule,
@@ -31,6 +30,7 @@ import { PlayersService } from '@/api/modules/players.service';
 import { TDate, TDateTimePickerModes } from '@/components/interfaces/auth.interfaces';
 import SharedButton from '@/components/modules/shared/button.component';
 import MultiSelectPicker from '@/components/modules/shared/multi-select.component';
+import { ButtonTextActions } from '@/constants';
 import { routes } from '@/constants/routes.constants';
 import { INavigationParams, IRoute } from '@/interfaces';
 import { showWarningAlert } from '@/shared/alerts/toast.alert';
@@ -423,7 +423,9 @@ export default function BookScreen(): React.JSX.Element {
                         alignSelf: 'center',
                         width: 350,
                     }}
-                    _buttonText={route.params ? ButtonText.EDIT : ButtonText.CREATE}
+                    _buttonText={
+                        route.params?._id ? ButtonTextActions.EDIT : ButtonTextActions.BOOK
+                    }
                     _onClick={() =>
                         _confirmBooking(
                             courtNumber!,

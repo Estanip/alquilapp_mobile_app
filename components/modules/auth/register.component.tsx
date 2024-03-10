@@ -19,7 +19,7 @@ import {
     fields,
     membershipTypes,
     registerFormData,
-} from '@/components/constants/register.contants';
+} from '@/components/constants/register.constants';
 import { IControllerField } from '@/components/interfaces';
 import {
     IRegisterComponentProps,

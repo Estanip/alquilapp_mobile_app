@@ -10,7 +10,7 @@ import { AuthService } from '@/api/modules/auth.service';
 import AuthConfirmButton from '@/components/modules/auth/confirm-btn.component';
 import AuthRedirectButton from '@/components/modules/auth/redirect-btn.component';
 import RegisterForm from '@/components/modules/auth/register.component';
-import { routes } from '@/constants/routes.constants';
+import { routes, screenNavigations } from '@/constants/routes.constants';
 import { showSuccessAlert } from '@/shared/alerts/toast.alert';
 import { showAlert } from '@/shared/alerts/window.alert';
 import { useSession } from '@/store/react.ctx';
@@ -59,7 +59,10 @@ export default function RegisterScreen(): React.JSX.Element {
                     _registerData={handleRegisterData}
                     _validatedData={handleDataValidated}
                 />
-                <AuthRedirectButton _navigateTo="login" _redirectButtonText="Ya estoy registrado" />
+                <AuthRedirectButton
+                    _navigateTo={screenNavigations.LOGIN}
+                    _redirectButtonText="Ya estoy registrado"
+                />
                 <AuthConfirmButton _buttonText="Registrarme" _onClick={confirmRegister} />
             </ScrollView>
         </View>
