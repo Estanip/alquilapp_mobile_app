@@ -1,22 +1,33 @@
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Text, TextInput } from 'react-native';
+import { Text, TextInput, View } from 'react-native';
 
-import { sharedStyles, textInputStyles } from '../shared/styles';
+import { iconStyles, sharedStyles, textInputStyles, viewStyles } from '../shared/styles';
 
-import { errorsState } from '@/components/constants/login.contants';
+import { errorsState } from '@/components/constants/login.constants';
 import {
     IErrorState,
     ILoginComponentProps,
     ILoginForm,
 } from '@/components/interfaces/auth.interfaces';
-import { emailRegExp, passwordRegExp } from '@/constants/auth.constants';
+import { PasswordIconNames, emailRegExp, passwordRegExp } from '@/constants/auth.constants';
+import { FontAwesome } from '@expo/vector-icons';
 
 export default function LoginForm({
+    _resetPassword,
     _emailData,
     _passwordData,
     _validatedData,
 }: ILoginComponentProps): React.JSX.Element {
+    // Password visibility state
+    const [passwordVisibility, setPasswordVisibility] = useState(false);
+    const [passwordIconName, setPasswordIconName] = useState(PasswordIconNames.EYE_OPEN);
+    const _showPassword = () => {
+        setPasswordVisibility(!passwordVisibility);
+        if (!passwordVisibility) setPasswordIconName(PasswordIconNames.EYE_CLOSED);
+        else setPasswordIconName(PasswordIconNames.EYE_OPEN);
+    };
+
     // Login state
     const { control, setValue, getValues } = useForm<ILoginForm>();
 
@@ -81,7 +92,9 @@ export default function LoginForm({
                 render={() => (
                     <TextInput
                         style={
-                            errors.email === '' ? textInputStyles.success : textInputStyles.error
+                            errors.email === ''
+                                ? { width: 360, ...textInputStyles.success }
+                                : { width: 360, ...textInputStyles.error }
                         }
                         onChangeText={(value: string) => {
                             setEmail(value);
@@ -91,21 +104,40 @@ export default function LoginForm({
                 )}
             />
             <Text style={sharedStyles.textError}>{errors.email}</Text>
-            <Controller
-                control={control}
-                name="password"
-                render={() => (
-                    <TextInput
-                        style={
-                            errors.password === '' ? textInputStyles.success : textInputStyles.error
-                        }
-                        onChangeText={(value: string) => {
-                            setPassword(value);
-                        }}
-                        placeholder="Ingrese contraseña"
+            <View
+                style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
+            >
+                <Controller
+                    control={control}
+                    name="password"
+                    render={() => (
+                        <TextInput
+                            secureTextEntry={!!!passwordVisibility}
+                            style={
+                                errors.password === ''
+                                    ? { width: 330, ...textInputStyles.success }
+                                    : { width: 330, ...textInputStyles.error }
+                            }
+                            onChangeText={(value: string) => {
+                                setPassword(value);
+                            }}
+                            placeholder={
+                                _resetPassword ? 'Ingrese nueva contraseña' : 'Ingrese contraseña'
+                            }
+                        />
+                    )}
+                />
+                <View key={'View-Icon'} style={viewStyles.icon}>
+                    <FontAwesome.Button
+                        underlayColor="transparent"
+                        name={passwordIconName}
+                        size={20}
+                        iconStyle={iconStyles.icon}
+                        style={iconStyles.background}
+                        onPress={() => _showPassword()}
                     />
-                )}
-            />
+                </View>
+            </View>
             <Text style={sharedStyles.textError}>{errors.password}</Text>
         </>
     );

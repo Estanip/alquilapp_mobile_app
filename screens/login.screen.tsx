@@ -8,12 +8,21 @@ import { AuthService } from '@/api/modules/auth.service';
 import AuthConfirmButton from '@/components/modules/auth/confirm-btn.component';
 import LoginForm from '@/components/modules/auth/login.component';
 import AuthRedirectButton from '@/components/modules/auth/redirect-btn.component';
-import { routes } from '@/constants/routes.constants';
+import SharedButton from '@/components/modules/shared/button.component';
+import { ButtonTextActions } from '@/constants';
+import { routes, screenNavigations } from '@/constants/routes.constants';
+import { INavigationParams, IRoute } from '@/interfaces';
 import { showSuccessAlert } from '@/shared/alerts/toast.alert';
 import { showAlert } from '@/shared/alerts/window.alert';
 import { useSession } from '@/store/react.ctx';
+import { useRoute } from '@react-navigation/native';
 
 export default function LoginScreen(): React.JSX.Element {
+    // Params from navigate
+    let params: INavigationParams;
+    const route: IRoute = useRoute();
+    if (route.params) params = route.params;
+
     // Session
     const { token, signIn } = useSession();
     useEffect(() => {
@@ -48,26 +57,69 @@ export default function LoginScreen(): React.JSX.Element {
             }
         }
     };
+    const resetPasword = async () => {
+        if (password === '' || email === '' || !validatedData)
+            showAlert('Error', 'Datos incompletos');
+        else {
+            const result = await AuthService().resetPassword({ email, new_password: password });
+            if (!result) showAlert('Error', 'Estamos teniendo inconvenientes, intente más tarde');
+            else if (!result?.success) showAlert('Error', 'Datos incorrectos');
+            else if (result?.success) {
+                router.replace({ pathname: routes.LOGIN });
+                await showSuccessAlert('La contraseña se ha actualizado correctamente');
+                resetFields();
+            }
+        }
+    };
 
     return (
         <View style={loginStyles.view}>
             <View style={loginStyles.viewForm}>
                 <LoginForm
+                    _resetPassword={route?.params?._password_reset === '1' ? true : false}
                     _emailData={handleEmailData}
                     _passwordData={handlePasswordData}
                     _validatedData={handleDataValidated}
                 />
-                <View style={loginStyles.viewButtons}>
-                    <AuthRedirectButton
-                        _navigateTo="register"
-                        _redirectButtonText="Aún no estoy registrado"
-                    />
-                    {/*                     <AuthRedirectButton
-                        navigateTo="home"
-                        redirectButtonText="Recuperar contraseña"
-                    ></AuthRedirectButton> */}
-                </View>
-                <AuthConfirmButton _buttonText="Iniciar sesión" _onClick={confirmLogin} />
+                {route?.params?._password_reset === '1' ? null : (
+                    <View style={loginStyles.viewButtons}>
+                        <AuthRedirectButton
+                            _navigateTo={screenNavigations.REGISTER}
+                            _redirectButtonText="Aún no estoy registrado"
+                        />
+                        <AuthRedirectButton
+                            _navigateTo={screenNavigations.RESET_PASSWORD}
+                            _redirectButtonText="Recuperar contraseña"
+                        ></AuthRedirectButton>
+                    </View>
+                )}
+                {route?.params?._password_reset === '1' ? (
+                    <View
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                        }}
+                    >
+                        <SharedButton
+                            _btnStyle={{ width: 150 }}
+                            _buttonText={ButtonTextActions.CONFIRM}
+                            _onClick={resetPasword}
+                        />
+                        <SharedButton
+                            _btnStyle={{ width: 150, backgroundColor: 'red' }}
+                            _buttonText={ButtonTextActions.BACK}
+                            _onClick={() =>
+                                router.replace({
+                                    pathname: routes.LOGIN,
+                                    params: { _password_reset: '0' },
+                                })
+                            }
+                        />
+                    </View>
+                ) : (
+                    <AuthConfirmButton _buttonText="Iniciar sesión" _onClick={confirmLogin} />
+                )}
             </View>
         </View>
     );
