@@ -8,7 +8,7 @@ export enum routes {
 }
 
 export enum routesName {
-    REGISTER = '(auth)register',
+    REGISTER = '(auth)/register',
     LOGIN = '(auth)/login',
     RESET_PASSWORD = '(auth)/login',
     HOME = '(app)/home',
