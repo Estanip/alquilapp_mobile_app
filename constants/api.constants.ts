@@ -4,6 +4,7 @@ import { TToken } from '@/api/interfaces/auth.interfaces';
 export const apiUris = {
     register: '/auth/register',
     login: '/auth/login',
+    reset_password: '/auth/change-password',
     courts: '/court',
     reservation: '/reservation',
     user: '/user',
