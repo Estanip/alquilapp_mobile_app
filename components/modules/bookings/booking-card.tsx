@@ -1,4 +1,3 @@
-import { router } from 'expo-router';
 import React from 'react';
 import { Text, View } from 'react-native';
 import tailwind from 'twrnc';
@@ -7,10 +6,11 @@ import SharedButton from '../shared/button.component';
 import { Card, CardContent, CardSubtitle, CardText } from '../shared/card';
 
 import { IBookingCardProps } from '@/components/interfaces/booking.interfaces';
-import { ButtonsTextVariants, Currencies } from '@/constants';
+import { ButtonTextActions, Currencies, _formatStringToDate } from '@/constants';
 import { routes } from '@/constants/routes.constants';
 import { BookingStatus } from '@/screens/constants/bookings.constants';
 import { BookingDetailsSubtitles, IBookingDetails } from '@/screens/interfaces/bookings.interface';
+import { router } from 'expo-router';
 
 export default function BookingCard({
     _cancelBooking,
@@ -21,6 +21,24 @@ export default function BookingCard({
     _cancelButton = false,
     _detailsButton = false,
 }: IBookingCardProps): any {
+    const _cancel = () => _cancelBooking(_booking_id);
+
+    const _edit = () =>
+        router.navigate({
+            pathname: routes.BOOK,
+            params: { _id: _booking_id },
+        });
+
+    const _validateLimitDate = () => {
+        const { text } = _infoDetails!.find(
+            (e) => e.subtitle === BookingDetailsSubtitles.DATE,
+        ) as IBookingDetails;
+        const limitDate = _formatStringToDate(text).getTime();
+        const currentDate = new Date().getTime();
+        if (currentDate > limitDate) return false;
+        else return true;
+    };
+
     return (
         <View style={{ alignItems: 'center' }} key={_booking_id}>
             <Card style={tailwind`mt-2 w-90`}>
@@ -99,35 +117,27 @@ export default function BookingCard({
                             justifyContent: 'space-between',
                         }}
                     >
-                        {_editButton && _status === BookingStatus.ACTIVE ? (
+                        {_editButton && _status === BookingStatus.ACTIVE && _validateLimitDate() ? (
                             <SharedButton
                                 _btnStyle={{ width: 150 }}
-                                _buttonText={ButtonsTextVariants.EDIT}
-                                _onClick={() =>
-                                    router.navigate({
-                                        pathname: routes.BOOK,
-                                        params: { _id: _booking_id },
-                                    })
-                                }
+                                _buttonText={ButtonTextActions.EDIT}
+                                _onClick={() => (_validateLimitDate() ? _edit() : null)}
                             />
                         ) : null}
-                        {_cancelButton && _status === BookingStatus.ACTIVE ? (
+                        {_cancelButton &&
+                        _status === BookingStatus.ACTIVE &&
+                        _validateLimitDate() ? (
                             <SharedButton
                                 _btnStyle={{ width: 150, backgroundColor: 'red' }}
-                                _buttonText={ButtonsTextVariants.CANCEL}
-                                _onClick={() => _cancelBooking(_booking_id)}
+                                _buttonText={ButtonTextActions.CANCEL}
+                                _onClick={() => (_validateLimitDate() ? _cancel() : null)}
                             />
                         ) : null}
                     </View>
                     {_detailsButton && _status === BookingStatus.INACTIVE ? (
                         <SharedButton
-                            _buttonText={ButtonsTextVariants.DETAILS}
-                            _onClick={() =>
-                                router.navigate({
-                                    pathname: routes.BOOK,
-                                    params: { _id: _booking_id },
-                                })
-                            }
+                            _buttonText={ButtonTextActions.DETAILS}
+                            _onClick={() => null}
                             _btnStyle={{ alignSelf: 'center' }}
                         />
                     ) : null}
