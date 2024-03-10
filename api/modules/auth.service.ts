@@ -1,11 +1,13 @@
 import {
     ILoginRequest,
     ILoginSuccessResponse,
+    IPasswordResetSuccessResponse,
     IRegisterRequest,
     IRegisterResponse,
+    IResetPasswordRequest,
 } from '../interfaces/auth.interfaces';
 
-import { apiPost, apiUris } from '@/constants/api.constants';
+import { apiPost, apiPut, apiUris } from '@/constants/api.constants';
 import { environment } from '@/environments/environment';
 
 export function AuthService() {
@@ -35,8 +37,26 @@ export function AuthService() {
         }
     };
 
+    const resetPassword = async (
+        request: IResetPasswordRequest,
+    ): Promise<IPasswordResetSuccessResponse | undefined> => {
+        try {
+            const response = await apiPut(
+                `${environment.SERVER_URI}${apiUris.reset_password}`,
+                request,
+            );
+            if (response)
+                return {
+                    message: response?.message,
+                    success: response?.success,
+                };
+        } catch (error: unknown) {
+            console.log(error);
+        }
+    };
     return {
         login,
         register,
+        resetPassword,
     };
 }
