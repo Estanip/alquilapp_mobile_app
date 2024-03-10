@@ -55,9 +55,12 @@ export default function Root() {
                 <Stack.Screen
                     name={routesName.LOGIN}
                     component={LoginScreen}
-                    options={{
-                        title: SectionsTitles.LOGIN,
-                    }}
+                    options={({ route }: { route: IRoute }) => ({
+                        title:
+                            route.params?._password_reset === '1'
+                                ? SectionsTitles.PASSWORD_RESET
+                                : SectionsTitles.LOGIN,
+                    })}
                 />
                 <Stack.Screen
                     name={routesName.REGISTER}
