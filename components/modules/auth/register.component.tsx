@@ -27,6 +27,7 @@ import {
     TDateTimePickerModes,
     TRegisterValues,
 } from '@/components/interfaces/auth.interfaces';
+import { TimeZones } from '@/constants';
 import {
     PasswordIconNames,
     RegisterFieldNames,
@@ -201,7 +202,7 @@ export default function RegisterForm({
     const formatDate = (selectedDate: TDate) => {
         if (isDateSelected) {
             let formatedDateToRender = selectedDate?.toLocaleString('en-GB', {
-                timeZone: 'UTC',
+                timeZone: TimeZones.ARG,
             })!;
             formatedDateToRender = formatedDateToRender?.substring(0, 10);
             let formatedDateToSetState = selectedDate?.toISOString()!;

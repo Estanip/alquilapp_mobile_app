@@ -25,3 +25,7 @@ export enum Currencies {
 
 export const _formatStringToDate = (date: string) =>
     new Date(`${date.substring(6, 10)}-${date.substring(3, 5)}-${date.substring(0, 2)}T00:00:00`);
+
+export enum TimeZones {
+    ARG = 'America/Argentina/Buenos_Aires',
+}
