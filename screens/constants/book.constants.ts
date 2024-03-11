@@ -28,7 +28,7 @@ export const initialDataState: IFieldsData = {
     players: [],
 };
 
-export const schedulePickerProps = (schedule: string) => {
+export const schedulePickerProps = (schedule: string | null) => {
     return {
         label: schedule ? `${schedule} hs` : 'Seleccione horario',
         value: schedule ? schedule : null,
@@ -98,12 +98,9 @@ export const _confirmBooking = (
 };
 
 export const _formatDate = (selectedDate: TDate | null, isDateSelected: boolean) => {
-    if (isDateSelected) {
-        let formatedDateToRender = selectedDate?.toLocaleString('en-GB', {
-            timeZone: 'UTC',
-        })!;
-        formatedDateToRender = formatedDateToRender?.substring(0, 10);
-        return formatedDateToRender;
+    if (isDateSelected && selectedDate) {
+        const formatedDate = selectedDate?.toISOString();
+        return `${formatedDate.substring(8, 10)}-${formatedDate.substring(5, 7)}-${formatedDate.substring(0, 4)}`;
     } else if (!isDateSelected) return 'Seleccione una fecha';
 };
 
@@ -111,11 +108,16 @@ export const _setSchdule = (
     bookings: number[],
     courtAvailabitlyFrom: number,
     courtAvailabitlyTo: number,
+    dateSelected: Date,
 ) => {
     let initialSchedule: number[] = [];
     initialScheduleState.map((hour) => {
         if (hour >= courtAvailabitlyFrom && hour <= courtAvailabitlyTo) initialSchedule.push(hour);
     });
     initialSchedule = initialSchedule.filter((hour) => !bookings.includes(hour));
-    return initialSchedule;
+    if (dateSelected.getDate() === new Date().getDate()) {
+        const currentHour = new Date().getHours();
+        const unavailableHours = initialScheduleState.filter((hour) => hour > currentHour);
+        return initialSchedule.filter((hour) => unavailableHours.includes(hour));
+    } else return initialSchedule;
 };
