@@ -1,7 +1,7 @@
 import { AntDesign } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 
 import { BookingStatus } from './constants/bookings.constants';
 import {
@@ -87,7 +87,7 @@ export default function BookingsScreen(): React.JSX.Element {
                         )}
                     </Text>
                 </Pressable>
-                {activeOpen ? (
+                {activeOpen && reservations?.active?.length ? (
                     <>
                         {reservations.active.length
                             ? reservations.active.map((reservation, index) => (
@@ -144,6 +144,10 @@ export default function BookingsScreen(): React.JSX.Element {
                               ))
                             : null}
                     </>
+                ) : activeOpen && !reservations?.active?.length ? (
+                    <View>
+                        <TextInput>No hay reservas</TextInput>
+                    </View>
                 ) : null}
             </View>
             <View style={{ padding: 10 }}>
@@ -163,7 +167,7 @@ export default function BookingsScreen(): React.JSX.Element {
                         )}
                     </Text>
                 </Pressable>
-                {inactiveOpen ? (
+                {inactiveOpen && reservations?.inactive?.length ? (
                     <>
                         {reservations.inactive.length
                             ? reservations.inactive.map((reservation, index) => (
@@ -217,6 +221,10 @@ export default function BookingsScreen(): React.JSX.Element {
                               ))
                             : null}
                     </>
+                ) : inactiveOpen && !reservations?.inactive?.length ? (
+                    <View>
+                        <TextInput>No hay reservas</TextInput>
+                    </View>
                 ) : null}
             </View>
         </ScrollView>
