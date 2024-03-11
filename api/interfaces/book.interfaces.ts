@@ -25,7 +25,7 @@ export type TBookServices = {
     getByDateAndCourt: (
         token: string,
         court: number,
-        date: Date,
+        date: string,
     ) => Promise<TAvailabilities | undefined>;
     getById: (token: string, id: string) => Promise<IReservationResponse | undefined>;
     book: (
