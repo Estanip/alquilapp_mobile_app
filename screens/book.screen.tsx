@@ -30,7 +30,7 @@ import { PlayersService } from '@/api/modules/players.service';
 import { TDate, TDateTimePickerModes } from '@/components/interfaces/auth.interfaces';
 import SharedButton from '@/components/modules/shared/button.component';
 import MultiSelectPicker from '@/components/modules/shared/multi-select.component';
-import { ButtonTextActions } from '@/constants';
+import { ButtonTextActions, TimeZones } from '@/constants';
 import { routes } from '@/constants/routes.constants';
 import { INavigationParams, IRoute } from '@/interfaces';
 import { showWarningAlert } from '@/shared/alerts/toast.alert';
@@ -111,7 +111,11 @@ export default function BookScreen(): React.JSX.Element {
     const _getAvailbleSchedules = async (date: Date, reservationFrom?: string) => {
         let bookings;
         if (date && courtNumber) {
-            bookings = await BookService().getByDateAndCourt(token!, courtNumber, date);
+            bookings = await BookService().getByDateAndCourt(
+                token!,
+                courtNumber,
+                date.toLocaleString('en-GB').substring(0, 10),
+            );
             const selectedCourt = courts.find(
                 (court) => court?.court_number === courtNumber,
             ) as ICourtResponse;
@@ -136,6 +140,7 @@ export default function BookScreen(): React.JSX.Element {
                     bookingsTimeFrom,
                     courtAvailabilityFrom,
                     courtAvailabilityTo,
+                    date,
                 );
 
                 const availableSchedulesFields: IField[] = availableSchedules.map((hour) => {
@@ -187,13 +192,13 @@ export default function BookScreen(): React.JSX.Element {
     };
 
     const _resetDataState = (
-        court: boolean = false,
-        date: boolean = false,
-        schedule: boolean = false,
+        unsetCourt: boolean = false,
+        unsetDate: boolean = false,
+        unsetSchedule: boolean = false,
     ) => {
-        if (court) setCourtNumber(null);
-        if (date) setDate(null);
-        if (schedule) setSchedule(null);
+        if (unsetCourt) setCourtNumber(null);
+        if (unsetDate) setDate(null);
+        if (unsetSchedule) setSchedule(null);
         setPlayers([]);
         setIsChecked(false);
     };
@@ -207,7 +212,7 @@ export default function BookScreen(): React.JSX.Element {
 
     const _setExistingBooking = async (reservation: IReservationResponse) => {
         setCourtNumber(reservation.court);
-        setDate(new Date(reservation.date));
+        setDate(new Date(`${reservation.date}T00:00:00.000`));
         setDateSelected(true);
         await _getAvailbleSchedules(new Date(reservation.date), reservation.from);
         setSchedule(reservation.from);
@@ -268,6 +273,7 @@ export default function BookScreen(): React.JSX.Element {
     };
 
     const onChangeDate = async (e: DateTimePickerEvent, selectedDate: TDate | undefined) => {
+        setSchedule(null);
         setShowDatePicker(false);
         if (e?.type === 'dismissed') {
             _resetDataState(false, true, true);
@@ -281,7 +287,7 @@ export default function BookScreen(): React.JSX.Element {
         } else if (e?.type === 'set' && selectedDate) {
             _resetDataState(false, false, true);
             await _getAvailbleSchedules(selectedDate);
-            setDate(selectedDate!);
+            setDate(new Date(`${selectedDate.toISOString().substring(0, 10)}T00:00:00.000`));
             setDateSelected(true);
             setSteps({
                 ...steps,
@@ -310,7 +316,7 @@ export default function BookScreen(): React.JSX.Element {
         }
     };
 
-    const onChangeSchedule = async (selectedSchedule: string) => {
+    const onChangeSchedule = async (selectedSchedule: string | null) => {
         if (!selectedSchedule) {
             _resetDataState();
             setSteps({ ...steps, _schedule: StepStatus.PENDING, _players: StepStatus.PENDING });
@@ -364,6 +370,8 @@ export default function BookScreen(): React.JSX.Element {
                             onChange={onChangeDate}
                             maximumDate={new Date(nextWeek)}
                             minimumDate={new Date()}
+                            timeZoneName={TimeZones.ARG}
+                            locale="en-GB"
                         />
                     )}
                 </View>
@@ -380,6 +388,7 @@ export default function BookScreen(): React.JSX.Element {
                         textInputProps={{ style: { color: '#737373' } } as TextInputProps}
                         onValueChange={(value: string) => onChangeSchedule(value)}
                         items={availablesSchedulesFieldsData}
+                        itemKey={'id'}
                     />
                 </View>
             )}
