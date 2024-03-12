@@ -1,7 +1,14 @@
 import DateTimePicker, { type DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Pressable, TextInput, TextInputProps, View } from 'react-native';
+import {
+    ActivityIndicator,
+    Pressable,
+    StyleSheet,
+    TextInput,
+    TextInputProps,
+    View,
+} from 'react-native';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import RNPickerSelect from 'react-native-picker-select';
 
@@ -27,10 +34,10 @@ import { ICourtResponse, TCourts } from '@/api/interfaces/court.interfaces';
 import { BookService } from '@/api/modules/book.service';
 import { CourtService } from '@/api/modules/court.service';
 import { PlayersService } from '@/api/modules/players.service';
-import { TDate, TDateTimePickerModes } from '@/components/interfaces/auth.interfaces';
+import { TDate } from '@/components/interfaces/auth.interfaces';
 import SharedButton from '@/components/modules/shared/button.component';
 import MultiSelectPicker from '@/components/modules/shared/multi-select.component';
-import { ButtonTextActions, TimeZones } from '@/constants';
+import { ButtonTextActions } from '@/constants';
 import { routes } from '@/constants/routes.constants';
 import { INavigationParams, IRoute } from '@/interfaces';
 import { showWarningAlert } from '@/shared/alerts/toast.alert';
@@ -43,6 +50,9 @@ export default function BookScreen(): React.JSX.Element {
     const route: IRoute = useRoute();
     if (route.params) params = route.params;
 
+    // Loading
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
     // Session
     const { token, user_id } = useSession();
     useEffect(() => {
@@ -53,6 +63,7 @@ export default function BookScreen(): React.JSX.Element {
     useEffect(() => {
         (async () => {
             try {
+                setIsLoading(true);
                 let courts: TCourts = [];
                 const response = await CourtService().get(token);
                 if (response) courts = response as TCourts;
@@ -71,8 +82,10 @@ export default function BookScreen(): React.JSX.Element {
                     setCourtsFieldsData(courtsField);
                     _setBookingById(params._id);
                 }
+                setIsLoading(false);
             } catch (error) {
                 console.error('Error fetching data:', error);
+                setIsLoading(false);
             }
         })();
     }, []);
@@ -103,7 +116,6 @@ export default function BookScreen(): React.JSX.Element {
     const [date, setDate] = useState<TDate | null>(null);
     const [isDateSelected, setDateSelected] = useState<boolean>(false);
     const [showDatePicker, setShowDatePicker] = useState(false);
-    const [displaymode, setMode] = useState<TDateTimePickerModes>('date');
 
     // Checkbox status
     const [isChecked, setIsChecked] = useState<boolean>(false);
@@ -170,10 +182,7 @@ export default function BookScreen(): React.JSX.Element {
         setPlayersFieldsData(playersFields);
     };
 
-    const _displayDatepicker = (mode: TDateTimePickerModes) => {
-        setMode(mode);
-        setShowDatePicker(true);
-    };
+    const _displayDatepicker = () => setShowDatePicker(true);
 
     const _filterPlayersSelection = (word: string) => {
         if (word === '') setPlayersFieldsData(playersFieldsData);
@@ -216,7 +225,7 @@ export default function BookScreen(): React.JSX.Element {
         setDateSelected(true);
         await _getAvailbleSchedules(new Date(reservation.date), reservation.from);
         setSchedule(reservation.from);
-        await _getPlayers();
+        _getPlayers();
         const currentPlayers = reservation.players.map((player) => player.user);
         reservation.players.map((player) => {
             if (player.user === user_id) setIsChecked(true);
@@ -231,6 +240,7 @@ export default function BookScreen(): React.JSX.Element {
     };
 
     const onChangeCheck = (isChecked: boolean) => {
+        setIsLoading(true);
         let currentPlayers;
         if (isChecked && players.length < 4 && user_id) {
             currentPlayers = [...players, user_id?.toString()];
@@ -248,6 +258,7 @@ export default function BookScreen(): React.JSX.Element {
             else if (currentPlayers.length < 2)
                 setSteps({ ...steps, _players: StepStatus.PENDING });
         }
+        setIsLoading(false);
     };
 
     const onChangeCourt = (selectedCourt: number) => {
@@ -273,6 +284,7 @@ export default function BookScreen(): React.JSX.Element {
     };
 
     const onChangeDate = async (e: DateTimePickerEvent, selectedDate: TDate | undefined) => {
+        setIsLoading(true);
         setSchedule(null);
         setShowDatePicker(false);
         if (e?.type === 'dismissed') {
@@ -285,7 +297,6 @@ export default function BookScreen(): React.JSX.Element {
                 _players: StepStatus.PENDING,
             });
         } else if (e?.type === 'set' && selectedDate) {
-            _resetDataState(false, false, true);
             await _getAvailbleSchedules(selectedDate);
             setDate(new Date(`${selectedDate.toISOString().substring(0, 10)}T00:00:00.000`));
             setDateSelected(true);
@@ -296,9 +307,11 @@ export default function BookScreen(): React.JSX.Element {
                 _players: StepStatus.PENDING,
             });
         }
+        setIsLoading(false);
     };
 
-    const onChangePlayers = async (selectedPlayers: any, isEditing = false) => {
+    const onChangePlayers = (selectedPlayers: any, isEditing = false) => {
+        setIsLoading(true);
         if (selectedPlayers.length === 5 && players.length === 4)
             return showWarningAlert('Máximo 4 jugadores');
         else if ((selectedPlayers.length === 4 && players.length === 3) || isEditing) {
@@ -314,9 +327,11 @@ export default function BookScreen(): React.JSX.Element {
             else if (selectedPlayers.length < 2)
                 setSteps({ ...steps, _players: StepStatus.PENDING });
         }
+        setIsLoading(false);
     };
 
     const onChangeSchedule = async (selectedSchedule: string | null) => {
+        setIsLoading(true);
         if (!selectedSchedule) {
             _resetDataState();
             setSteps({ ...steps, _schedule: StepStatus.PENDING, _players: StepStatus.PENDING });
@@ -331,124 +346,144 @@ export default function BookScreen(): React.JSX.Element {
             });
             setSchedule(selectedSchedule);
         }
+        setIsLoading(false);
     };
 
     return (
-        <View key="View-container" style={bookStyles.view}>
-            <View
-                key="View-court-select"
-                style={{ ...bookStyles.viewPicker, marginBottom: 20, height: 50 }}
-            >
-                <RNPickerSelect
-                    placeholder={pickerCourts}
-                    useNativeAndroidPickerStyle={false}
-                    textInputProps={{ style: { color: '#737373' } } as TextInputProps}
-                    onValueChange={(value: number) => onChangeCourt(value)}
-                    items={courtsFieldsData}
-                    value={courtNumber}
-                />
-            </View>
-
-            {steps._court === StepStatus.DONE && (
-                <View key="View-date-picker">
-                    <Pressable onPress={() => _displayDatepicker('date')}>
-                        <TextInput
-                            style={{
-                                ...bookStyles.textInputDatePicker,
-                                marginBottom: 20,
-                                height: 50,
-                            }}
-                            value={_formatDate(date, isDateSelected)}
-                            editable={false}
-                            placeholder={!date ? 'Seleccione una fecha' : date.toDateString()}
+        <>
+            {isLoading ? (
+                <View style={[styles.container, styles.horizontal]}>
+                    <ActivityIndicator size="large" />
+                </View>
+            ) : (
+                <View key="View-container" style={bookStyles.view}>
+                    <View
+                        key="View-court-select"
+                        style={{ ...bookStyles.viewPicker, marginBottom: 20, height: 50 }}
+                    >
+                        <RNPickerSelect
+                            placeholder={pickerCourts}
+                            useNativeAndroidPickerStyle={false}
+                            textInputProps={{ style: { color: '#737373' } } as TextInputProps}
+                            onValueChange={(value: number) => onChangeCourt(value)}
+                            items={courtsFieldsData}
+                            value={courtNumber}
                         />
-                    </Pressable>
-                    {showDatePicker && (
-                        <DateTimePicker
-                            value={date ? date : new Date()}
-                            mode={displaymode}
-                            onChange={onChangeDate}
-                            maximumDate={new Date(nextWeek)}
-                            minimumDate={new Date()}
-                            timeZoneName={TimeZones.ARG}
-                            locale="en-GB"
+                    </View>
+
+                    {steps._court === StepStatus.DONE && (
+                        <View key="View-date-picker">
+                            <Pressable onPress={() => _displayDatepicker()}>
+                                <TextInput
+                                    style={{
+                                        ...bookStyles.textInputDatePicker,
+                                        marginBottom: 20,
+                                        height: 50,
+                                    }}
+                                    value={_formatDate(date, isDateSelected)}
+                                    editable={false}
+                                    placeholder={
+                                        !date ? 'Seleccione una fecha' : date.toDateString()
+                                    }
+                                />
+                            </Pressable>
+                            {showDatePicker && (
+                                <DateTimePicker
+                                    value={date ? date : new Date()}
+                                    onChange={(e, date) => onChangeDate(e, date)}
+                                    maximumDate={new Date(nextWeek)}
+                                    minimumDate={new Date()}
+                                />
+                            )}
+                        </View>
+                    )}
+
+                    {steps._date === StepStatus.DONE && (
+                        <View
+                            key="View-court-time"
+                            style={{ ...bookStyles.viewPicker, marginBottom: 20, height: 50 }}
+                        >
+                            <RNPickerSelect
+                                placeholder={schedulePickerProps(schedule!)}
+                                useNativeAndroidPickerStyle={false}
+                                textInputProps={{ style: { color: '#737373' } } as TextInputProps}
+                                onValueChange={(value: string) => onChangeSchedule(value)}
+                                items={availablesSchedulesFieldsData}
+                                itemKey={'id'}
+                            />
+                        </View>
+                    )}
+
+                    {steps._schedule === StepStatus.DONE && (
+                        <>
+                            <View>
+                                <BouncyCheckbox
+                                    size={18}
+                                    fillColor="#3498db"
+                                    unfillColor="#FFFFFF"
+                                    text="Soy parte de los jugadores"
+                                    iconStyle={{ borderColor: '#3498db' }}
+                                    innerIconStyle={{ borderWidth: 2 }}
+                                    textStyle={{ textDecorationLine: 'none' }}
+                                    style={{ paddingLeft: 2, marginBottom: 20 }}
+                                    isChecked={isChecked}
+                                    disableBuiltInState
+                                    onPress={() => onChangeCheck(!isChecked)}
+                                />
+                            </View>
+
+                            <View>
+                                <MultiSelectPicker
+                                    key={'players-multi-select'}
+                                    _items={playersFieldsData}
+                                    _onChangeInput={(word: string) => _filterPlayersSelection(word)}
+                                    _onSelectedItemsChange={(items: any) => onChangePlayers(items)}
+                                    _selectedItems={players}
+                                    _resetFields={_resetPlayersFields}
+                                />
+                            </View>
+                        </>
+                    )}
+
+                    {steps._players === StepStatus.DONE && (
+                        <SharedButton
+                            _btnStyle={{
+                                position: 'absolute',
+                                bottom: 20,
+                                alignSelf: 'center',
+                                width: 350,
+                            }}
+                            _buttonText={
+                                route.params?._id ? ButtonTextActions.EDIT : ButtonTextActions.BOOK
+                            }
+                            _onClick={() =>
+                                _confirmBooking(
+                                    courtNumber!,
+                                    date!,
+                                    schedule!,
+                                    players,
+                                    user_id!,
+                                    token!,
+                                    params?._id ? true : false,
+                                    params?._id,
+                                )
+                            }
                         />
                     )}
                 </View>
             )}
-
-            {steps._date === StepStatus.DONE && (
-                <View
-                    key="View-court-time"
-                    style={{ ...bookStyles.viewPicker, marginBottom: 20, height: 50 }}
-                >
-                    <RNPickerSelect
-                        placeholder={schedulePickerProps(schedule!)}
-                        useNativeAndroidPickerStyle={false}
-                        textInputProps={{ style: { color: '#737373' } } as TextInputProps}
-                        onValueChange={(value: string) => onChangeSchedule(value)}
-                        items={availablesSchedulesFieldsData}
-                        itemKey={'id'}
-                    />
-                </View>
-            )}
-
-            {steps._schedule === StepStatus.DONE && (
-                <>
-                    <View>
-                        <BouncyCheckbox
-                            size={18}
-                            fillColor="#3498db"
-                            unfillColor="#FFFFFF"
-                            text="Soy parte de los jugadores"
-                            iconStyle={{ borderColor: '#3498db' }}
-                            innerIconStyle={{ borderWidth: 2 }}
-                            textStyle={{ textDecorationLine: 'none' }}
-                            style={{ paddingLeft: 2, marginBottom: 20 }}
-                            isChecked={isChecked}
-                            disableBuiltInState
-                            onPress={() => onChangeCheck(!isChecked)}
-                        />
-                    </View>
-
-                    <View>
-                        <MultiSelectPicker
-                            key={'players-multi-select'}
-                            _items={playersFieldsData}
-                            _onChangeInput={(word: string) => _filterPlayersSelection(word)}
-                            _onSelectedItemsChange={(items: any) => onChangePlayers(items)}
-                            _selectedItems={players}
-                            _resetFields={_resetPlayersFields}
-                        />
-                    </View>
-                </>
-            )}
-
-            {steps._players === StepStatus.DONE && (
-                <SharedButton
-                    _btnStyle={{
-                        position: 'absolute',
-                        bottom: 20,
-                        alignSelf: 'center',
-                        width: 350,
-                    }}
-                    _buttonText={
-                        route.params?._id ? ButtonTextActions.EDIT : ButtonTextActions.BOOK
-                    }
-                    _onClick={() =>
-                        _confirmBooking(
-                            courtNumber!,
-                            date!,
-                            schedule!,
-                            players,
-                            user_id!,
-                            token!,
-                            params?._id ? true : false,
-                            params?._id,
-                        )
-                    }
-                />
-            )}
-        </View>
+        </>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+    },
+    horizontal: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        padding: 10,
+    },
+});
