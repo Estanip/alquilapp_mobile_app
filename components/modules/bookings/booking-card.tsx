@@ -134,13 +134,13 @@ export default function BookingCard({
                             />
                         ) : null}
                     </View>
-                    {_detailsButton && _status === BookingStatus.INACTIVE ? (
+                    {/*                     {_detailsButton && _status === BookingStatus.INACTIVE ? (
                         <SharedButton
                             _buttonText={ButtonTextActions.DETAILS}
                             _onClick={() => null}
                             _btnStyle={{ alignSelf: 'center' }}
                         />
-                    ) : null}
+                    ) : null} */}
                 </CardContent>
             </Card>
         </View>
