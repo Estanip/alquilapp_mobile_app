@@ -29,6 +29,7 @@ export default function Root() {
                 screenOptions={{
                     headerTintColor: 'white',
                     headerStyle: { backgroundColor: '#3498db' },
+                    contentStyle: { backgroundColor: '#f0f8ff' },
                 }}
             >
                 <Stack.Screen
