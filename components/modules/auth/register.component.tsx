@@ -1,8 +1,16 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import DateTimePicker, { type DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Pressable, Text, TextInput, View, type TextInputProps } from 'react-native';
+import {
+    Button,
+    Platform,
+    Pressable,
+    Text,
+    TextInput,
+    View,
+    type TextInputProps,
+} from 'react-native';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import RNPickerSelect from 'react-native-picker-select';
 
 import {
@@ -24,7 +32,6 @@ import { IControllerField } from '@/components/interfaces';
 import {
     IRegisterComponentProps,
     TDate,
-    TDateTimePickerModes,
     TRegisterValues,
 } from '@/components/interfaces/auth.interfaces';
 import { TimeZones } from '@/constants';
@@ -59,7 +66,6 @@ export default function RegisterForm({
     const [date, setDate] = useState<TDate>(new Date());
     const [isDateSelected, setDateSelected] = useState<boolean>(false);
     const [showDatePicker, setShowDatePicker] = useState(false);
-    const [displaymode, setMode] = useState<TDateTimePickerModes>('date');
 
     const checkErrors = (value: string, key: keyof IRegisterForm) => {
         _validatedData(true);
@@ -205,29 +211,18 @@ export default function RegisterForm({
                 timeZone: TimeZones.ARG,
             })!;
             formatedDateToRender = formatedDateToRender?.substring(0, 10);
-            let formatedDateToSetState = selectedDate?.toISOString()!;
-            formatedDateToSetState = formatedDateToSetState.substring(0, 10);
-            setValue('birth_date', formatedDateToSetState?.trim());
             return formatedDateToRender;
         }
 
         return RegisterFieldNames.BIRTH_DATE;
     };
-    const onChangeDate = (e: DateTimePickerEvent, selectedDate: TDate | undefined) => {
-        let selected = '0';
-        setShowDatePicker(false);
-        if (e?.type === 'dismissed') setDateSelected(false);
-        else if (e?.type === 'set') {
-            selected = '1';
-            setDate(selectedDate!);
-            setDateSelected(true);
-        }
+    const onChangeDate = (selectedDate: TDate) => {
+        setDate(selectedDate);
+        setDateSelected(true);
+        setValue('birth_date', selectedDate.toISOString()?.substring(0, 10));
         _registerData(getValues());
-        checkErrors(selected, 'birth_date');
-    };
-    const displayDatepicker = (mode: TDateTimePickerModes) => {
-        setMode(mode);
-        setShowDatePicker(true);
+        checkErrors('1', 'birth_date');
+        setShowDatePicker(false);
     };
     const onChangeMembershipType = (type: string) => {
         setValue('membership_type', type?.trim());
@@ -363,40 +358,10 @@ export default function RegisterForm({
                     );
                 }
 
-                if (field_name === RegisterFieldNames.BIRTH_DATE) {
-                    return (
-                        <View key={`View-Date-${index}`}>
-                            <Pressable onPress={() => displayDatepicker('date')}>
-                                <TextInput
-                                    style={
-                                        !registerErrors['birth_date' as keyof IRegisterForm]
-                                            ? textInputStyles.success
-                                            : textInputStyles.error
-                                    }
-                                    value={formatDate(date)}
-                                    editable={false}
-                                />
-                            </Pressable>
-                            {showDatePicker && (
-                                <DateTimePicker
-                                    value={date!}
-                                    mode={displaymode}
-                                    onChange={onChangeDate}
-                                    maximumDate={new Date()}
-                                />
-                            )}
-                            <Text style={sharedStyles.textError}>
-                                {registerErrors[field_value as keyof IRegisterForm]}
-                            </Text>
-                        </View>
-                    );
-                }
-
                 if (field_name === RegisterFieldNames.MEMBERSHIP_TYPE) {
                     return (
-                        <>
+                        <View key={`View-Select-${index}`}>
                             <View
-                                key={`View-Select-${index}`}
                                 style={
                                     !registerErrors['membership_type' as keyof IRegisterForm]
                                         ? viewPickerStyles.success
@@ -411,12 +376,75 @@ export default function RegisterForm({
                                     useNativeAndroidPickerStyle={false}
                                     onValueChange={(value: string) => onChangeMembershipType(value)}
                                     items={membershipTypes}
+                                    doneText={'Seleccionar'}
                                 />
                             </View>
                             <Text style={sharedStyles.textError}>
                                 {registerErrors[field_value as keyof IRegisterForm]}
                             </Text>
-                        </>
+                        </View>
+                    );
+                }
+
+                if (field_name === RegisterFieldNames.BIRTH_DATE) {
+                    return (
+                        <View key={`View-Date-${index}`} style={{ marginBottom: 20 }}>
+                            <DateTimePickerModal
+                                maximumDate={new Date()}
+                                isVisible={showDatePicker}
+                                onConfirm={(date) => onChangeDate(date)}
+                                onCancel={() => setShowDatePicker(false)}
+                                confirmTextIOS={'Confirmar'}
+                                cancelTextIOS={'Cancelar'}
+                            />
+                            <View
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    flexDirection: 'row',
+                                }}
+                            >
+                                <TextInput
+                                    style={
+                                        !registerErrors['birth_date' as keyof IRegisterForm]
+                                            ? { ...textInputStyles.success, width: 240 }
+                                            : { ...textInputStyles.error, width: 240 }
+                                    }
+                                    value={date ? formatDate(date) : 'Fecha de nacimiento'}
+                                    editable={false}
+                                />
+                                {Platform.OS === 'ios' ? (
+                                    <View
+                                        style={{ alignItems: 'center', justifyContent: 'center' }}
+                                    >
+                                        <Button
+                                            color={'#2196F3'}
+                                            title="Seleccionar"
+                                            onPress={() => setShowDatePicker(!showDatePicker)}
+                                        />
+                                    </View>
+                                ) : (
+                                    <Pressable
+                                        onPress={() => setShowDatePicker(!showDatePicker)}
+                                        style={{ alignItems: 'center', justifyContent: 'center' }}
+                                    >
+                                        <Text
+                                            style={{
+                                                color: '#2196F3',
+                                                fontWeight: '600',
+                                                fontSize: 16,
+                                            }}
+                                        >
+                                            Seleccionar
+                                        </Text>
+                                    </Pressable>
+                                )}
+
+                                <Text style={sharedStyles.textError}>
+                                    {registerErrors[field_value as keyof IRegisterForm]}
+                                </Text>
+                            </View>
+                        </View>
                     );
                 }
             })}

@@ -38,11 +38,11 @@ export const fields: IControllerField[] = [
         field_value: RegisterFieldValues.PHONE_NUMBER,
         field_name: RegisterFieldNames.PHONE_NUMBER,
     },
-    { field_value: RegisterFieldValues.BIRTH_DATE, field_name: RegisterFieldNames.BIRTH_DATE },
     {
         field_value: RegisterFieldValues.MEMBERSHIP_TYPE,
         field_name: RegisterFieldNames.MEMBERSHIP_TYPE,
     },
+    { field_value: RegisterFieldValues.BIRTH_DATE, field_name: RegisterFieldNames.BIRTH_DATE },
 ];
 
 export const membershipTypes: ISelectOptions[] = [
