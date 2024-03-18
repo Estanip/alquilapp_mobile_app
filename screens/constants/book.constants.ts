@@ -1,15 +1,21 @@
 import { router } from 'expo-router';
 
-import { IFieldsData, IStep, StepStatus } from '../interfaces/book.interfaces';
+import { IFieldsData, IStep, StepStatus, SurfaceTypes_ES } from '../interfaces/book.interfaces';
 
 import { TToken } from '@/api/interfaces/auth.interfaces';
 import { IBookRequest, IPlayer } from '@/api/interfaces/book.interfaces';
 import { BookService } from '@/api/modules/book.service';
 import { BookingsService } from '@/api/modules/bookings.service';
-import { TDate } from '@/components/interfaces/auth.interfaces';
+import { TimeZones } from '@/constants';
 import { routes } from '@/constants/routes.constants';
 import { showErrorAlert, showSuccessAlert, showWarningAlert } from '@/shared/alerts/toast.alert';
 import { showAlert } from '@/shared/alerts/window.alert';
+
+type TPickerSelectProps = {
+    label: string;
+    color: string;
+    value: string | null;
+};
 
 // STATES & PROPS
 const initialScheduleState: number[] = [
@@ -28,10 +34,22 @@ export const initialDataState: IFieldsData = {
     players: [],
 };
 
-export const schedulePickerProps = (schedule: string | null) => {
+export const schedulePickerProps = (schedule: string | null): TPickerSelectProps => {
     return {
         label: schedule ? `${schedule} hs` : 'Seleccione horario',
         value: schedule ? schedule : null,
+        color: '#737373',
+    };
+};
+
+export const courtsPickerProps = (court: string | null): TPickerSelectProps => {
+    return {
+        label: court
+            ? Number(court.toString()) < 3
+                ? `${court} - ${SurfaceTypes_ES.HARD}`
+                : `${court} - ${SurfaceTypes_ES.CLAY}`
+            : 'Seleccione cancha',
+        value: court ? court : null,
         color: '#737373',
     };
 };
@@ -64,6 +82,7 @@ export const _book = async (
             ? await BookingsService().edit(token!, bookRequest, booking_id!)
             : await BookService().book(token!, bookRequest);
         if (response?.success) {
+            // eslint-disable-next-line no-unused-expressions
             editing
                 ? showSuccessAlert('Reserva editada con éxito')
                 : showSuccessAlert('Reserva completada con éxito');
@@ -97,11 +116,16 @@ export const _confirmBooking = (
     );
 };
 
-export const _formatDate = (selectedDate: TDate | null, isDateSelected: boolean) => {
-    if (isDateSelected && selectedDate) {
-        const formatedDate = selectedDate?.toISOString();
-        return `${formatedDate.substring(8, 10)}-${formatedDate.substring(5, 7)}-${formatedDate.substring(0, 4)}`;
-    } else if (!isDateSelected) return 'Seleccione una fecha';
+export const _formatDate = (selectedDate: Date) => {
+    if (selectedDate) {
+        let formatedDateToRender = selectedDate?.toLocaleString('en-GB', {
+            timeZone: TimeZones.ARG,
+        })!;
+        formatedDateToRender = formatedDateToRender?.substring(0, 10);
+        return formatedDateToRender;
+    }
+
+    return 'Seleccione una fecha';
 };
 
 export const _setSchdule = (
