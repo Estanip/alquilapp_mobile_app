@@ -1,14 +1,7 @@
-import DateTimePicker, { type DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import { useRoute } from '@react-navigation/native';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import {
-    ActivityIndicator,
-    Pressable,
-    StyleSheet,
-    TextInput,
-    TextInputProps,
-    View,
-} from 'react-native';
+import { ActivityIndicator, Platform, TextInputProps, View } from 'react-native';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import RNPickerSelect from 'react-native-picker-select';
 
@@ -16,6 +9,7 @@ import {
     _confirmBooking,
     _formatDate,
     _setSchdule,
+    courtsPickerProps,
     initialDataState,
     initialStateSteps,
     schedulePickerProps,
@@ -25,31 +19,30 @@ import {
     IMultiSelectField,
     IStep,
     StepStatus,
-    SurfaceTypes,
+    SurfaceTypes_EN,
+    SurfaceTypes_ES,
 } from './interfaces/book.interfaces';
-import { bookStyles, pickerCourts } from './styles';
+import { bookStyles, sharedStyles } from './styles';
 
 import { IReservationResponse } from '@/api/interfaces/booking.interfaces';
 import { ICourtResponse, TCourts } from '@/api/interfaces/court.interfaces';
 import { BookService } from '@/api/modules/book.service';
 import { CourtService } from '@/api/modules/court.service';
 import { PlayersService } from '@/api/modules/players.service';
-import { TDate } from '@/components/interfaces/auth.interfaces';
 import SharedButton from '@/components/modules/shared/button.component';
+import DatePicker from '@/components/modules/shared/datePicker.component';
 import MultiSelectPicker from '@/components/modules/shared/multi-select.component';
 import { ButtonTextActions } from '@/constants';
 import { routes } from '@/constants/routes.constants';
 import { INavigationParams, IRoute } from '@/interfaces';
 import { showWarningAlert } from '@/shared/alerts/toast.alert';
 import { useSession } from '@/store/react.ctx';
-import { useRoute } from '@react-navigation/native';
 
 export default function BookScreen(): React.JSX.Element {
     // Params from navigate
     let params: INavigationParams;
     const route: IRoute = useRoute();
     if (route.params) params = route.params;
-
     // Loading
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -70,9 +63,9 @@ export default function BookScreen(): React.JSX.Element {
                 setCourts(courts);
                 const courtsField: IField[] = courts?.map((court) => {
                     return {
-                        label: `${court?.court_number} - ${court?.surface_type === SurfaceTypes.HARD ? 'Cemento' : 'Polvo de Ladrillo'}`,
-                        value: court?.court_number,
-                        id: court?._id,
+                        id: court.court_number.toString(),
+                        value: court?.court_number.toString(),
+                        label: `${court?.court_number} - ${court?.surface_type === SurfaceTypes_EN.HARD ? SurfaceTypes_ES.HARD : SurfaceTypes_ES.CLAY}`,
                     };
                 });
                 if (!params._id) {
@@ -103,7 +96,7 @@ export default function BookScreen(): React.JSX.Element {
 
     // Court state
     const [courts, setCourts] = useState<TCourts>([]);
-    const [courtNumber, setCourtNumber] = useState<number | null>(null);
+    const [courtNumber, setCourtNumber] = useState<string | null>(null);
 
     // Available schedules state
     const [schedule, setSchedule] = useState<string | null>(null);
@@ -113,8 +106,7 @@ export default function BookScreen(): React.JSX.Element {
 
     // Date Time Picker
     const nextWeek = new Date().setDate(new Date().getDate() + 7);
-    const [date, setDate] = useState<TDate | null>(null);
-    const [isDateSelected, setDateSelected] = useState<boolean>(false);
+    const [date, setDate] = useState<Date | null>(null);
     const [showDatePicker, setShowDatePicker] = useState(false);
 
     // Checkbox status
@@ -122,17 +114,21 @@ export default function BookScreen(): React.JSX.Element {
 
     const _getAvailbleSchedules = async (date: Date, reservationFrom?: string) => {
         let bookings;
+
         if (date && courtNumber) {
+            const selectedCourtNumber = Number(courtNumber);
             bookings = await BookService().getByDateAndCourt(
                 token!,
-                courtNumber,
+                selectedCourtNumber,
                 date.toLocaleString('en-GB').substring(0, 10),
             );
+
             const selectedCourt = courts.find(
-                (court) => court?.court_number === courtNumber,
+                (court) => court?.court_number === selectedCourtNumber,
             ) as ICourtResponse;
+
             if (selectedCourt) {
-                let bookingsTimeFrom: number[] = [];
+                const bookingsTimeFrom: number[] = [];
                 if (bookings)
                     bookings.map((reservation) => {
                         if (reservation.from !== reservationFrom)
@@ -182,8 +178,6 @@ export default function BookScreen(): React.JSX.Element {
         setPlayersFieldsData(playersFields);
     };
 
-    const _displayDatepicker = () => setShowDatePicker(true);
-
     const _filterPlayersSelection = (word: string) => {
         if (word === '') setPlayersFieldsData(playersFieldsData);
         else if (word?.length > 2)
@@ -220,9 +214,8 @@ export default function BookScreen(): React.JSX.Element {
     };
 
     const _setExistingBooking = async (reservation: IReservationResponse) => {
-        setCourtNumber(reservation.court);
+        setCourtNumber(reservation.court.toString());
         setDate(new Date(`${reservation.date}T00:00:00.000`));
-        setDateSelected(true);
         await _getAvailbleSchedules(new Date(reservation.date), reservation.from);
         setSchedule(reservation.from);
         _getPlayers();
@@ -261,8 +254,8 @@ export default function BookScreen(): React.JSX.Element {
         setIsLoading(false);
     };
 
-    const onChangeCourt = (selectedCourt: number) => {
-        if (!selectedCourt) {
+    const onChangeCourt = (selectedCourt: string) => {
+        if (!selectedCourt && Platform.OS !== 'ios') {
             _resetDataState(true, true, true);
             setSteps({
                 _court: StepStatus.PENDING,
@@ -283,30 +276,18 @@ export default function BookScreen(): React.JSX.Element {
         }
     };
 
-    const onChangeDate = async (e: DateTimePickerEvent, selectedDate: TDate | undefined) => {
+    const onChangeDate = async (selectedDate: Date) => {
         setIsLoading(true);
         setSchedule(null);
         setShowDatePicker(false);
-        if (e?.type === 'dismissed') {
-            _resetDataState(false, true, true);
-            setDateSelected(false);
-            setSteps({
-                ...steps,
-                _date: StepStatus.PENDING,
-                _schedule: StepStatus.PENDING,
-                _players: StepStatus.PENDING,
-            });
-        } else if (e?.type === 'set' && selectedDate) {
-            await _getAvailbleSchedules(selectedDate);
-            setDate(new Date(`${selectedDate.toISOString().substring(0, 10)}T00:00:00.000`));
-            setDateSelected(true);
-            setSteps({
-                ...steps,
-                _date: StepStatus.DONE,
-                _schedule: StepStatus.PENDING,
-                _players: StepStatus.PENDING,
-            });
-        }
+        await _getAvailbleSchedules(selectedDate);
+        setDate(new Date(`${selectedDate.toISOString().substring(0, 10)}T00:00:00.000`));
+        setSteps({
+            ...steps,
+            _date: StepStatus.DONE,
+            _schedule: StepStatus.PENDING,
+            _players: StepStatus.PENDING,
+        });
         setIsLoading(false);
     };
 
@@ -352,7 +333,7 @@ export default function BookScreen(): React.JSX.Element {
     return (
         <>
             {isLoading ? (
-                <View style={[styles.container, styles.horizontal]}>
+                <View style={sharedStyles.viewLoading}>
                     <ActivityIndicator size="large" />
                 </View>
             ) : (
@@ -362,39 +343,29 @@ export default function BookScreen(): React.JSX.Element {
                         style={{ ...bookStyles.viewPicker, marginBottom: 20, height: 50 }}
                     >
                         <RNPickerSelect
-                            placeholder={pickerCourts}
+                            placeholder={courtsPickerProps(courtNumber!)}
                             useNativeAndroidPickerStyle={false}
                             textInputProps={{ style: { color: '#737373' } } as TextInputProps}
-                            onValueChange={(value: number) => onChangeCourt(value)}
+                            onValueChange={(value: string) => onChangeCourt(value)}
                             items={courtsFieldsData}
-                            value={courtNumber}
+                            itemKey="id"
+                            doneText="Seleccionar"
                         />
                     </View>
 
                     {steps._court === StepStatus.DONE && (
-                        <View key="View-date-picker">
-                            <Pressable onPress={() => _displayDatepicker()}>
-                                <TextInput
-                                    style={{
-                                        ...bookStyles.textInputDatePicker,
-                                        marginBottom: 20,
-                                        height: 50,
-                                    }}
-                                    value={_formatDate(date, isDateSelected)}
-                                    editable={false}
-                                    placeholder={
-                                        !date ? 'Seleccione una fecha' : date.toDateString()
-                                    }
-                                />
-                            </Pressable>
-                            {showDatePicker && (
-                                <DateTimePicker
-                                    value={date ? date : new Date()}
-                                    onChange={(e, date) => onChangeDate(e, date)}
-                                    maximumDate={new Date(nextWeek)}
-                                    minimumDate={new Date()}
-                                />
-                            )}
+                        <View key="View-date-picker" style={{ marginBottom: 20 }}>
+                            <DatePicker
+                                _showDatePicker={showDatePicker}
+                                _onChangeDate={(selectedDate: any) => onChangeDate(selectedDate!)}
+                                _setShowDatePicker={() => setShowDatePicker(!showDatePicker)}
+                                _onCancel={() => setShowDatePicker(false)}
+                                _formatDate={_formatDate(date!)}
+                                _maximumDate={new Date(nextWeek)}
+                                _minimumDate={new Date()}
+                                _date={date!}
+                                _placeholderText="Fecha"
+                            />
                         </View>
                     )}
 
@@ -409,7 +380,8 @@ export default function BookScreen(): React.JSX.Element {
                                 textInputProps={{ style: { color: '#737373' } } as TextInputProps}
                                 onValueChange={(value: string) => onChangeSchedule(value)}
                                 items={availablesSchedulesFieldsData}
-                                itemKey={'id'}
+                                itemKey="id"
+                                doneText="Seleccionar"
                             />
                         </View>
                     )}
@@ -434,7 +406,7 @@ export default function BookScreen(): React.JSX.Element {
 
                             <View>
                                 <MultiSelectPicker
-                                    key={'players-multi-select'}
+                                    key="players-multi-select"
                                     _items={playersFieldsData}
                                     _onChangeInput={(word: string) => _filterPlayersSelection(word)}
                                     _onSelectedItemsChange={(items: any) => onChangePlayers(items)}
@@ -458,13 +430,13 @@ export default function BookScreen(): React.JSX.Element {
                             }
                             _onClick={() =>
                                 _confirmBooking(
-                                    courtNumber!,
+                                    Number(courtNumber!),
                                     date!,
                                     schedule!,
                                     players,
                                     user_id!,
                                     token!,
-                                    params?._id ? true : false,
+                                    !!params?._id,
                                     params?._id,
                                 )
                             }
@@ -475,15 +447,3 @@ export default function BookScreen(): React.JSX.Element {
         </>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-    },
-    horizontal: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        padding: 10,
-    },
-});
