@@ -126,7 +126,7 @@ export default function BookingsScreen(): React.JSX.Element {
                                                                 return {
                                                                     name: `${first_name} ${last_name}`,
                                                                     membership: membership_type,
-                                                                    fee: fee,
+                                                                    fee,
                                                                 };
                                                             },
                                                         )
@@ -205,7 +205,7 @@ export default function BookingsScreen(): React.JSX.Element {
                                                             return {
                                                                 name: `${first_name} ${last_name}`,
                                                                 membership: membership_type,
-                                                                fee: fee,
+                                                                fee,
                                                             };
                                                         })
                                                       : [],
