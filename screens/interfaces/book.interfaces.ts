@@ -21,11 +21,15 @@ export interface IMultiSelectField {
     name: string;
 }
 
-export enum SurfaceTypes {
+export enum SurfaceTypes_ES {
+    CLAY = 'Polvo de Ladrillo',
+    HARD = 'Cemento',
+}
+
+export enum SurfaceTypes_EN {
     CLAY = 'Clay',
     HARD = 'Hard',
 }
-
 export interface IFieldsData {
     courtNumbers: IField[];
     availableSchedules: IField[];
