@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
+import { AppState, AppStateStatus } from 'react-native';
 import ToastManager from 'toastify-react-native';
 
 import Book from './(app)/book';
@@ -11,10 +12,21 @@ import { routesName } from '@/constants/routes.constants';
 import { IRoute } from '@/interfaces';
 import LoginScreen from '@/screens/login.screen';
 import RegisterScreen from '@/screens/register.screen';
-import { SessionProvider } from '@/store/react.ctx';
+import { SessionProvider, useSession } from '@/store/react.ctx';
 
 export default function Root() {
     const Stack = createNativeStackNavigator();
+    const { signOut } = useSession();
+
+    AppState.addEventListener('change', (nextAppState: AppStateStatus) => {
+        switch (nextAppState) {
+            case 'inactive':
+            case 'background':
+            case 'unknown':
+                signOut();
+                break;
+        }
+    });
 
     return (
         <SessionProvider>
