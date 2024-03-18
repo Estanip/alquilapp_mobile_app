@@ -1,9 +1,15 @@
 import { StyleSheet } from 'react-native';
 
 // Shared styles
-const sharedStyles = StyleSheet.create({
+export const sharedStyles = StyleSheet.create({
     viewForm: {
         width: '100%',
+    },
+    viewLoading: {
+        flex: 1,
+        justifyContent: 'center',
+        flexDirection: 'row',
+        padding: 10,
     },
 });
 
@@ -18,7 +24,6 @@ export const loginStyles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
-
     viewForm: {
         ...sharedStyles.viewForm,
     },
@@ -95,9 +100,3 @@ export const bookStyles = StyleSheet.create({
         justifyContent: 'center',
     },
 });
-
-export const pickerCourts = {
-    label: 'Selecciona cancha',
-    value: null,
-    color: '#737373',
-};
