@@ -1,3 +1,4 @@
+import { useRoute } from '@react-navigation/native';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
@@ -11,17 +12,14 @@ import AuthRedirectButton from '@/components/modules/auth/redirect-btn.component
 import SharedButton from '@/components/modules/shared/button.component';
 import { ButtonTextActions } from '@/constants';
 import { routes, screenNavigations } from '@/constants/routes.constants';
-import { INavigationParams, IRoute } from '@/interfaces';
+import { IRoute } from '@/interfaces';
 import { showSuccessAlert } from '@/shared/alerts/toast.alert';
 import { showAlert } from '@/shared/alerts/window.alert';
 import { useSession } from '@/store/react.ctx';
-import { useRoute } from '@react-navigation/native';
 
 export default function LoginScreen(): React.JSX.Element {
     // Params from navigate
-    let params: INavigationParams;
     const route: IRoute = useRoute();
-    if (route.params) params = route.params;
 
     // Session
     const { token, signIn } = useSession();
@@ -76,7 +74,7 @@ export default function LoginScreen(): React.JSX.Element {
         <View style={loginStyles.view}>
             <View style={loginStyles.viewForm}>
                 <LoginForm
-                    _resetPassword={route?.params?._password_reset === '1' ? true : false}
+                    _resetPassword={route?.params?._password_reset === '1'}
                     _emailData={handleEmailData}
                     _passwordData={handlePasswordData}
                     _validatedData={handleDataValidated}
@@ -90,7 +88,7 @@ export default function LoginScreen(): React.JSX.Element {
                         <AuthRedirectButton
                             _navigateTo={screenNavigations.RESET_PASSWORD}
                             _redirectButtonText="Recuperar contraseña"
-                        ></AuthRedirectButton>
+                        />
                     </View>
                 )}
                 {route?.params?._password_reset === '1' ? (
