@@ -1,3 +1,4 @@
+import { FontAwesome } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Text, TextInput, View } from 'react-native';
@@ -11,7 +12,6 @@ import {
     ILoginForm,
 } from '@/components/interfaces/auth.interfaces';
 import { PasswordIconNames, emailRegExp, passwordRegExp } from '@/constants/auth.constants';
-import { FontAwesome } from '@expo/vector-icons';
 
 export default function LoginForm({
     _resetPassword,
@@ -112,7 +112,7 @@ export default function LoginForm({
                     name="password"
                     render={() => (
                         <TextInput
-                            secureTextEntry={!!!passwordVisibility}
+                            secureTextEntry={!passwordVisibility}
                             style={
                                 errors.password === ''
                                     ? { width: 330, ...textInputStyles.success }
@@ -127,7 +127,7 @@ export default function LoginForm({
                         />
                     )}
                 />
-                <View key={'View-Icon'} style={viewStyles.icon}>
+                <View key="View-Icon" style={viewStyles.icon}>
                     <FontAwesome.Button
                         underlayColor="transparent"
                         name={passwordIconName}
