@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import React from 'react';
 import { Text, View } from 'react-native';
 import tailwind from 'twrnc';
@@ -10,7 +11,6 @@ import { ButtonTextActions, Currencies, _formatStringToDate } from '@/constants'
 import { routes } from '@/constants/routes.constants';
 import { BookingStatus } from '@/screens/constants/bookings.constants';
 import { BookingDetailsSubtitles, IBookingDetails } from '@/screens/interfaces/bookings.interface';
-import { router } from 'expo-router';
 
 export default function BookingCard({
     _cancelBooking,
@@ -110,7 +110,7 @@ export default function BookingCard({
                         ),
                     )}
                     <View
-                        key={`buttons-active-view`}
+                        key="buttons-active-view"
                         style={{
                             display: 'flex',
                             flexDirection: 'row',
