@@ -22,7 +22,6 @@ export interface ILoginComponentProps {
     _validatedData: (arg: boolean) => void;
 }
 export type TDateTimePickerModes = 'date' | 'time' | 'datetime' | 'countdown';
-export type TDate = Date;
 export type TRegisterValues =
     | 'email'
     | 'password'

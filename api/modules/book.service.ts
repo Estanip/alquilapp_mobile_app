@@ -1,10 +1,10 @@
 import { IServerResponse } from '../interfaces';
 import { TToken } from '../interfaces/auth.interfaces';
 import { IBookRequest, TAvailabilities, TBookServices } from '../interfaces/book.interfaces';
+import { IReservationResponse } from '../interfaces/booking.interfaces';
 
 import { apiGet, apiPost, apiUris } from '@/constants/api.constants';
 import { environment } from '@/environments/environment';
-import { IReservationResponse } from '../interfaces/booking.interfaces';
 
 export function BookService(): TBookServices {
     const book = async (
@@ -45,7 +45,7 @@ export function BookService(): TBookServices {
     const getByDateAndCourt = async (
         token: TToken,
         court: number,
-        date: Date,
+        date: string,
     ): Promise<TAvailabilities | undefined> => {
         try {
             const response = await apiGet(
