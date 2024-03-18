@@ -11,7 +11,7 @@ const host =
 const api =
     ENVIRONMENT === 'local'
         ? `http://${Constants?.expoGoConfig
-              ?.debuggerHost!.split(':')!
+              ?.debuggerHost!.split(':')
               ?.shift()!
               .concat(':' + API_PORT)}`
         : host;
