@@ -4,6 +4,7 @@ export interface IUser {
     first_name: string;
     last_name: string;
     identification_number: string;
+    is_enabled: boolean;
 }
 export interface IUserResponse extends IUser {
     token: string;
