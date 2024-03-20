@@ -3,6 +3,7 @@ export enum routes {
     LOGIN = '/(auth)/login',
     RESET_PASSWORD = '/(auth)/login',
     HOME = '/(app)/home',
+    CODE_VERIFICATION = '/(auth)/code_verification',
     BOOKINGS = '/(app)/bookings',
     BOOK = '/(app)/book',
 }
@@ -14,6 +15,7 @@ export enum routesName {
     HOME = '(app)/home',
     BOOKINGS = '(app)/bookings',
     BOOK = '(app)/book',
+    CODE_VERIFICATION = '(auth)/code_verification',
 }
 
 export enum screenNavigations {

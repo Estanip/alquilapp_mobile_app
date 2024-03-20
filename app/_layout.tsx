@@ -10,6 +10,7 @@ import Home from './(app)/home';
 import { SectionsTitles } from '@/constants';
 import { routesName } from '@/constants/routes.constants';
 import { IRoute } from '@/interfaces';
+import CodeVerificationScreen from '@/screens/code_verification.screen';
 import LoginScreen from '@/screens/login.screen';
 import RegisterScreen from '@/screens/register.screen';
 import { SessionProvider, useSession } from '@/store/react.ctx';
@@ -74,6 +75,13 @@ export default function Root() {
                                 ? SectionsTitles.PASSWORD_RESET
                                 : SectionsTitles.LOGIN,
                     })}
+                />
+                <Stack.Screen
+                    name={routesName.CODE_VERIFICATION}
+                    component={CodeVerificationScreen}
+                    options={{
+                        title: SectionsTitles.CODE_VERIFICATION,
+                    }}
                 />
                 <Stack.Screen
                     name={routesName.REGISTER}

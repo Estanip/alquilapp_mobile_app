@@ -2,6 +2,7 @@ export enum SectionsTitles {
     HOME = 'Home',
     BOOKINGS = 'Mis Reservas',
     BOOK = 'Reservar',
+    CODE_VERIFICATION = 'Verificar usuario',
     LOGOUT = 'Cerrar Sesión',
     LOGIN = 'Ingreso',
     REGISTER = 'Registro',
