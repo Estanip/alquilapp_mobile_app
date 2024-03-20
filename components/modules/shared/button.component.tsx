@@ -5,11 +5,13 @@ import { sharedBtnStyles } from './styles';
 
 import { IConfirmBtnComponentProps } from '@/components/interfaces/auth.interfaces';
 
-export default function SharedButton({
+export default function CommonButton({
     _buttonText,
     _btnStyle = {},
     _onClick,
+    _disabled,
 }: IConfirmBtnComponentProps) {
+    _btnStyle = _disabled && { ..._btnStyle, backgroundColor: '#DCDCDC' };
     return (
         <Pressable
             style={{ ...sharedBtnStyles.pressable, ..._btnStyle }}

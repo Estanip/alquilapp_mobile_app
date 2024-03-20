@@ -14,6 +14,7 @@ export interface IConfirmBtnComponentProps {
     _buttonText: string;
     _btnStyle?: StyleProp<any>;
     _onClick: () => void;
+    _disabled?: boolean;
 }
 export interface ILoginComponentProps {
     _resetPassword?: boolean;
