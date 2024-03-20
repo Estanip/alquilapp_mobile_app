@@ -13,7 +13,6 @@ export default function MultiSelectPicker({
     return (
         <MultiSelect
             displayKey="name"
-            //canAddItems={false}
             fixedHeight
             filterMethod="partial"
             hideDropdown={false}
@@ -22,7 +21,6 @@ export default function MultiSelectPicker({
             items={_items}
             itemTextColor="black"
             noItemsText="No hay jugadores disponibles"
-            //onAddItem={(item) => console.log('additem', item)}
             onChangeInput={(word: string) => _onChangeInput(word)}
             onSelectedItemsChange={(items: any) => _onSelectedItemsChange(items)}
             onToggleList={() => _resetFields()}
