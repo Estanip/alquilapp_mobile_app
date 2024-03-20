@@ -6,10 +6,10 @@ import { View } from 'react-native';
 import { loginStyles } from './styles';
 
 import { AuthService } from '@/api/modules/auth.service';
-import AuthConfirmButton from '@/components/modules/auth/confirm-btn.component';
 import LoginForm from '@/components/modules/auth/login.component';
-import AuthRedirectButton from '@/components/modules/auth/redirect-btn.component';
-import SharedButton from '@/components/modules/shared/button.component';
+import CommonButton from '@/components/modules/shared/button.component';
+import AuthConfirmButton from '@/components/modules/shared/confirm-btn.component';
+import RedirectButton from '@/components/modules/shared/redirect-btn.component';
 import { ButtonTextActions } from '@/constants';
 import { routes, screenNavigations } from '@/constants/routes.constants';
 import { IRoute } from '@/interfaces';
@@ -48,8 +48,15 @@ export default function LoginScreen(): React.JSX.Element {
             if (!result) showAlert('Error', 'Estamos teniendo inconvenientes, intente más tarde');
             else if (!result?.success) showAlert('Error', 'Datos incorrectos');
             else if (result?.success) {
-                signIn(result?.data.token, result?.data._id);
-                router.replace({ pathname: routes.HOME });
+                signIn(
+                    result?.data.token,
+                    result?.data._id,
+                    result.data.is_enabled,
+                    result.data.email,
+                );
+                if (!result.data?.is_enabled)
+                    router.replace({ pathname: routes.CODE_VERIFICATION });
+                else router.replace({ pathname: routes.HOME });
                 await showSuccessAlert('Logueo exitoso');
                 resetFields();
             }
@@ -81,11 +88,11 @@ export default function LoginScreen(): React.JSX.Element {
                 />
                 {route?.params?._password_reset === '1' ? null : (
                     <View style={loginStyles.viewButtons}>
-                        <AuthRedirectButton
+                        <RedirectButton
                             _navigateTo={screenNavigations.REGISTER}
                             _redirectButtonText="Aún no estoy registrado"
                         />
-                        <AuthRedirectButton
+                        <RedirectButton
                             _navigateTo={screenNavigations.RESET_PASSWORD}
                             _redirectButtonText="Recuperar contraseña"
                         />
@@ -99,12 +106,12 @@ export default function LoginScreen(): React.JSX.Element {
                             justifyContent: 'space-between',
                         }}
                     >
-                        <SharedButton
+                        <CommonButton
                             _btnStyle={{ width: 150 }}
                             _buttonText={ButtonTextActions.CONFIRM}
                             _onClick={resetPasword}
                         />
-                        <SharedButton
+                        <CommonButton
                             _btnStyle={{ width: 150, backgroundColor: 'red' }}
                             _buttonText={ButtonTextActions.BACK}
                             _onClick={() =>
