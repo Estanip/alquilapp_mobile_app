@@ -5,6 +5,8 @@ export const apiUris = {
     register: '/auth/register',
     login: '/auth/login',
     reset_password: '/auth/change-password',
+    user_code_verification: '/auth/code-verification',
+    resend_verification_code: '/auth/resend-verification-code',
     courts: '/court',
     reservation: '/reservation',
     user: '/user',
