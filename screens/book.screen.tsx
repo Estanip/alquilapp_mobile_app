@@ -29,7 +29,7 @@ import { ICourtResponse, TCourts } from '@/api/interfaces/court.interfaces';
 import { BookService } from '@/api/modules/book.service';
 import { CourtService } from '@/api/modules/court.service';
 import { PlayersService } from '@/api/modules/players.service';
-import SharedButton from '@/components/modules/shared/button.component';
+import CommonButton from '@/components/modules/shared/button.component';
 import DatePicker from '@/components/modules/shared/datePicker.component';
 import MultiSelectPicker from '@/components/modules/shared/multi-select.component';
 import { ButtonTextActions } from '@/constants';
@@ -418,7 +418,7 @@ export default function BookScreen(): React.JSX.Element {
                     )}
 
                     {steps._players === StepStatus.DONE && (
-                        <SharedButton
+                        <CommonButton
                             _btnStyle={{
                                 position: 'absolute',
                                 bottom: 20,

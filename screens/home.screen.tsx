@@ -4,7 +4,7 @@ import { View } from 'react-native';
 
 import { homeStyles } from './styles';
 
-import SharedButton from '@/components/modules/shared/button.component';
+import CommonButton from '@/components/modules/shared/button.component';
 import { SectionsTitles } from '@/constants';
 import { routes } from '@/constants/routes.constants';
 import { useSession } from '@/store/react.ctx';
@@ -19,15 +19,15 @@ export default function HomeScreen(): React.JSX.Element {
         <View style={homeStyles.view}>
             <View style={homeStyles.viewButtons}>
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                    <SharedButton
+                    <CommonButton
                         _buttonText={SectionsTitles.BOOKINGS}
                         _onClick={() => router.navigate({ pathname: routes.BOOKINGS })}
                     />
-                    <SharedButton
+                    <CommonButton
                         _buttonText={SectionsTitles.BOOK}
                         _onClick={() => router.navigate({ pathname: routes.BOOK })}
                     />
-                    <SharedButton
+                    <CommonButton
                         _btnStyle={{ marginTop: 50 }}
                         _buttonText={SectionsTitles.LOGOUT}
                         _onClick={() => signOut()}

@@ -7,9 +7,9 @@ import { IRegisterForm } from './interfaces/register.interfaces';
 import { registerStyles } from './styles';
 
 import { AuthService } from '@/api/modules/auth.service';
-import AuthConfirmButton from '@/components/modules/auth/confirm-btn.component';
-import AuthRedirectButton from '@/components/modules/auth/redirect-btn.component';
 import RegisterForm from '@/components/modules/auth/register.component';
+import AuthConfirmButton from '@/components/modules/shared/confirm-btn.component';
+import RedirectButton from '@/components/modules/shared/redirect-btn.component';
 import { routes, screenNavigations } from '@/constants/routes.constants';
 import { showSuccessAlert } from '@/shared/alerts/toast.alert';
 import { showAlert } from '@/shared/alerts/window.alert';
@@ -59,7 +59,7 @@ export default function RegisterScreen(): React.JSX.Element {
                     _registerData={handleRegisterData}
                     _validatedData={handleDataValidated}
                 />
-                <AuthRedirectButton
+                <RedirectButton
                     _navigateTo={screenNavigations.LOGIN}
                     _redirectButtonText="Ya estoy registrado"
                 />

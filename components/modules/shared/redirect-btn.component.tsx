@@ -2,12 +2,12 @@ import { router } from 'expo-router';
 import React from 'react';
 import { Pressable, Text } from 'react-native';
 
-import { sharedStyles } from '../shared/styles';
+import { sharedStyles } from './styles';
 
 import { IRedirectBtnComponentProps } from '@/components/interfaces/auth.interfaces';
 import { routes, screenNavigations } from '@/constants/routes.constants';
 
-export default function AuthRedirectButton({
+export default function RedirectButton({
     _navigateTo,
     _redirectButtonText,
 }: IRedirectBtnComponentProps) {

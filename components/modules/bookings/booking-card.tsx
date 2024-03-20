@@ -3,7 +3,7 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import tailwind from 'twrnc';
 
-import SharedButton from '../shared/button.component';
+import CommonButton from '../shared/button.component';
 import { Card, CardContent, CardSubtitle, CardText } from '../shared/card';
 
 import { IBookingCardProps } from '@/components/interfaces/booking.interfaces';
@@ -118,7 +118,7 @@ export default function BookingCard({
                         }}
                     >
                         {_editButton && _status === BookingStatus.ACTIVE && _validateLimitDate() ? (
-                            <SharedButton
+                            <CommonButton
                                 _btnStyle={{ width: 150 }}
                                 _buttonText={ButtonTextActions.EDIT}
                                 _onClick={() => (_validateLimitDate() ? _edit() : null)}
@@ -127,20 +127,13 @@ export default function BookingCard({
                         {_cancelButton &&
                         _status === BookingStatus.ACTIVE &&
                         _validateLimitDate() ? (
-                            <SharedButton
+                            <CommonButton
                                 _btnStyle={{ width: 150, backgroundColor: 'red' }}
                                 _buttonText={ButtonTextActions.CANCEL}
                                 _onClick={() => (_validateLimitDate() ? _cancel() : null)}
                             />
                         ) : null}
                     </View>
-                    {/*                     {_detailsButton && _status === BookingStatus.INACTIVE ? (
-                        <SharedButton
-                            _buttonText={ButtonTextActions.DETAILS}
-                            _onClick={() => null}
-                            _btnStyle={{ alignSelf: 'center' }}
-                        />
-                    ) : null} */}
                 </CardContent>
             </Card>
         </View>
