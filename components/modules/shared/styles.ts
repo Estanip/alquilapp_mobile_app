@@ -22,6 +22,9 @@ export const sharedBtnStyles = StyleSheet.create({
         marginTop: 16,
         borderRadius: 8,
     },
+    disabled: {
+        backgroundColor: 'red',
+    },
     text: {
         color: 'white',
         fontSize: 16,
