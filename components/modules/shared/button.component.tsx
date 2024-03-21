@@ -11,7 +11,7 @@ export default function CommonButton({
     _onClick,
     _disabled,
 }: IConfirmBtnComponentProps) {
-    _btnStyle = _disabled && { ..._btnStyle, backgroundColor: '#DCDCDC' };
+    _btnStyle = _disabled ? { ..._btnStyle, backgroundColor: '#DCDCDC' } : _btnStyle;
     return (
         <Pressable
             style={{ ...sharedBtnStyles.pressable, ..._btnStyle }}
