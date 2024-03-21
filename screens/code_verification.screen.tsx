@@ -19,7 +19,7 @@ export default function CodeVerificationScreen(): React.JSX.Element {
     const [code, setCode] = useState<string | null>(null);
 
     const _verifyUserCode = async () => {
-        const result = await AuthService().verifyUserCode(token!, user_id!, code!);
+        const result = await AuthService().verifyUserCode(token!, user_id!, code!.trim());
         if (!result?.success) showErrorAlert('El código no es correcto');
         else if (result.success) {
             showSuccessAlert('Validación satisfactoria');
