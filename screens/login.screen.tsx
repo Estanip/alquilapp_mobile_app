@@ -110,6 +110,7 @@ export default function LoginScreen(): React.JSX.Element {
                             _btnStyle={{ width: 150 }}
                             _buttonText={ButtonTextActions.CONFIRM}
                             _onClick={resetPasword}
+                            _disabled={password === '' || email === '' || !validatedData}
                         />
                         <CommonButton
                             _btnStyle={{ width: 150, backgroundColor: 'red' }}
