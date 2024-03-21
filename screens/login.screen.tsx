@@ -123,7 +123,11 @@ export default function LoginScreen(): React.JSX.Element {
                         />
                     </View>
                 ) : (
-                    <AuthConfirmButton _buttonText="Iniciar sesión" _onClick={confirmLogin} />
+                    <AuthConfirmButton
+                        _buttonText="Iniciar sesión"
+                        _onClick={confirmLogin}
+                        _disabled={password === '' || email === '' || !validatedData}
+                    />
                 )}
             </View>
         </View>

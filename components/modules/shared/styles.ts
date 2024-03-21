@@ -155,3 +155,5 @@ export const pickerMembershipTypeProps = {
     value: null,
     color: '#737373',
 };
+
+export const disabledBackgroundColor = '#DCDCDC';

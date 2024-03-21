@@ -63,7 +63,13 @@ export default function RegisterScreen(): React.JSX.Element {
                     _navigateTo={screenNavigations.LOGIN}
                     _redirectButtonText="Ya estoy registrado"
                 />
-                <AuthConfirmButton _buttonText="Registrarme" _onClick={confirmRegister} />
+                <AuthConfirmButton
+                    _buttonText="Registrarme"
+                    _onClick={confirmRegister}
+                    _disabled={
+                        Object.values(registerState).some((e) => !e || e === '') || !validatedData
+                    }
+                />
             </ScrollView>
         </View>
     );
