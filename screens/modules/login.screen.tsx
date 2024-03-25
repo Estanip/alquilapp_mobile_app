@@ -6,7 +6,6 @@ import { View } from 'react-native';
 import { AuthService } from '@/api/modules/auth.service';
 import LoginForm from '@/components/modules/auth/login.component';
 import CommonButton from '@/components/modules/shared/button.component';
-import AuthConfirmButton from '@/components/modules/shared/confirm-btn.component';
 import RedirectButton from '@/components/modules/shared/redirect-btn.component';
 import { ButtonTextActions } from '@/constants';
 import { routes, screenNavigations } from '@/constants/routes.constants';
@@ -123,7 +122,7 @@ export default function LoginScreen(): React.JSX.Element {
                         />
                     </View>
                 ) : (
-                    <AuthConfirmButton
+                    <CommonButton
                         _buttonText="Iniciar sesión"
                         _onClick={confirmLogin}
                         _disabled={password === '' || email === '' || !validatedData}

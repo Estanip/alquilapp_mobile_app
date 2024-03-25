@@ -3,14 +3,14 @@ import { Pressable, Text, View } from 'react-native';
 
 import { disabledBackgroundColor, sharedBtnStyles } from '../../../shared/styles/components.styles';
 
-import { IConfirmBtnComponentProps } from '@/components/interfaces/auth.interfaces';
+import { IButtonProps } from '@/components/interfaces/auth.interfaces';
 
 export default function CommonButton({
     _buttonText,
     _btnStyle = {},
     _onClick,
     _disabled,
-}: IConfirmBtnComponentProps) {
+}: IButtonProps) {
     _btnStyle = _disabled ? { ..._btnStyle, backgroundColor: disabledBackgroundColor } : _btnStyle;
     return (
         <Pressable

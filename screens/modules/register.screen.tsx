@@ -6,7 +6,7 @@ import { IRegisterForm } from '../interfaces/register.interfaces';
 
 import { AuthService } from '@/api/modules/auth.service';
 import RegisterForm from '@/components/modules/auth/register.component';
-import AuthConfirmButton from '@/components/modules/shared/confirm-btn.component';
+import CommonButton from '@/components/modules/shared/button.component';
 import RedirectButton from '@/components/modules/shared/redirect-btn.component';
 import { registerForm } from '@/constants/auth.constants';
 import { routes, screenNavigations } from '@/constants/routes.constants';
@@ -63,7 +63,7 @@ export default function RegisterScreen(): React.JSX.Element {
                     _navigateTo={screenNavigations.LOGIN}
                     _redirectButtonText="Ya estoy registrado"
                 />
-                <AuthConfirmButton
+                <CommonButton
                     _buttonText="Registrarme"
                     _onClick={confirmRegister}
                     _disabled={

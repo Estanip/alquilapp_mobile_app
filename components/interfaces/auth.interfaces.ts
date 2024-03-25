@@ -20,7 +20,7 @@ export interface IRedirectBtnComponentProps {
     _navigateTo: string;
     _redirectButtonText: string;
 }
-export interface IConfirmBtnComponentProps {
+export interface IButtonProps {
     _buttonText: string;
     _btnStyle?: StyleProp<any>;
     _onClick: () => void;
