@@ -123,6 +123,7 @@ export default function LoginScreen(): React.JSX.Element {
                     </View>
                 ) : (
                     <CommonButton
+                        _btnStyle={{ width: 300, alignSelf: 'center' }}
                         _buttonText="Iniciar sesión"
                         _onClick={confirmLogin}
                         _disabled={password === '' || email === '' || !validatedData}

@@ -64,6 +64,7 @@ export default function RegisterScreen(): React.JSX.Element {
                     _redirectButtonText="Ya estoy registrado"
                 />
                 <CommonButton
+                    _btnStyle={{ width: 300, alignSelf: 'center' }}
                     _buttonText="Registrarme"
                     _onClick={confirmRegister}
                     _disabled={
