@@ -34,8 +34,8 @@ export default function Root() {
             <ToastManager
                 width={400}
                 duration={5000}
-                textStyle={{ color: 'grey', padding: 10, fontSize: 18 }}
-                style={{ margin: 0, padding: 0 }}
+                textStyle={{ color: 'grey', padding: 10, fontSize: 16 }}
+                positionValue={0}
             />
             <Stack.Navigator
                 initialRouteName={routesName.HOME}
