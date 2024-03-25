@@ -2,7 +2,7 @@ import { Redirect } from 'expo-router';
 import React from 'react';
 
 import { routes } from '@/constants/routes.constants';
-import HomeScreen from '@/screens/home.screen';
+import HomeScreen from '@/screens/modules/home.screen';
 import { useSession } from '@/store/react.ctx';
 
 export default function Home(): React.JSX.Element {

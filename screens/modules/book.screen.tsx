@@ -12,8 +12,7 @@ import {
     StepStatus,
     SurfaceTypes_EN,
     SurfaceTypes_ES,
-} from './interfaces/book.interfaces';
-import { bookStyles, sharedStyles } from './styles';
+} from '../interfaces/book.interfaces';
 
 import { IReservationResponse } from '@/api/interfaces/booking.interfaces';
 import { ICourtResponse, TCourts } from '@/api/interfaces/court.interfaces';
@@ -36,6 +35,8 @@ import {
 import { routes } from '@/constants/routes.constants';
 import { INavigationParams, IRoute } from '@/interfaces';
 import { showWarningAlert } from '@/shared/alerts/toast.alert';
+import { sharedStyles } from '@/shared/styles';
+import { bookStyles } from '@/shared/styles/screens.styles';
 import { useSession } from '@/store/react.ctx';
 
 export default function BookScreen(): React.JSX.Element {

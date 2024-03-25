@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Platform, Pressable, Text, TextInput, View } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-import { textInputStyles } from '../shared/styles';
+import { textInputStyles } from '../../../shared/styles/components.styles';
 
 import { IDatePickerProps } from '@/components/interfaces';
 

@@ -2,13 +2,13 @@ import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { Pressable, Text, TextInput, View } from 'react-native';
 
-import { homeStyles } from './styles';
-
 import { AuthService } from '@/api/modules/auth.service';
 import CommonButton from '@/components/modules/shared/button.component';
-import { sharedStyles, textInputStyles } from '@/components/modules/shared/styles';
 import { routes } from '@/constants/routes.constants';
 import { showErrorAlert, showSuccessAlert } from '@/shared/alerts/toast.alert';
+import { sharedStyles } from '@/shared/styles';
+import { textInputStyles } from '@/shared/styles/components.styles';
+import { homeStyles } from '@/shared/styles/screens.styles';
 import { useSession } from '@/store/react.ctx';
 
 export default function CodeVerificationScreen(): React.JSX.Element {

@@ -2,11 +2,10 @@ import { router } from 'expo-router';
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 
-import { homeStyles } from './styles';
-
 import CommonButton from '@/components/modules/shared/button.component';
 import { SectionsTitles } from '@/constants';
 import { routes } from '@/constants/routes.constants';
+import { homeStyles } from '@/shared/styles/screens.styles';
 import { useSession } from '@/store/react.ctx';
 
 export default function HomeScreen(): React.JSX.Element {

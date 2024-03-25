@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 
-import { disabledBackgroundColor, sharedBtnStyles } from './styles';
+import { disabledBackgroundColor, sharedBtnStyles } from '../../../shared/styles/components.styles';
 
 import { IConfirmBtnComponentProps } from '@/components/interfaces/auth.interfaces';
 

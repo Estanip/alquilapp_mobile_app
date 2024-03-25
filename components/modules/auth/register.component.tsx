@@ -4,15 +4,13 @@ import { Controller, useForm } from 'react-hook-form';
 import { Text, TextInput, View, type TextInputProps } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 
-import DatePicker from '../shared/datePicker.component';
 import {
     iconStyles,
-    pickerMembershipTypeProps,
-    sharedStyles,
     textInputStyles,
     viewPickerStyles,
     viewStyles,
-} from '../shared/styles';
+} from '../../../shared/styles/components.styles';
+import DatePicker from '../shared/datePicker.component';
 
 import { IControllerField } from '@/components/interfaces';
 import { IRegisterComponentProps, TRegisterValues } from '@/components/interfaces/auth.interfaces';
@@ -28,10 +26,12 @@ import {
     membershipTypes,
     passwordRegExp,
     phoneNumberRegExp,
+    pickerMembershipTypeProps,
     registerFormData,
 } from '@/constants/auth.constants';
 import { IRegisterForm } from '@/screens/interfaces/register.interfaces';
 import { showInfoAlert } from '@/shared/alerts/toast.alert';
+import { sharedStyles } from '@/shared/styles';
 
 export default function RegisterForm({
     _registerData,

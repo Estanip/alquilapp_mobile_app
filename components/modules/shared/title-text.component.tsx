@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native';
 
-import { titleTextStyles } from './styles';
+import { titleTextStyles } from '../../../shared/styles/components.styles';
 
 import { ITitleProps } from '@/components/interfaces';
 

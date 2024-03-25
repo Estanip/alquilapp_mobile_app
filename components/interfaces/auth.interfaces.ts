@@ -1,6 +1,16 @@
 import { StyleProp } from 'react-native';
 
+import { IUser } from '@/api/interfaces/user.interfaces';
+import { AuthStates } from '@/constants/auth.constants';
 import { IRegisterForm } from '@/screens/interfaces/register.interfaces';
+
+export interface AuthState {
+    status: AuthStates;
+    success: boolean;
+    error: unknown;
+    user?: IUser;
+    message: string;
+}
 
 export interface IRegisterComponentProps {
     _registerData: (arg: IRegisterForm) => void;

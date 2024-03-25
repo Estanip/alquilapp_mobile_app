@@ -10,23 +10,6 @@ export enum AuthStates {
     PENDING = 'PENDING',
     ERROR = 'ERROR',
 }
-
-export interface AuthState {
-    status: AuthStates;
-    success: boolean;
-    error: unknown;
-    user?: IUser;
-    message: string;
-}
-
-/* export const tokenRegExp = */
-/*     /^([A-Za-z]+(\d[A-Za-z]+)+)\d\.[A-Za-z]+\d([A-Za-z]+(2[A-Za-z]+)+)\d([A-Za-z]+(3[A-Za-z]+)+)\d[A-Za-z]+\d([A-Za-z]+(3[A-Za-z]+)+)\d[A-Za-z]+\d\.([A-Za-z]+(\d[A-Za-z]+)+)\d-[A-Za-z]+$/;
- */
-export const tokenRegExp = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/;
-export const emailRegExp = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
-export const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-export const phoneNumberRegExp = /^\d\d\d\d\d\d\d\d\d\d$/;
-export const identificationNumberRegExp = /^\d\d\d\d\d\d\d\d$/;
 export enum RegisterFieldValues {
     EMAIL = 'email',
     PASSWORD = 'password',
@@ -64,28 +47,6 @@ export const errorsState: IErrorState = {
     membership_type: '',
 };
 
-export const registerFormData: IRegisterForm = {
-    email: '',
-    password: '',
-    first_name: '',
-    last_name: '',
-    phone_number: '',
-    identification_number: '',
-    birth_date: '',
-    membership_type: '',
-};
-
-export const registerForm: IRegisterForm = {
-    email: '',
-    password: '',
-    first_name: '',
-    last_name: '',
-    identification_number: '',
-    phone_number: '',
-    birth_date: '',
-    membership_type: '',
-};
-
 export const fields: IControllerField[] = [
     { field_value: RegisterFieldValues.EMAIL, field_name: RegisterFieldNames.EMAIL },
     { field_value: RegisterFieldValues.PASSWORD, field_name: RegisterFieldNames.PASSWORD },
@@ -111,3 +72,37 @@ export const membershipTypes: ISelectOptions[] = [
     { label: MembershipTypes.SOCIO, value: MembershipTypes.SOCIO },
     { label: MembershipTypes.NO_SOCIO, value: MembershipTypes.NO_SOCIO },
 ];
+
+export const pickerMembershipTypeProps = {
+    label: 'Seleccione tipo de usuario',
+    value: null,
+    color: '#737373',
+};
+
+export const registerFormData: IRegisterForm = {
+    email: '',
+    password: '',
+    first_name: '',
+    last_name: '',
+    phone_number: '',
+    identification_number: '',
+    birth_date: '',
+    membership_type: '',
+};
+
+export const registerForm: IRegisterForm = {
+    email: '',
+    password: '',
+    first_name: '',
+    last_name: '',
+    identification_number: '',
+    phone_number: '',
+    birth_date: '',
+    membership_type: '',
+};
+
+export const tokenRegExp = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/;
+export const emailRegExp = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
+export const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+export const phoneNumberRegExp = /^\d\d\d\d\d\d\d\d\d\d$/;
+export const identificationNumberRegExp = /^\d\d\d\d\d\d\d\d$/;

@@ -7,7 +7,7 @@ import {
     BookingDetailsSubtitles,
     TBookingDetails,
     _formatDateToString,
-} from './interfaces/bookings.interface';
+} from '../interfaces/bookings.interface';
 
 import { TReservationPlayer, TReservations, TUser } from '@/api/interfaces/booking.interfaces';
 import { BookingsService } from '@/api/modules/bookings.service';

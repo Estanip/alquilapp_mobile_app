@@ -2,7 +2,7 @@ import { Redirect } from 'expo-router';
 import React from 'react';
 
 import { routes } from '@/constants/routes.constants';
-import BookScreen from '@/screens/book.screen';
+import BookScreen from '@/screens/modules/book.screen';
 import { useSession } from '@/store/react.ctx';
 
 export default function Book(): React.JSX.Element {

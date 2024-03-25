@@ -10,9 +10,9 @@ import Home from './(app)/home';
 import { SectionsTitles } from '@/constants';
 import { routesName } from '@/constants/routes.constants';
 import { IRoute } from '@/interfaces';
-import CodeVerificationScreen from '@/screens/code_verification.screen';
-import LoginScreen from '@/screens/login.screen';
-import RegisterScreen from '@/screens/register.screen';
+import CodeVerificationScreen from '@/screens/modules/code_verification.screen';
+import LoginScreen from '@/screens/modules/login.screen';
+import RegisterScreen from '@/screens/modules/register.screen';
 import { SessionProvider, useSession } from '@/store/react.ctx';
 
 export default function Root() {

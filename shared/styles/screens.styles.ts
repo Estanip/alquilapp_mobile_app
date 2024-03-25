@@ -1,17 +1,5 @@
 import { StyleSheet } from 'react-native';
-
-// Shared styles
-export const sharedStyles = StyleSheet.create({
-    viewForm: {
-        width: '100%',
-    },
-    viewLoading: {
-        flex: 1,
-        justifyContent: 'center',
-        flexDirection: 'row',
-        padding: 10,
-    },
-});
+import { sharedStyles } from '.';
 
 // Login screen styles
 export const loginStyles = StyleSheet.create({

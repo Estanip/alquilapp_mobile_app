@@ -8,8 +8,9 @@ import {
     ILoginErrorState,
     ILoginForm,
 } from '@/components/interfaces/auth.interfaces';
-import { iconStyles, sharedStyles, textInputStyles, viewStyles } from '../shared/styles';
 import { PasswordIconNames, emailRegExp, passwordRegExp } from '@/constants/auth.constants';
+import { sharedStyles } from '@/shared/styles';
+import { iconStyles, textInputStyles, viewStyles } from '../../../shared/styles/components.styles';
 
 export default function LoginForm({
     _resetPassword,

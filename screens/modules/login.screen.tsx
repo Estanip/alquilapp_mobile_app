@@ -3,8 +3,6 @@ import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 
-import { loginStyles } from './styles';
-
 import { AuthService } from '@/api/modules/auth.service';
 import LoginForm from '@/components/modules/auth/login.component';
 import CommonButton from '@/components/modules/shared/button.component';
@@ -15,6 +13,7 @@ import { routes, screenNavigations } from '@/constants/routes.constants';
 import { IRoute } from '@/interfaces';
 import { showSuccessAlert } from '@/shared/alerts/toast.alert';
 import { showAlert } from '@/shared/alerts/window.alert';
+import { loginStyles } from '@/shared/styles/screens.styles';
 import { useSession } from '@/store/react.ctx';
 
 export default function LoginScreen(): React.JSX.Element {
