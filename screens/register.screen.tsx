@@ -2,7 +2,6 @@ import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
-import { registerForm } from './constants/register.constants';
 import { IRegisterForm } from './interfaces/register.interfaces';
 import { registerStyles } from './styles';
 
@@ -10,6 +9,7 @@ import { AuthService } from '@/api/modules/auth.service';
 import RegisterForm from '@/components/modules/auth/register.component';
 import AuthConfirmButton from '@/components/modules/shared/confirm-btn.component';
 import RedirectButton from '@/components/modules/shared/redirect-btn.component';
+import { registerForm } from '@/constants/auth.constants';
 import { routes, screenNavigations } from '@/constants/routes.constants';
 import { showSuccessAlert } from '@/shared/alerts/toast.alert';
 import { showAlert } from '@/shared/alerts/window.alert';

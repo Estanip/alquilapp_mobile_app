@@ -33,7 +33,16 @@ export interface ILoginForm {
     email: string;
     password: string;
 }
+
 export interface IErrorState {
     email: string;
     password: string;
+    first_name: string;
+    last_name: string;
+    identification_number: string;
+    phone_number: string;
+    birth_date: string;
+    membership_type: string;
 }
+
+export interface ILoginErrorState extends Pick<IErrorState, 'email' | 'password'> {}

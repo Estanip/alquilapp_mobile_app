@@ -1,3 +1,4 @@
+import { apiGet, apiPost, apiPut, apiUris } from '@/constants/api.constants';
 import { IServerResponse } from '../interfaces';
 import {
     ILoginRequest,
@@ -6,7 +7,6 @@ import {
     TToken,
 } from '../interfaces/auth.interfaces';
 
-import { apiGet, apiPost, apiPut, apiUris } from '@/constants/api.constants';
 import { environment } from '@/environments/environment';
 
 export function AuthService() {

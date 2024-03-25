@@ -8,8 +8,8 @@ import { Card, CardContent, CardSubtitle, CardText } from '../shared/card';
 
 import { IBookingCardProps } from '@/components/interfaces/booking.interfaces';
 import { ButtonTextActions, Currencies, _formatStringToDate } from '@/constants';
+import { BookingStatus } from '@/constants/bookings.constants';
 import { routes } from '@/constants/routes.constants';
-import { BookingStatus } from '@/screens/constants/bookings.constants';
 import { BookingDetailsSubtitles, IBookingDetails } from '@/screens/interfaces/bookings.interface';
 
 export default function BookingCard({

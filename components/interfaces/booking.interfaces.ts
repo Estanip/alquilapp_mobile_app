@@ -1,4 +1,4 @@
-import { BookingStatus } from '@/screens/constants/bookings.constants';
+import { BookingStatus } from '@/constants/bookings.constants';
 import { IBookingDetails } from '@/screens/interfaces/bookings.interface';
 
 export interface IBookingCardProps {

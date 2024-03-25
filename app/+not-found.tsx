@@ -1,8 +1,7 @@
+import { routes } from '@/constants/routes.constants';
 import { Link, Stack } from 'expo-router';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-
-import { routes } from '@/constants/routes.constants';
 
 const styles = StyleSheet.create({
     container: {

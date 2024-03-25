@@ -1,7 +1,6 @@
+import { routes } from '@/constants/routes.constants';
 import { router } from 'expo-router';
 import { Alert, AlertButton } from 'react-native';
-
-import { routes } from '../../constants/routes.constants';
 
 export enum ButtonStyles {
     CANCEL = 'cancel',

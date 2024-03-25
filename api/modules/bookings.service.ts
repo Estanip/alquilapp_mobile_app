@@ -1,9 +1,9 @@
+import { apiDelete, apiGet, apiPut, apiUris } from '@/constants/api.constants';
 import { IServerResponse } from '../interfaces';
 import { TToken } from '../interfaces/auth.interfaces';
 import { IBookRequest } from '../interfaces/book.interfaces';
 import { TReservations } from '../interfaces/booking.interfaces';
 
-import { apiDelete, apiGet, apiPut, apiUris } from '@/constants/api.constants';
 import { environment } from '@/environments/environment';
 
 export function BookingsService() {

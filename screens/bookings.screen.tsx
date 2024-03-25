@@ -3,7 +3,6 @@ import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 
-import { BookingStatus } from './constants/bookings.constants';
 import {
     BookingDetailsSubtitles,
     TBookingDetails,
@@ -13,6 +12,7 @@ import {
 import { TReservationPlayer, TReservations, TUser } from '@/api/interfaces/booking.interfaces';
 import { BookingsService } from '@/api/modules/bookings.service';
 import BookingCard from '@/components/modules/bookings/booking-card';
+import { BookingStatus } from '@/constants/bookings.constants';
 import { routes } from '@/constants/routes.constants';
 import { showErrorAlert, showSuccessAlert } from '@/shared/alerts/toast.alert';
 import { showAlert } from '@/shared/alerts/window.alert';

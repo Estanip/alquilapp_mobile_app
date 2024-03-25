@@ -14,22 +14,21 @@ import {
     viewStyles,
 } from '../shared/styles';
 
-import {
-    errorsState,
-    fields,
-    membershipTypes,
-    registerFormData,
-} from '@/components/constants/register.constants';
 import { IControllerField } from '@/components/interfaces';
 import { IRegisterComponentProps, TRegisterValues } from '@/components/interfaces/auth.interfaces';
+
 import { TimeZones } from '@/constants';
 import {
     PasswordIconNames,
     RegisterFieldNames,
     emailRegExp,
+    errorsState,
+    fields,
     identificationNumberRegExp,
+    membershipTypes,
     passwordRegExp,
     phoneNumberRegExp,
+    registerFormData,
 } from '@/constants/auth.constants';
 import { IRegisterForm } from '@/screens/interfaces/register.interfaces';
 import { showInfoAlert } from '@/shared/alerts/toast.alert';

@@ -3,14 +3,12 @@ import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Text, TextInput, View } from 'react-native';
 
-import { iconStyles, sharedStyles, textInputStyles, viewStyles } from '../shared/styles';
-
-import { errorsState } from '@/components/constants/login.constants';
 import {
-    IErrorState,
     ILoginComponentProps,
+    ILoginErrorState,
     ILoginForm,
 } from '@/components/interfaces/auth.interfaces';
+import { iconStyles, sharedStyles, textInputStyles, viewStyles } from '../shared/styles';
 import { PasswordIconNames, emailRegExp, passwordRegExp } from '@/constants/auth.constants';
 
 export default function LoginForm({
@@ -32,7 +30,10 @@ export default function LoginForm({
     const { control, setValue, getValues } = useForm<ILoginForm>();
 
     // Errors state
-    const [errors, setErrors] = useState<IErrorState>(errorsState);
+    const [errors, setErrors] = useState<ILoginErrorState>({
+        email: '',
+        password: '',
+    });
 
     const checkErrors = (value: string, field: string) => {
         _validatedData(true);

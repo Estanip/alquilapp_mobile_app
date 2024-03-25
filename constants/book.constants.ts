@@ -1,6 +1,11 @@
 import { router } from 'expo-router';
 
-import { IFieldsData, IStep, StepStatus, SurfaceTypes_ES } from '../interfaces/book.interfaces';
+import {
+    IFieldsData,
+    IStep,
+    StepStatus,
+    SurfaceTypes_ES,
+} from '../screens/interfaces/book.interfaces';
 
 import { TToken } from '@/api/interfaces/auth.interfaces';
 import { IBookRequest, IPlayer } from '@/api/interfaces/book.interfaces';
