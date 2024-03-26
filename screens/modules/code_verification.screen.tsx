@@ -32,11 +32,7 @@ export default function CodeVerificationScreen(): React.JSX.Element {
     };
 
     const _resendCode = async () => {
-        const result = await AuthService().resendCode(
-            token!,
-            user_id!,
-            'estani.pettigrew@gmail.com',
-        );
+        const result = await AuthService().resendCode(token!, user_id!, user_email!);
         if (!result?.success) showErrorAlert('Error al enviar email');
         else if (result.success) {
             const push_token = await registerForPushNotificationsAsync();
