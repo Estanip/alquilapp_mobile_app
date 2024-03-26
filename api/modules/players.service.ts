@@ -1,7 +1,7 @@
-import { apiGet, apiUris } from '@/constants/api.constants';
 import { TToken } from '../interfaces/auth.interfaces';
 import { TPlayers } from '../interfaces/user.interfaces';
 
+import { apiGet, apiUris } from '@/constants/api.constants';
 import { environment } from '@/environments/environment';
 
 export function PlayersService() {

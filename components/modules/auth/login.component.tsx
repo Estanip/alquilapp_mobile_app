@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Text, TextInput, View } from 'react-native';
 
+import { iconStyles, textInputStyles, viewStyles } from '../../../shared/styles/components.styles';
+
 import {
     ILoginComponentProps,
     ILoginErrorState,
@@ -10,7 +12,6 @@ import {
 } from '@/components/interfaces/auth.interfaces';
 import { PasswordIconNames, emailRegExp, passwordRegExp } from '@/constants/auth.constants';
 import { sharedStyles } from '@/shared/styles';
-import { iconStyles, textInputStyles, viewStyles } from '../../../shared/styles/components.styles';
 
 export default function LoginForm({
     _resetPassword,

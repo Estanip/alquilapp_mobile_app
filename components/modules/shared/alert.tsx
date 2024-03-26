@@ -1,10 +1,8 @@
 import { default as React, ReactNode, createContext, useContext } from 'react';
 import { Text, TextProps, View, ViewProps, ViewStyle } from 'react-native';
-import tailwind, { useAppColorScheme } from 'twrnc';
+import tailwind, { useAppColorScheme, Style } from 'twrnc';
 
 import { Icon, IconProps } from '@/components/modules/shared/icon';
-
-import { Style } from 'twrnc';
 
 export type TAlertVariants = {
     default: Style;

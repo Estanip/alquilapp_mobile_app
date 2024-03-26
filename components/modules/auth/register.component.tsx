@@ -14,7 +14,6 @@ import DatePicker from '../shared/datePicker.component';
 
 import { IControllerField } from '@/components/interfaces';
 import { IRegisterComponentProps, TRegisterValues } from '@/components/interfaces/auth.interfaces';
-
 import { TimeZones } from '@/constants';
 import {
     PasswordIconNames,

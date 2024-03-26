@@ -1,5 +1,6 @@
-import { apiPost, apiUris } from '@/constants/api.constants';
 import { TToken } from '../interfaces/auth.interfaces';
+
+import { apiPost, apiUris } from '@/constants/api.constants';
 
 export function NotificationService() {
     const sendPush = async (token: TToken, message: object): Promise<void | undefined> => {

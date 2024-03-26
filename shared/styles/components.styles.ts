@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+
 import { sharedStyles } from '.';
 
 // Confirm BTN styles

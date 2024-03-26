@@ -1,7 +1,5 @@
-import { IUser } from '@/api/interfaces/user.interfaces';
 import { IControllerField, ISelectOptions } from '@/components/interfaces';
 import { IErrorState } from '@/components/interfaces/auth.interfaces';
-
 import { MembershipTypes } from '@/constants/user.constants';
 import { IRegisterForm } from '@/screens/interfaces/register.interfaces';
 
