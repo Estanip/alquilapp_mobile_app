@@ -48,3 +48,6 @@ expo-env.d.ts
 
 # Environment
 .env
+
+#Google service config
+google-services.json
