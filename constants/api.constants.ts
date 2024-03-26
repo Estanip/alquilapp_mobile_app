@@ -1,6 +1,10 @@
 import { IServerResponse } from '@/api/interfaces';
 import { TToken } from '@/api/interfaces/auth.interfaces';
 
+type HeadersOptions = {
+    [key: string]: string;
+};
+
 export const apiUris = {
     register: '/auth/register',
     login: '/auth/login',
@@ -10,6 +14,7 @@ export const apiUris = {
     courts: '/court',
     reservation: '/reservation',
     user: '/user',
+    send_push_notification: 'https://exp.host/--/api/v2/push/send',
 };
 
 export const apiGet = (url: string, token: TToken): Promise<IServerResponse> => {
@@ -24,12 +29,17 @@ export const apiGet = (url: string, token: TToken): Promise<IServerResponse> => 
         .then((response) => response);
 };
 
-export const apiPost = (url: string, body: object, token?: TToken): Promise<IServerResponse> => {
+export const apiPost = (
+    url: string,
+    body: object,
+    token?: TToken,
+    headers: HeadersOptions = { authorization: `Bearer ${token}` },
+): Promise<IServerResponse> => {
     return fetch(url, {
         method: 'POST',
         body: JSON.stringify(body),
         headers: {
-            authorization: `Bearer ${token}`,
+            ...headers,
             'Content-Type': 'application/json',
         },
     })
