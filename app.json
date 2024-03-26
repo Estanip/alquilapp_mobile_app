@@ -21,14 +21,28 @@
                 "foregroundImage": "./assets/images/adaptive-icon.png",
                 "backgroundColor": "#ffffff"
             },
-            "package": "alquilapp.id"
+            "package": "alquilapp.id",
+            "googleServicesFile": "google-services.json"
         },
         "web": {
             "bundler": "metro",
             "output": "static",
             "favicon": "./assets/images/favicon.png"
         },
-        "plugins": ["expo-font", "expo-router", "expo-secure-store"],
+        "plugins": [
+            "expo-font",
+            "expo-router",
+            "expo-secure-store",
+            [
+                "expo-notifications",
+                {
+                    "icon": "./icon.png",
+                    "color": "red",
+                    "sounds": ["./sound.wav"],
+                    "mode": "development"
+                }
+            ]
+        ],
         "experiments": {
             "tsconfigPaths": true,
             "typedRoutes": true
