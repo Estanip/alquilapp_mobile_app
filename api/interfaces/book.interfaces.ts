@@ -8,8 +8,8 @@ interface IAvailabilityResponse {
 
 export type TAvailabilities = IAvailabilityResponse[];
 
-export interface IPlayer {
-    user: string;
+export interface IPlayerRequest {
+    user_id: string;
 }
 
 export interface IBookRequest {
@@ -17,7 +17,7 @@ export interface IBookRequest {
     readonly date: Date;
     readonly from: string;
     readonly court: number;
-    readonly players: IPlayer[];
+    readonly players: IPlayerRequest[];
     readonly owner_id: string;
 }
 

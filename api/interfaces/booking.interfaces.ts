@@ -1,11 +1,8 @@
-export type TUser = {
+export type TReservationPlayer = {
+    id: string;
     first_name: string;
     last_name: string;
     membership_type: string;
-};
-
-export type TReservationPlayer = {
-    user: TUser | string;
     fee: number;
 };
 

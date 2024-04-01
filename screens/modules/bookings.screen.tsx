@@ -1,15 +1,4 @@
-import { AntDesign } from '@expo/vector-icons';
-import { router } from 'expo-router';
-import React, { useEffect, useState } from 'react';
-import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
-
-import {
-    BookingDetailsSubtitles,
-    TBookingDetails,
-    _formatDateToString,
-} from '../interfaces/bookings.interface';
-
-import { TReservationPlayer, TReservations, TUser } from '@/api/interfaces/booking.interfaces';
+import { TReservationPlayer, TReservations } from '@/api/interfaces/booking.interfaces';
 import { BookingsService } from '@/api/modules/bookings.service';
 import BookingCard from '@/components/modules/bookings/booking-card';
 import { BookingStatus } from '@/constants/bookings.constants';
@@ -17,6 +6,15 @@ import { routes } from '@/constants/routes.constants';
 import { showErrorAlert, showSuccessAlert } from '@/shared/alerts/toast.alert';
 import { showAlert } from '@/shared/alerts/window.alert';
 import { useSession } from '@/store/react.ctx';
+import { AntDesign } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import {
+    BookingDetailsSubtitles,
+    TBookingDetails,
+    _formatDateToString,
+} from '../interfaces/bookings.interface';
 
 export default function BookingsScreen(): React.JSX.Element {
     const { token, user_id } = useSession();
@@ -117,12 +115,12 @@ export default function BookingsScreen(): React.JSX.Element {
                                                   subtitle: BookingDetailsSubtitles.PLAYERS,
                                                   playersText: reservation.players.length
                                                       ? reservation.players.map(
-                                                            ({ user, fee }: TReservationPlayer) => {
-                                                                const {
-                                                                    first_name,
-                                                                    last_name,
-                                                                    membership_type,
-                                                                } = user as TUser;
+                                                            ({
+                                                                fee,
+                                                                first_name,
+                                                                last_name,
+                                                                membership_type,
+                                                            }: TReservationPlayer) => {
                                                                 return {
                                                                     name: `${first_name} ${last_name}`,
                                                                     membership: membership_type,
@@ -196,18 +194,20 @@ export default function BookingsScreen(): React.JSX.Element {
                                               {
                                                   subtitle: BookingDetailsSubtitles.PLAYERS,
                                                   playersText: reservation.players.length
-                                                      ? reservation.players.map(({ user, fee }) => {
-                                                            const {
+                                                      ? reservation.players.map(
+                                                            ({
+                                                                fee,
                                                                 first_name,
                                                                 last_name,
                                                                 membership_type,
-                                                            } = user as TUser;
-                                                            return {
-                                                                name: `${first_name} ${last_name}`,
-                                                                membership: membership_type,
-                                                                fee,
-                                                            };
-                                                        })
+                                                            }) => {
+                                                                return {
+                                                                    name: `${first_name} ${last_name}`,
+                                                                    membership: membership_type,
+                                                                    fee,
+                                                                };
+                                                            },
+                                                        )
                                                       : [],
                                               },
                                               {

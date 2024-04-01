@@ -1,20 +1,18 @@
-import { router } from 'expo-router';
-
-import {
-    IFieldsData,
-    IStep,
-    StepStatus,
-    SurfaceTypes_ES,
-} from '../screens/interfaces/book.interfaces';
-
 import { TToken } from '@/api/interfaces/auth.interfaces';
-import { IBookRequest, IPlayer } from '@/api/interfaces/book.interfaces';
+import { IBookRequest, IPlayerRequest } from '@/api/interfaces/book.interfaces';
 import { BookService } from '@/api/modules/book.service';
 import { BookingsService } from '@/api/modules/bookings.service';
 import { TimeZones } from '@/constants';
 import { routes } from '@/constants/routes.constants';
 import { showErrorAlert, showSuccessAlert, showWarningAlert } from '@/shared/alerts/toast.alert';
 import { showAlert } from '@/shared/alerts/window.alert';
+import { router } from 'expo-router';
+import {
+    IFieldsData,
+    IStep,
+    StepStatus,
+    SurfaceTypes_ES,
+} from '../screens/interfaces/book.interfaces';
 
 type TPickerSelectProps = {
     label: string;
@@ -73,8 +71,8 @@ export const _book = async (
     if (!courtNumber || !date || !schedule || players.length === 0)
         showWarningAlert('Datos incompletos');
     else {
-        const playersList: IPlayer[] = players.map((player) => {
-            return { user: player };
+        const playersList: IPlayerRequest[] = players.map((player) => {
+            return { user_id: player };
         });
         const bookRequest: IBookRequest = {
             date,
@@ -86,6 +84,7 @@ export const _book = async (
         const response = editing
             ? await BookingsService().edit(token!, bookRequest, booking_id!)
             : await BookService().book(token!, bookRequest);
+
         if (response?.success) {
             // eslint-disable-next-line no-unused-expressions
             editing

@@ -220,9 +220,9 @@ export default function BookScreen(): React.JSX.Element {
         await _getAvailbleSchedules(new Date(reservation.date), reservation.from);
         setSchedule(reservation.from);
         _getPlayers();
-        const currentPlayers = reservation.players.map((player) => player.user);
+        const currentPlayers = reservation.players.map((player) => player.id);
         reservation.players.map((player) => {
-            if (player.user === user_id) setIsChecked(true);
+            if (player.id === user_id) setIsChecked(true);
         });
         onChangePlayers(currentPlayers, true);
         setSteps({
