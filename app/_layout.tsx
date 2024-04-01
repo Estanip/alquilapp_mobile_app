@@ -1,33 +1,19 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from 'react';
-import { AppState, AppStateStatus } from 'react-native';
-import ToastManager from 'toastify-react-native';
-
-import Book from './(app)/book';
-import Bookings from './(app)/bookings';
-import Home from './(app)/home';
-
 import { SectionsTitles } from '@/constants';
 import { routesName } from '@/constants/routes.constants';
 import { IRoute } from '@/interfaces';
 import CodeVerificationScreen from '@/screens/modules/code_verification.screen';
 import LoginScreen from '@/screens/modules/login.screen';
 import RegisterScreen from '@/screens/modules/register.screen';
-import { SessionProvider, useSession } from '@/store/react.ctx';
+import { SessionProvider } from '@/store/react.ctx';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
+import ToastManager from 'toastify-react-native';
+import Book from './(app)/book';
+import Bookings from './(app)/bookings';
+import Home from './(app)/home';
 
 export default function Root() {
     const Stack = createNativeStackNavigator();
-    const { signOut } = useSession();
-
-    AppState.addEventListener('change', (nextAppState: AppStateStatus) => {
-        switch (nextAppState) {
-            case 'inactive':
-            case 'background':
-            case 'unknown':
-                signOut();
-                break;
-        }
-    });
 
     return (
         <SessionProvider>
