@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 
 import { AuthService } from '@/api/modules/auth.service';
+import { NotificationService } from '@/api/modules/notifications.service';
 import LoginForm from '@/components/modules/auth/login.component';
 import CommonButton from '@/components/modules/shared/button.component';
 import RedirectButton from '@/components/modules/shared/redirect-btn.component';
@@ -12,6 +13,7 @@ import { routes, screenNavigations } from '@/constants/routes.constants';
 import { IRoute } from '@/interfaces';
 import { showSuccessAlert } from '@/shared/alerts/toast.alert';
 import { showAlert } from '@/shared/alerts/window.alert';
+import { registerForPushNotificationsAsync } from '@/shared/notifications/push';
 import { loginStyles } from '@/shared/styles/screens.styles';
 import { useSession } from '@/store/react.ctx';
 
@@ -56,6 +58,12 @@ export default function LoginScreen(): React.JSX.Element {
                     router.replace({ pathname: routes.CODE_VERIFICATION });
                 else router.replace({ pathname: routes.HOME });
                 await showSuccessAlert('Logueo exitoso');
+                const expoPushToken = await registerForPushNotificationsAsync();
+                await NotificationService().saveExpoPushToken(
+                    result?.data.token,
+                    result?.data._id,
+                    expoPushToken!.toString(),
+                );
                 resetFields();
             }
         }
