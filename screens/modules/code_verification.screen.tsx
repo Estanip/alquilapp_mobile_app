@@ -6,10 +6,6 @@ import { AuthService } from '@/api/modules/auth.service';
 import CommonButton from '@/components/modules/shared/button.component';
 import { routes } from '@/constants/routes.constants';
 import { showErrorAlert, showSuccessAlert } from '@/shared/alerts/toast.alert';
-import {
-    registerForPushNotificationsAsync,
-    sendPushNotification,
-} from '@/shared/notifications/push';
 import { sharedStyles } from '@/shared/styles';
 import { textInputStyles } from '@/shared/styles/components.styles';
 import { homeStyles } from '@/shared/styles/screens.styles';
@@ -34,16 +30,7 @@ export default function CodeVerificationScreen(): React.JSX.Element {
     const _resendCode = async () => {
         const result = await AuthService().resendCode(token!, user_id!, user_email!);
         if (!result?.success) showErrorAlert('Error al enviar email');
-        else if (result.success) {
-            const push_token = await registerForPushNotificationsAsync();
-            await sendPushNotification(
-                token!,
-                push_token!,
-                'Alquilapp',
-                'Has recibido un email con tu codigo de verificación',
-            );
-            showSuccessAlert('Email enviado satisfactoriamente');
-        }
+        else if (result.success) showSuccessAlert('Email enviado satisfactoriamente');
     };
 
     return (
