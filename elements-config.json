@@ -1,11 +1,7 @@
 {
-  "theme": "default",
-  "components": {
-    "directory": "components",
-    "installed": [
-      "alert",
-      "card",
-      "icon"
-    ]
-  }
+    "theme": "default",
+    "components": {
+        "directory": "components",
+        "installed": ["alert", "card", "icon"]
+    }
 }
