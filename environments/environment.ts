@@ -1,19 +1,25 @@
-import { API_PORT, ENVIRONMENT, HOST_DEV, HOST_LOCAL, HOST_PROD } from '@env';
+import {
+    EXPO_PUBLIC_API_PORT,
+    EXPO_PUBLIC_ENVIRONMENT,
+    EXPO_PUBLIC_HOST_DEV,
+    EXPO_PUBLIC_HOST_LOCAL,
+    EXPO_PUBLIC_HOST_PROD,
+} from '@env';
 import Constants from 'expo-constants';
 
 const host =
-    ENVIRONMENT === 'local'
-        ? `${HOST_LOCAL}:${API_PORT}`
-        : ENVIRONMENT === 'development'
-          ? HOST_DEV
-          : HOST_PROD;
+    EXPO_PUBLIC_ENVIRONMENT === 'local'
+        ? `${EXPO_PUBLIC_HOST_LOCAL}:${EXPO_PUBLIC_API_PORT}`
+        : EXPO_PUBLIC_ENVIRONMENT === 'development'
+          ? EXPO_PUBLIC_HOST_DEV
+          : EXPO_PUBLIC_HOST_PROD;
 
 const api =
-    ENVIRONMENT === 'local'
+    EXPO_PUBLIC_ENVIRONMENT === 'local'
         ? `http://${Constants?.expoGoConfig
               ?.debuggerHost!.split(':')
               ?.shift()!
-              .concat(':' + API_PORT)}`
+              .concat(':' + EXPO_PUBLIC_API_PORT)}`
         : host;
 
 export const environment = {
