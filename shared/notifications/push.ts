@@ -34,7 +34,6 @@ export async function registerForPushNotificationsAsync() {
     if (Platform.OS === 'android') {
         Notifications.setNotificationChannelAsync('new-emails', {
             name: 'E-mail notifications',
-            sound: '../../sound.wav',
             importance: Notifications.AndroidImportance.MAX,
             lightColor: 'red',
             vibrationPattern: [0, 250, 250, 250],
