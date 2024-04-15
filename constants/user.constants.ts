@@ -1,5 +1,5 @@
 export enum MembershipTypes {
-    ABONADO = 'ABONADO',
-    SOCIO = 'SOCIO',
-    NO_SOCIO = 'NO SOCIO',
+  ABONADO = 'ABONADO',
+  SOCIO = 'SOCIO',
+  NO_SOCIO = 'NO SOCIO',
 }

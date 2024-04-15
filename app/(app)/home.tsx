@@ -6,6 +6,6 @@ import HomeScreen from '@/screens/modules/home.screen';
 import { useSession } from '@/store/react.ctx';
 
 export default function Home(): React.JSX.Element {
-    const { token } = useSession();
-    return !token ? <Redirect href={routes.LOGIN} /> : <HomeScreen />;
+  const { token } = useSession();
+  return !token ? <Redirect href={routes.LOGIN} /> : <HomeScreen />;
 }

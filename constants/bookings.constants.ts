@@ -1,4 +1,4 @@
 export enum BookingStatus {
-    ACTIVE = 'VIGENTES',
-    INACTIVE = 'HISTORICAS',
+  ACTIVE = 'VIGENTES',
+  INACTIVE = 'HISTORICAS',
 }

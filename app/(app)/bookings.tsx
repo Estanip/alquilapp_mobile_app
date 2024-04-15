@@ -6,6 +6,6 @@ import BookingsScreen from '@/screens/modules/bookings.screen';
 import { useSession } from '@/store/react.ctx';
 
 export default function Bookings(): React.JSX.Element {
-    const { token } = useSession();
-    return !token ? <Redirect href={routes.LOGIN} /> : <BookingsScreen />;
+  const { token } = useSession();
+  return !token ? <Redirect href={routes.LOGIN} /> : <BookingsScreen />;
 }

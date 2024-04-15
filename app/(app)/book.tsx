@@ -6,6 +6,6 @@ import BookScreen from '@/screens/modules/book.screen';
 import { useSession } from '@/store/react.ctx';
 
 export default function Book(): React.JSX.Element {
-    const { token } = useSession();
-    return !token ? <Redirect href={routes.LOGIN} /> : <BookScreen />;
+  const { token } = useSession();
+  return !token ? <Redirect href={routes.LOGIN} /> : <BookScreen />;
 }

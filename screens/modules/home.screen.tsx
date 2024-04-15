@@ -9,30 +9,30 @@ import { homeStyles } from '@/shared/styles/screens.styles';
 import { useSession } from '@/store/react.ctx';
 
 export default function HomeScreen(): React.JSX.Element {
-    // Session
-    const { token, signOut } = useSession();
-    useEffect(() => {
-        if (!token) router.replace(routes.LOGIN);
-    }, []);
-    return (
-        <View style={homeStyles.view}>
-            <View style={homeStyles.viewButtons}>
-                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                    <CommonButton
-                        _buttonText={SectionsTitles.BOOKINGS}
-                        _onClick={() => router.navigate({ pathname: routes.BOOKINGS })}
-                    />
-                    <CommonButton
-                        _buttonText={SectionsTitles.BOOK}
-                        _onClick={() => router.navigate({ pathname: routes.BOOK })}
-                    />
-                    <CommonButton
-                        _btnStyle={{ marginTop: 50 }}
-                        _buttonText={SectionsTitles.LOGOUT}
-                        _onClick={() => signOut()}
-                    />
-                </View>
-            </View>
+  // Session
+  const { token, signOut } = useSession();
+  useEffect(() => {
+    if (!token) router.replace(routes.LOGIN);
+  }, []);
+  return (
+    <View style={homeStyles.view}>
+      <View style={homeStyles.viewButtons}>
+        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <CommonButton
+            _buttonText={SectionsTitles.BOOKINGS}
+            _onClick={() => router.navigate({ pathname: routes.BOOKINGS })}
+          />
+          <CommonButton
+            _buttonText={SectionsTitles.BOOK}
+            _onClick={() => router.navigate({ pathname: routes.BOOK })}
+          />
+          <CommonButton
+            _btnStyle={{ marginTop: 50 }}
+            _buttonText={SectionsTitles.LOGOUT}
+            _onClick={() => signOut()}
+          />
         </View>
-    );
+      </View>
+    </View>
+  );
 }
