@@ -1,11 +1,9 @@
+# Add files here to ignore them from prettier formatting
 babel.config.js
 tailwind.config.js
 metro.config.js
 .expo
 .husky
 node_modules
-eslintrc.js
-.prettierignore
+.eslintignore
 .prettierrc
-env.d.ts
-eslintrc.js
