@@ -1,9 +1,12 @@
-# Add files here to ignore them from prettier formatting
-babel.config.js
-tailwind.config.js
-metro.config.js
-.expo
-.husky
-node_modules
+# Directories
+node_modules/
+.expo/
+.husky/
+.vscode/
+
+# Files
+*.md
+*.pdf
+*.yml
+*.yaml
 .eslintignore
-.prettierrc

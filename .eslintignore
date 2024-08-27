@@ -1,11 +1,16 @@
-babel.config.js
-tailwind.config.js
-metro.config.js
-.expo
-.husky
-node_modules
-eslintrc.js
+# Directories
+node_modules/
+.expo/
+.husky/
+.vscode/
+
+# Files
+*.json
+*.js
+*.pdf
+*.md
+*.yml
+*.yaml
 .prettierignore
 .prettierrc
 env.d.ts
-eslintrc.js
